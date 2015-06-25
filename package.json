@@ -2,11 +2,28 @@
   "name": "nodebb-plugin-smoothshorts",
   "version": "0.0.1",
   "description": "Seamless short URLs for topic and post links in NodeBB.",
+  "author": {
+    "name": "Raphael Beer",
+    "email": "rbeerdev@gmail.com"
+  },
+  "dependencies": {
+    "xxhash": "^0.2.2"
+  },
   "main": "smoothshorts.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/rbeer/nodebb-plugin-smoothshorts"
   },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.github.com/rbeer/nodebb-plugin-smoothshorts/master/LICENSE"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/rbeer/nodebb-plugin-smoothshorts/issues"
+  },
+  "homepage": "https://github.com/rbeer/nodebb-plugin-smoothshorts",
   "keywords": [
     "nodebb",
     "plugin",
@@ -16,14 +33,7 @@
     "shortURL",
     "seamless"
   ],
-  "author": {
-    "name": "Raphael Beer",
-    "email": "raphaelbeer030@gmail.com"
-  },
   "nbbpm": {
     "compatibility": "^0.7.0"
-  },
-  "devDependencies": {
-    "eslint": "^0.22.1"
   }
 }
