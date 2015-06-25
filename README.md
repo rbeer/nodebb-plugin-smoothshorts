@@ -24,6 +24,8 @@ The now copied address is one of the form `https://yourNodeBB.org/ss/HASH`. Visi
 
 ![SmoothShorts resolving a hash](assets/resolving.png?raw=true "SmoothShorts resolving a hash")
 
+The original address is restored on any next `mousedown` event. This way even if the just hashed and copied link is clicked, the user will be visiting that original, since the event is processed before the browser attempts to follow the link. (Tested in FireFox 38.05 and Chrome 43.0; [please let me know if your browser doesn't work](https://github.com/rbeer/nodebb-plugin-smoothshorts/issues "")!)
+
 ## FAQ
 ###Why not use a service like bit.ly or goo.gl?
 For two reasons:
