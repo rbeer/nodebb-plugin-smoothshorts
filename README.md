@@ -1,5 +1,7 @@
-﻿# nodebb-plugin-smoothshorts
-###Seamless short URL plugin for NodeBB
+[![endorse](https://api.coderwall.com/rbeer/endorsecount.png)](https://coderwall.com/rbeer)
+﻿
+# nodebb-plugin-smoothshorts
+### Seamless short URL plugin for NodeBB
 Nobody likes itchy pants, do you? Neither do I, that's why these shorts are seamlessly woven into the NodeBB experience, your users won't feel a thing.
 
 ## Installation
