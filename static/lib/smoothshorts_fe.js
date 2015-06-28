@@ -15,7 +15,7 @@
 
       $(window).on('action:ajaxify.contentLoaded', function(evt, data) {
         var sel = '';   // query selector
-        var doms;       // dom elements found by 'sel'
+        var doms;       // DOM elements found by 'sel'
         var ids = [];   // topic or post ids
         var i = 0;      // for counter
         if (data.tpl === 'category') {
@@ -34,6 +34,7 @@
                           window.SmoothShorts.assignHashs('category', backData);
                         }
                       });
+          window.SmoothShorts.setHooks();
         } else if (data.tpl === 'topic') {
           /* hash posts inside topics */
           // get all post ids
@@ -50,15 +51,18 @@
                           window.SmoothShorts.assignHashs('topic', backData);
                         }
                       });
+          window.SmoothShorts.setHooks();
         }
-        document.addEventListener('contextmenu',
-                                  window.SmoothShorts.replaceWithShortURL,
-                                  false);
-        document.addEventListener('mousedown',
-                                  window.SmoothShorts.restoreOriginalURL,
-                                  false);
       });
       return this;
+    },
+    setHooks: function() {
+      document.addEventListener('contextmenu',
+                                window.SmoothShorts.replaceWithShortURL,
+                                false);
+      document.addEventListener('mousedown',
+                                window.SmoothShorts.restoreOriginalURL,
+                                false);
     },
     assignHashs: function(type, hashs) {
       var linkSelector = '';
@@ -86,7 +90,7 @@
       }
     },
     // restore original URL on the link, that has
-    // been right clicked to open the context menu
+    // been right clicked to open the context menu.
     // the 'mousedown' handler also fires when a c-menu call
     // follows a c-menu call, since this also qualifies as a
     // (right button) 'mousedown'. Neato, isn't it? :]
@@ -97,8 +101,8 @@
       }
     },
 
-    // replace href on the link, that has been
-    // right clicked to open the c-menu
+    // replace href on the link that has been
+    // right-clicked to open the c-menu
     replaceWithShortURL: function(evt) {
       var target;
       if (evt.target.tagName === 'A') {
