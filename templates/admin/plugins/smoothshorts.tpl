@@ -163,6 +163,7 @@ $(document).ready(function() {
     target.innerText = parseInt(target.innerText, 10) + 1;
     if (target.innerText === total.innerText) {
       counter[data.type + 'Well'].classList.remove('cout-warn');
+      app.alertSuccess('All ' + data.type + ' hashed.')
     }
   }
   socket.on('event:smoothshorts.newhash', handleNewHash);
