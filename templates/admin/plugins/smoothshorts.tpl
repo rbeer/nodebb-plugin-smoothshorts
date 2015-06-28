@@ -111,18 +111,10 @@ $(document).ready(function() {
   };
 
   useModKey.addEventListener('click', function handleUseModKey(evt) {
-    if (evt.target.checked) {
-      ddModKey.disabled = false;
-    } else {
-      ddModKey.disabled = true;
-    }
+    ddModKey.disabled = !evt.target.checked;
   });
   useDomain.addEventListener('click', function handleUseDomain(evt) {
-    if (evt.target.checked) {
-      txtDomain.disabled = false;
-    } else {
-      txtDomain.disabled = true;
-    }
+    txtDomain.disabled = !evt.target.checked;
   });
   btnSave.addEventListener('click', function(e) {
     $.post(config.relative_path + '/api/admin/plugins/smoothshorts/save', {
