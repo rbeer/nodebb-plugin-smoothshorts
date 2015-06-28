@@ -5,7 +5,6 @@ var winston = require.main.require('winston');
 var async = require.main.require('async');
 var PluginSocket = require.main.require('./src/socket.io/plugins');
 var AdminSocket = require.main.require('./src/socket.io/admin');
-var util = require('util');
 
 var xxh = require('xxhash');
 /** open world **/
@@ -138,14 +137,14 @@ SmoothShorts.resolveHash = function(req, res, cb) {
   });
 };
 SmoothShorts.shortenTopic = function(topicData, cb) {
-  winston.verbose('[plugin:smoothshorts] Shortening Topic:');
   /** topics:smoothshorts sortedSet **/
   // hash topic object
   var hash = xxh.hash(new Buffer(JSON.stringify(topicData)),
                       0xCAFEBABE).toString(16);
   db.sortedSetAdd('topics:smoothshorts', topicData.tid, hash, function(err) {
     if (!err) {
-      winston.verbose('[plugin:smoothshorts] ' + topicData);
+      winston.verbose('[plugin:smoothshorts] Hashed \'' + topicData.title +
+                      '\' (ID: ' + topicData.tid + ')');
       if (cb) cb();
     } else {
       winston.error('[plugin:smoothshorts] Writing hash to DB failed.' +
@@ -156,23 +155,23 @@ SmoothShorts.shortenTopic = function(topicData, cb) {
   // next(null, topicData);
 };
 SmoothShorts.purgeTopic = function(tid) {
-  winston.verbose('[plugin:smoothshorts] Purging Topic: ' + tid);
   db.sortedSetsRemoveRangeByScore(['topics:smoothshorts'], tid, tid, function(err) {
     if (err) {
       winston.error('[plugin:smoothshorts] Deleting hash from DB failed.' +
                     '(tid=' + tid + ')');
-    };
+    } else {
+      winston.verbose('[plugin:smoothshorts] Deleted hash for topic with ID ' + tid);
+    }
   });
 };
 SmoothShorts.shortenPost = function(postData, cb) {
-  winston.verbose('[plugin:smoothshorts] Shortening Post:');
   /** posts:smoothshorts sortedSet **/
   // hash post object
   var hash = xxh.hash(new Buffer(JSON.stringify(postData)),
                       0xCAFEBABE).toString(16);
   db.sortedSetAdd('posts:smoothshorts', postData.pid, hash, function(err) {
     if (!err) {
-      winston.verbose('[plugin:smoothshorts] ' + util.inspect(postData));
+      winston.verbose('[plugin:smoothshorts] Hashed post with ID ' + postData.pid);
       if (cb) cb();
     } else {
       winston.error('[plugin:smoothshorts] Writing hash to DB failed.' +
@@ -188,7 +187,9 @@ SmoothShorts.purgePost = function(pid) {
     if (err) {
       winston.error('[plugin:smoothshorts] Deleting hash from DB failed.' +
                     '(pid=' + pid + ')');
-    };
+    } else {
+      winston.verbose('[plugin:smoothshorts] Deleted hash for post with ID ' + pid);
+    }
   });
 };
 SmoothShorts.getHashForTid = function(tid, cb) {
