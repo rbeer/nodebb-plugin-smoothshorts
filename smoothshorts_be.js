@@ -255,7 +255,7 @@ SmoothShorts.Admin.render = function(req, res, next) {
                       'cout-warn' : '';
     data.topicStatus = (data.topicCount !== data.topicHashCount) ?
                        'cout-warn' : '';
-    res.render('admin', data);
+    res.render('admin/plugins/smoothshorts', data);
   });
 };
 SmoothShorts.Admin.saveSettings = function(req, res, next) {
