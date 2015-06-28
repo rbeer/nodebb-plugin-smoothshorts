@@ -12,9 +12,11 @@
     { "hook": "action:topic.purge", "method": "purgeTopic" },
     { "hook": "action:post.save", "method": "shortenPost" },
     { "hook": "action:post.purge", "method": "purgePost" },
+    { "hook": "filter:admin.header.build", "method": "Admin.addMenuItem" },
     { "hook": "static:app.load", "method": "init" }
   ],
-  "scripts": [
+  "scripts": [ 
     "./static/lib/smoothshorts_fe.js"
-  ]
+  ],
+  "templates": "./templates"
 }

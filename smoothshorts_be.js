@@ -2,14 +2,46 @@
 
 var db = require.main.require('./src/database');
 var winston = require.main.require('winston');
-var xxh = require('xxhash');
 var async = require.main.require('async');
 var PluginSocket = require.main.require('./src/socket.io/plugins');
+var AdminSocket = require.main.require('./src/socket.io/admin');
 
-var SmoothShorts = {};
-
+var xxh = require('xxhash');
+/** open world **/
+var SmoothShorts = {
+  useModKey: false,
+  modKey: '',
+  useDomain: false,
+  forcedDomain: '',
+  topiCount: 0,
+  topicHashCount: 0,
+  postCount: 0,
+  postHashCount: 0
+};
 SmoothShorts.init = function(app, cb) {
   app.router.get('/ss/:hash', SmoothShorts.resolveHash);
+  app.router.get('/admin/plugins/smoothshorts',
+                 app.middleware.applyCSRF, app.middleware.admin.buildHeader,
+                 SmoothShorts.Admin.render);
+  app.router.get('/api/admin/plugins/SmoothShorts',
+                 app.middleware.applyCSRF,
+                 SmoothShorts.Admin.render);
+  app.router.post('/api/admin/plugins/smoothshorts/save',
+                  app.middleware.applyCSRF,
+                  SmoothShorts.Admin.saveSettings);
+
+  db.getObject('settings:smoothshorts', function(err, config) {
+    if (err) {
+      return cb(err);
+    }
+    if (config) {
+      SmoothShorts.useModKey = (config.useModKey) ? config.useModKey : false;
+      SmoothShorts.modKey = (config.modKey) ? config.modKey : '';
+      SmoothShorts.useDomain = (config.useDomain) ? config.useDomain : false;
+      SmoothShorts.forcedDomain = (config.forcedDomain) ? config.forcedDomain : '';
+    }
+  });
+
   PluginSocket.SmoothShorts = {};
   PluginSocket.SmoothShorts.getTopicHashs = function(socket, tids, cb) {
     async.map(tids, SmoothShorts.getHashForTid, function(err, hashs) {
@@ -29,7 +61,6 @@ SmoothShorts.init = function(app, cb) {
   };
   return cb(null, app);
 };
-
 SmoothShorts.resolveHash = function(req, res, cb) {
   var hash = req.params.hash;
   console.log(hash);
@@ -51,6 +82,9 @@ SmoothShorts.resolveHash = function(req, res, cb) {
         },
         function(pid, next) {
           db.getObjectField('post:' + pid, 'tid', function(err, tid) {
+            if (err) {
+              return cb(err);
+            }
             return next(null, {pid: pid, tid: tid});
           });
         },
@@ -106,7 +140,6 @@ SmoothShorts.resolveHash = function(req, res, cb) {
     }
   });
 };
-
 SmoothShorts.shortenTopic = function(topicData) {
   winston.verbose('[plugin:smoothshorts] Shortening Topic:');
   /** topics:smoothshorts sortedSet **/
@@ -136,7 +169,8 @@ SmoothShorts.shortenPost = function(postData) {
   winston.verbose('[plugin:smoothshorts] Shortening Post:');
   /** posts:smoothshorts sortedSet **/
   // hash post object
-  var hash = xxh.hash(new Buffer(JSON.stringify(postData)), 0xCAFEBABE).toString(16);
+  var hash = xxh.hash(new Buffer(JSON.stringify(postData)),
+                      0xCAFEBABE).toString(16);
   db.sortedSetAdd('posts:smoothshorts', postData.pid, hash, function(err) {
     if (!err) {
       winston.verbose('[plugin:smoothshorts] ' + postData);
@@ -156,7 +190,6 @@ SmoothShorts.purgePost = function(pid) {
     };
   });
 };
-
 SmoothShorts.getHashForTid = function(tid, cb) {
   db.getSortedSetRangeByScore('topics:smoothshorts', 0, -1, tid, tid, function(err, hash) {
     if (err) {
@@ -165,13 +198,99 @@ SmoothShorts.getHashForTid = function(tid, cb) {
     cb(null, {tid: tid, hash: hash[0]});
   });
 };
-
 SmoothShorts.getHashForPid = function(pid, cb) {
-  db.getSortedSetRangeByScore('posts:smoothshorts', 0, -1, pid, pid, function(err, hash) {
-    if (err) {
-      cb(err);
+  db.getSortedSetRangeByScore('posts:smoothshorts', 0, -1, pid, pid,
+                              function(err, hash) {
+                                if (err) {
+                                  cb(err);
+                                }
+                                cb(null, {pid: pid, hash: hash[0]});
+                              });
+};
+
+/** admin's cave **/
+SmoothShorts.Admin = {};
+SmoothShorts.Admin.addMenuItem = function(custom_header, cb) {
+  custom_header.plugins.push({
+    route: '/plugins/smoothshorts',
+    icon: 'fa-location-arrow',
+    name: 'SmoothShorts'
+  });
+  cb(null, custom_header);
+};
+SmoothShorts.Admin.render = function(req, res, next) {
+  var data = {
+    csrf: req.csrfToken()
+  };
+  async.parallel({
+    postCount: function(next) {
+      db.sortedSetCard('posts:pid', next);
+    },
+    postHashCount: function(next) {
+      db.sortedSetCard('posts:smoothshorts', next);
+    },
+    topicCount: function(next) {
+      db.sortedSetCard('topics:tid', next);
+    },
+    topicHashCount: function(next) {
+      db.sortedSetCard('topics:smoothshorts', next);
+    },
+    config: function(next) {
+      db.getObject('settings:smoothshorts', next);
     }
-    cb(null, {pid: pid, hash: hash[0]});
+  }, function(err, result) {
+    if (err) {
+      return next(err);
+    }
+    // left side, "Settings"
+    if (result.config) {
+      if (result.config.modKey) {
+        data.modKey = {};
+        data.modKey[result.config.modKey] = true;
+      }
+      data.useModKey = (result.config.useModKey === 'true');
+      data.useDomain = (result.config.forcedDomain !== '');
+      data.forcedDomain = result.config.forcedDomain;
+    } else {
+      data.useDomain = false;
+      data.useModKey = false;
+      data.forcedDomain = '';
+    }
+    // right side, "Status"
+    data.postCount = result.postCount;
+    data.postHashCount = result.postHashCount;
+    data.topicCount = result.topicCount;
+    data.topicHashCount = result.topicHashCount;
+    data.postStatus = (data.postCount !== data.postHashCount) ?
+                      'cout-warn' : '';
+    data.topicStatus = (data.topicCount !== data.topicHashCount) ?
+                       'cout-warn' : '';
+    res.render('admin', data);
+  });
+};
+SmoothShorts.Admin.saveSettings = function(req, res, next) {
+  // { _csrf: 'Krgyg2tw-T6YOPxXXnFszAhRX4hw1KBC_9CU',
+  // useModKey: 'true',
+  // modKey: 'shift',
+  // useDomain: 'true',
+  // domain: 'mydomain.com' }
+  var dbData = {
+    useModKey: req.body.useModKey,
+    modKey: req.body.modKey,
+    useDomain: req.body.useDomain,
+    forcedDomain: req.body.domain
+  };
+  db.setObject('settings:smoothshorts', dbData, function(err) {
+    if (err) {
+      res.json(500, 'saveError');
+    }
+
+    SmoothShorts.useModKey = dbData.useModKey;
+    SmoothShorts.modKey = dbData.modKey;
+    SmoothShorts.useDomain = dbData.useDomain;
+    SmoothShorts.forcedDomain = dbData.forcedDomain;
+
+    res.json('OK');
   });
 };
 
