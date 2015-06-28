@@ -1,11 +1,13 @@
 <style>
 .cout-warn {
-  border-left-width: 3px;
-  border-left-color: #F0AD4E;
-  border-right-width: 3px;
-  border-right-color: #F0AD4E;
-  -webkit-transition: border-color 1s;
-  transition: border-color 1s;
+  border-left-width: 5px;
+  border-left-color: #D52222;
+  border-right-width: 5px;
+  border-right-color: #D52222;
+}
+.cout {
+  -webkit-transition: border 1s;
+  transition: border 1s;
 }
 </style>
 
@@ -49,7 +51,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">Status</div>
       <div class="panel-body">
-        <div class="row well well-sm {topicStatus}" id="topicWell">
+        <div class="row well well-sm cout {topicStatus}" id="topicWell">
           <div class="col-sm-6 col-xs-12">
             Topics:<br />
             <span id="topicCount" class="badge">{topicCount}</span>
@@ -59,7 +61,7 @@
             <span id="topicHashCount" class="badge">{topicHashCount}</span>
           </div>
         </div>
-        <div class="row well well-sm {postStatus}" id="postWell">
+        <div class="row well well-sm cout {postStatus}" id="postWell">
           <div class="col-sm-6 col-xs-12">
             Posts:<br />
             <span id="postCount" class="badge">{postCount}</span>
@@ -74,7 +76,9 @@
         </div>
         <div id="doStatus"></div>
         <button class="btn btn-success btn-md" id="btnHash">Hash Missing</button>
+        <!-- not yet implemented - stay tuned for 0.0.3! :)
         <button class="btn btn-danger btn-md" id="btnDel">Delete Unused</button>
+        -->
       </div>
     </div>
   </div>
@@ -85,8 +89,6 @@
 /* globals app, socket */
 $(document).ready(function() {
 
-  var doStatus = document.getElementById('doStatus');
-
   var useModKey = document.getElementById('useModKey');
   var ddModKey = document.getElementById('modKey');
   var useDomain = document.getElementById('useDomain');
@@ -94,10 +96,19 @@ $(document).ready(function() {
   var csrf = document.getElementById('csrfToken');
 
   var btnHash = document.getElementById('btnHash');
+  /* not yet implemented - stay tuned for 0.0.3! :)
   var btnDel = document.getElementById('btnDel');
+  */
   var btnSave = document.getElementById('btnSave');
 
-  var intervalId = 0;
+  var counter = {
+    topicTotal: document.getElementById('topicCount'),
+    topic: document.getElementById('topicHashCount'),
+    topicWell: document.getElementById('topicWell'),
+    postTotal: document.getElementById('postCount'),
+    post: document.getElementById('postHashCount'),
+    postWell: document.getElementById('postWell')
+  };
 
   useModKey.addEventListener('click', function handleUseModKey(evt) {
     if (evt.target.checked) {
@@ -134,50 +145,25 @@ $(document).ready(function() {
       if (err) {
         return app.alertError(err.message);
       }
-      // startProgress();
     });
   });
+  /* not yet implemented - stay tuned for 0.0.3! :)
   btnDel.addEventListener('click', function(e) {
     socket.emit('admin.plugins.SmoothShorts.deleteUnused', function(err) {
       if (err) {
         return app.alertError(err.message);
       }
-      // startProgress();
     });
   });
+  */
 
-  function startProgress() {
-    var domCounter = {
-      post: document.getElementById('postHashCount'),
-      postWell: document.getElementById('postWell'),
-      topic: document.getElementById('topicHashCount'),
-      topicWell: document.getElementById('topicWell')
-    };
-
-    intervalId = setInterval(function () {
-      socket.emit('admin.plugins.smoothshorts.getProgress'),
-                  function(err, pVal, type, changed) {
-                    var count;
-                    if (err) {
-                      // clearProgress();
-                      return app.alertError(err.message);
-                    }
-                    if (changed === void 0) {
-                      domCounter[type + 'Well'].classList.remove('cout-warn');
-                    } else {
-                      count = parseInt(domCounter[type].innerText, 10);
-                      domCounter[type].innerText = (count + changed).toString();
-                    }
-                    if (pVal >= 100) {
-                      // clearProgress();
-                      return app.alertSuccess('All done.');
-                    }
-                  }
-    }, 500);
-  }
-
-  function handleNewHash() {
-    console.log(arguments);
+  function handleNewHash(data) {
+    var target = counter[data.type];
+    var total = counter[data.type + 'Total'];
+    target.innerText = parseInt(target.innerText, 10) + 1;
+    if (target.innerText === total.innerText) {
+      counter[data.type + 'Well'].classList.remove('cout-warn');
+    }
   }
   socket.on('event:smoothshorts.newhash', handleNewHash);
 });

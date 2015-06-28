@@ -5,6 +5,7 @@ var winston = require.main.require('winston');
 var async = require.main.require('async');
 var PluginSocket = require.main.require('./src/socket.io/plugins');
 var AdminSocket = require.main.require('./src/socket.io/admin');
+var util = require('util');
 
 var xxh = require('xxhash');
 /** open world **/
@@ -12,11 +13,7 @@ var SmoothShorts = {
   useModKey: false,
   modKey: '',
   useDomain: false,
-  forcedDomain: '',
-  topiCount: 0,
-  topicHashCount: 0,
-  postCount: 0,
-  postHashCount: 0
+  forcedDomain: ''
 };
 SmoothShorts.init = function(app, cb) {
   app.router.get('/ss/:hash', SmoothShorts.resolveHash);
@@ -140,7 +137,7 @@ SmoothShorts.resolveHash = function(req, res, cb) {
     }
   });
 };
-SmoothShorts.shortenTopic = function(topicData) {
+SmoothShorts.shortenTopic = function(topicData, cb) {
   winston.verbose('[plugin:smoothshorts] Shortening Topic:');
   /** topics:smoothshorts sortedSet **/
   // hash topic object
@@ -149,9 +146,11 @@ SmoothShorts.shortenTopic = function(topicData) {
   db.sortedSetAdd('topics:smoothshorts', topicData.tid, hash, function(err) {
     if (!err) {
       winston.verbose('[plugin:smoothshorts] ' + topicData);
+      if (cb) cb();
     } else {
       winston.error('[plugin:smoothshorts] Writing hash to DB failed.' +
                     '(tid=' + topicData.tid + ')');
+      if (cb) cb(err);
     }
   });
   // next(null, topicData);
@@ -165,7 +164,7 @@ SmoothShorts.purgeTopic = function(tid) {
     };
   });
 };
-SmoothShorts.shortenPost = function(postData) {
+SmoothShorts.shortenPost = function(postData, cb) {
   winston.verbose('[plugin:smoothshorts] Shortening Post:');
   /** posts:smoothshorts sortedSet **/
   // hash post object
@@ -173,11 +172,13 @@ SmoothShorts.shortenPost = function(postData) {
                       0xCAFEBABE).toString(16);
   db.sortedSetAdd('posts:smoothshorts', postData.pid, hash, function(err) {
     if (!err) {
-      winston.verbose('[plugin:smoothshorts] ' + postData);
+      winston.verbose('[plugin:smoothshorts] ' + util.inspect(postData));
+      if (cb) cb();
     } else {
       winston.error('[plugin:smoothshorts] Writing hash to DB failed.' +
                     '(pid=' + postData.pid + ')');
       winston.error(err);
+      if (cb) cb(err);
     }
   });
 };
@@ -234,28 +235,17 @@ SmoothShorts.Admin.render = function(req, res, next) {
     },
     topicHashCount: function(next) {
       db.sortedSetCard('topics:smoothshorts', next);
-    },
-    config: function(next) {
-      db.getObject('settings:smoothshorts', next);
     }
   }, function(err, result) {
     if (err) {
       return next(err);
     }
     // left side, "Settings"
-    if (result.config) {
-      if (result.config.modKey) {
-        data.modKey = {};
-        data.modKey[result.config.modKey] = true;
-      }
-      data.useModKey = (result.config.useModKey === 'true');
-      data.useDomain = (result.config.forcedDomain !== '');
-      data.forcedDomain = result.config.forcedDomain;
-    } else {
-      data.useDomain = false;
-      data.useModKey = false;
-      data.forcedDomain = '';
-    }
+    data.modKey = {};
+    data.modKey[SmoothShorts.modKey] = true;
+    data.useModKey = SmoothShorts.useModKey;
+    data.useDomain = SmoothShorts.useDomain;
+    data.forcedDomain = SmoothShorts.forcedDomain;
     // right side, "Status"
     data.postCount = result.postCount;
     data.postHashCount = result.postHashCount;
@@ -294,4 +284,71 @@ SmoothShorts.Admin.saveSettings = function(req, res, next) {
   });
 };
 
+AdminSocket.plugins.SmoothShorts = {};
+AdminSocket.plugins.SmoothShorts.hashMissing = function(socket, data, cb) {
+  async.parallel({
+    postIds: function(next) {
+      db.getSortedSetRevRange('posts:pid', 0, -1, next);
+    },
+    topicIds: function(next) {
+      db.getSortedSetRevRange('topics:tid', 0, -1, next);
+    }
+  }, function(err, result) {
+    if (err) {
+      return cb(err);
+    }
+    db.getSortedSetRevRangeWithScores('posts:smoothshorts', 0, -1, function(err, hashSet) {
+      if (err) {
+        cb(err);
+      }
+      if (hashSet.length < result.postIds.length) {
+        result.postIds.forEach(function(pid) {
+          for (var i = 0; i < hashSet.length; i++) {
+            if (hashSet[i].score === pid) {
+              return;
+            }
+          }
+          db.getObject('post:' + pid, function(err, postData) {
+            if (err) {
+              return;
+            }
+            SmoothShorts.shortenPost(postData, function(err) {
+              if (!err) {
+                socket.emit('event:smoothshorts.newhash', {type: 'post'});
+              }
+            });
+          });
+        });
+      }
+    });
+    db.getSortedSetRevRangeWithScores('topics:smoothshorts', 0, -1, function(err, hashSet) {
+      if (err) {
+        cb(err);
+      }
+      if (hashSet.length < result.topicIds.length) {
+        result.topicIds.forEach(function(tid) {
+          for (var i = 0; i < hashSet.length; i++) {
+            if (hashSet[i].score === tid) {
+              return;
+            }
+          }
+          db.getObject('topic:' + tid, function(err, topicData) {
+            if (err) {
+              return;
+            }
+            SmoothShorts.shortenTopic(topicData, function(err) {
+              if (!err) {
+                socket.emit('event:smoothshorts.newhash', {type: 'topic'});
+              }
+            });
+          });
+        });
+      }
+    });
+  });
+};
+/* not yet implemented - stay tuned for 0.0.3! :)
+AdminSocket.plugins.SmoothShorts.deleteUnused = function(socket, data, cb) {
+};
+*/
 module.exports = SmoothShorts;
