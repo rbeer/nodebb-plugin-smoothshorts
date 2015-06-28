@@ -34,7 +34,8 @@ SmoothShorts.init = function(app, cb) {
       SmoothShorts.useModKey = (config.useModKey) ? config.useModKey : false;
       SmoothShorts.modKey = (config.modKey) ? config.modKey : '';
       SmoothShorts.useDomain = (config.useDomain) ? config.useDomain : false;
-      SmoothShorts.forcedDomain = (config.forcedDomain) ? config.forcedDomain : '';
+      SmoothShorts.forcedDomain = (config.forcedDomain) ?
+                                  config.forcedDomain : '';
     }
   });
 
@@ -155,14 +156,16 @@ SmoothShorts.shortenTopic = function(topicData, cb) {
   // next(null, topicData);
 };
 SmoothShorts.purgeTopic = function(tid) {
-  db.sortedSetsRemoveRangeByScore(['topics:smoothshorts'], tid, tid, function(err) {
-    if (err) {
-      winston.error('[plugin:smoothshorts] Deleting hash from DB failed.' +
-                    '(tid=' + tid + ')');
-    } else {
-      winston.verbose('[plugin:smoothshorts] Deleted hash for topic with ID ' + tid);
-    }
-  });
+  db.sortedSetsRemoveRangeByScore(['topics:smoothshorts'], tid, tid,
+    function(err) {
+      if (err) {
+        winston.error('[plugin:smoothshorts] Deleting hash from DB failed.' +
+                      '(tid=' + tid + ')');
+      } else {
+        winston.verbose('[plugin:smoothshorts] Deleted hash for topic ID ' +
+                        tid);
+      }
+    });
 };
 SmoothShorts.shortenPost = function(postData, cb) {
   /** posts:smoothshorts sortedSet **/
@@ -171,7 +174,7 @@ SmoothShorts.shortenPost = function(postData, cb) {
                       0xCAFEBABE).toString(16);
   db.sortedSetAdd('posts:smoothshorts', postData.pid, hash, function(err) {
     if (!err) {
-      winston.verbose('[plugin:smoothshorts] Hashed post with ID ' + postData.pid);
+      winston.verbose('[plugin:smoothshorts] Hashed post ID ' + postData.pid);
       if (cb) cb();
     } else {
       winston.error('[plugin:smoothshorts] Writing hash to DB failed.' +
@@ -183,22 +186,25 @@ SmoothShorts.shortenPost = function(postData, cb) {
 };
 SmoothShorts.purgePost = function(pid) {
   winston.verbose('[plugin:smoothshorts] Purging Post: ' + pid);
-  db.sortedSetsRemoveRangeByScore(['posts:smoothshorts'], pid, pid, function(err) {
-    if (err) {
-      winston.error('[plugin:smoothshorts] Deleting hash from DB failed.' +
-                    '(pid=' + pid + ')');
-    } else {
-      winston.verbose('[plugin:smoothshorts] Deleted hash for post with ID ' + pid);
-    }
-  });
+  db.sortedSetsRemoveRangeByScore(['posts:smoothshorts'], pid, pid,
+    function(err) {
+      if (err) {
+        winston.error('[plugin:smoothshorts] Deleting hash from DB failed.' +
+                      '(pid=' + pid + ')');
+      } else {
+        winston.verbose('[plugin:smoothshorts] Deleted hash for post ID ' +
+                        pid);
+      }
+    });
 };
 SmoothShorts.getHashForTid = function(tid, cb) {
-  db.getSortedSetRangeByScore('topics:smoothshorts', 0, -1, tid, tid, function(err, hash) {
-    if (err) {
-      return cb(err);
-    }
-    cb(null, {tid: tid, hash: hash[0]});
-  });
+  db.getSortedSetRangeByScore('topics:smoothshorts', 0, -1, tid, tid,
+    function(err, hash) {
+      if (err) {
+        return cb(err);
+      }
+      cb(null, {tid: tid, hash: hash[0]});
+    });
 };
 SmoothShorts.getHashForPid = function(pid, cb) {
   db.getSortedSetRangeByScore('posts:smoothshorts', 0, -1, pid, pid,
@@ -298,54 +304,56 @@ AdminSocket.plugins.SmoothShorts.hashMissing = function(socket, data, cb) {
     if (err) {
       return cb(err);
     }
-    db.getSortedSetRevRangeWithScores('posts:smoothshorts', 0, -1, function(err, hashSet) {
-      if (err) {
-        cb(err);
-      }
-      if (hashSet.length < result.postIds.length) {
-        result.postIds.forEach(function(pid) {
-          for (var i = 0; i < hashSet.length; i++) {
-            if (hashSet[i].score === pid) {
-              return;
-            }
-          }
-          db.getObject('post:' + pid, function(err, postData) {
-            if (err) {
-              return;
-            }
-            SmoothShorts.shortenPost(postData, function(err) {
-              if (!err) {
-                socket.emit('event:smoothshorts.newhash', {type: 'post'});
+    db.getSortedSetRevRangeWithScores('posts:smoothshorts', 0, -1,
+      function(err, hashSet) {
+        if (err) {
+          cb(err);
+        }
+        if (hashSet.length < result.postIds.length) {
+          result.postIds.forEach(function(pid) {
+            for (var i = 0; i < hashSet.length; i++) {
+              if (hashSet[i].score === pid) {
+                return;
               }
+            }
+            db.getObject('post:' + pid, function(err, postData) {
+              if (err) {
+                return;
+              }
+              SmoothShorts.shortenPost(postData, function(err) {
+                if (!err) {
+                  socket.emit('event:smoothshorts.newhash', {type: 'post'});
+                }
+              });
             });
           });
-        });
-      }
-    });
-    db.getSortedSetRevRangeWithScores('topics:smoothshorts', 0, -1, function(err, hashSet) {
-      if (err) {
-        cb(err);
-      }
-      if (hashSet.length < result.topicIds.length) {
-        result.topicIds.forEach(function(tid) {
-          for (var i = 0; i < hashSet.length; i++) {
-            if (hashSet[i].score === tid) {
-              return;
-            }
-          }
-          db.getObject('topic:' + tid, function(err, topicData) {
-            if (err) {
-              return;
-            }
-            SmoothShorts.shortenTopic(topicData, function(err) {
-              if (!err) {
-                socket.emit('event:smoothshorts.newhash', {type: 'topic'});
+        }
+      });
+    db.getSortedSetRevRangeWithScores('topics:smoothshorts', 0, -1,
+      function(err, hashSet) {
+        if (err) {
+          cb(err);
+        }
+        if (hashSet.length < result.topicIds.length) {
+          result.topicIds.forEach(function(tid) {
+            for (var i = 0; i < hashSet.length; i++) {
+              if (hashSet[i].score === tid) {
+                return;
               }
+            }
+            db.getObject('topic:' + tid, function(err, topicData) {
+              if (err) {
+                return;
+              }
+              SmoothShorts.shortenTopic(topicData, function(err) {
+                if (!err) {
+                  socket.emit('event:smoothshorts.newhash', {type: 'topic'});
+                }
+              });
             });
           });
-        });
-      }
-    });
+        }
+      });
   });
 };
 /* not yet implemented - stay tuned for 0.0.3! :)
