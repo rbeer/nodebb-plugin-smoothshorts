@@ -62,14 +62,12 @@ SmoothShorts.init = function(app, cb) {
       forcedDomain: (SmoothShorts.useDomain) ?
                     SmoothShorts.forcedDomain : ''
     };
-    console.log(data);
     cb(data);
   };
   return cb(null, app);
 };
 SmoothShorts.resolveHash = function(req, res, cb) {
   var hash = req.params.hash;
-  console.log(hash);
 
   async.parallel({
     isPost: function(next) {
