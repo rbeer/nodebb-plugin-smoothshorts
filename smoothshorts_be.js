@@ -31,9 +31,9 @@ SmoothShorts.init = function(app, cb) {
       return cb(err);
     }
     if (config) {
-      SmoothShorts.useModKey = (config.useModKey) ? config.useModKey : false;
+      SmoothShorts.useModKey = (config.useModKey === 'true');
       SmoothShorts.modKey = (config.modKey) ? config.modKey : '';
-      SmoothShorts.useDomain = (config.useDomain) ? config.useDomain : false;
+      SmoothShorts.useDomain = (config.useDomain === 'true');
       SmoothShorts.forcedDomain = (config.forcedDomain) ?
                                   config.forcedDomain : '';
     }
@@ -55,6 +55,15 @@ SmoothShorts.init = function(app, cb) {
       }
       cb(null, hashs);
     });
+  };
+  PluginSocket.SmoothShorts.getConfig = function(socket, cb) {
+    var data = {
+      modKey: (SmoothShorts.useModKey) ? SmoothShorts.modKey : '',
+      forcedDomain: (SmoothShorts.useDomain) ?
+                    SmoothShorts.forcedDomain : ''
+    };
+    console.log(data);
+    cb(data);
   };
   return cb(null, app);
 };
@@ -266,11 +275,6 @@ SmoothShorts.Admin.render = function(req, res, next) {
   });
 };
 SmoothShorts.Admin.saveSettings = function(req, res, next) {
-  // { _csrf: 'Krgyg2tw-T6YOPxXXnFszAhRX4hw1KBC_9CU',
-  // useModKey: 'true',
-  // modKey: 'shift',
-  // useDomain: 'true',
-  // domain: 'mydomain.com' }
   var dbData = {
     useModKey: req.body.useModKey,
     modKey: req.body.modKey,
@@ -282,9 +286,9 @@ SmoothShorts.Admin.saveSettings = function(req, res, next) {
       res.json(500, 'saveError');
     }
 
-    SmoothShorts.useModKey = dbData.useModKey;
+    SmoothShorts.useModKey = (dbData.useModKey === 'true');
     SmoothShorts.modKey = dbData.modKey;
-    SmoothShorts.useDomain = dbData.useDomain;
+    SmoothShorts.useDomain = (dbData.useDomain === 'true');
     SmoothShorts.forcedDomain = dbData.forcedDomain;
 
     res.json('OK');

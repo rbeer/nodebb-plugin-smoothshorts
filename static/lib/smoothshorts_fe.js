@@ -6,12 +6,22 @@
   window.SmoothShorts = {
 
     init: function() {
-      // the link that has been right clicked, when the context menu (rightclick on link) got called
-      this.lastTarget = void 0;
+      // the link that has been right clicked when the
+      // context menu (rightclick on link) got called
+      this.lastTarget = null;
       // original URL for restoring
       this.originalURL = '';
       // flag, whether the context menu was opened
       this.menuCalled = false;
+      // modifier key (ctrl, alt or shift) to enable uri replacement
+      this.modKey = '';
+      // Short URLs will use this domain, if set
+      this.forcedDomain = '';
+
+      socket.emit('plugins.SmoothShorts.getConfig', function(config) {
+        window.SmoothShorts.modKey = config.modKey;
+        window.SmoothShorts.forcedDomain = config.forcedDomain;
+      });
 
       $(window).on('action:ajaxify.contentLoaded', function(evt, data) {
         var sel = '';   // query selector
@@ -105,6 +115,10 @@
     // right-clicked to open the c-menu
     replaceWithShortURL: function(evt) {
       var target;
+      if (window.SmoothShorts.modKey !== '' &&
+          !evt[window.SmoothShorts.modKey + 'Key']) {
+        return;
+      }
       if (evt.target.tagName === 'A') {
         target = evt.target;
       } else if (evt.target.parentElement.tagName === 'A' &&
@@ -117,7 +131,15 @@
         window.SmoothShorts.menuCalled = true;
         window.SmoothShorts.lastTarget = target;
         window.SmoothShorts.originalURL = target.href;
-        window.SmoothShorts.lastTarget.href = '/ss/' + target.dataset.smoothhash;
+        window.SmoothShorts.lastTarget.href =
+          window.SmoothShorts.prepareUrl(target.dataset.smoothhash);
+      }
+    },
+    prepareUrl: function(hash) {
+      if (window.SmoothShorts.forcedDomain !== '') {
+        return '//' + window.SmoothShorts.forcedDomain + '/ss/' + hash;
+      } else {
+        return '/ss/' + hash;
       }
     }
   }.init();
