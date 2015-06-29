@@ -12,7 +12,6 @@ Nobody likes itchy pants, do you? Neither do I, that's why these shorts are seam
 3. Go click 'em! :D
 
 ## Features
-(Please note: Already existing topics and posts do not have a hash associated with them. Batch-hashing those will be part of the next patch (0.0.2); promised!)
 
 Once a user opens the browser's context menu upon a topic link, the href value of that link gets replaced with its assigned hash:
 
