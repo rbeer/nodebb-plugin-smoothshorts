@@ -76,7 +76,7 @@
         </div>
         <div id="doStatus"></div>
         <button class="btn btn-success btn-md" id="btnHash">Hash Missing</button>
-        <!-- not yet implemented - stay tuned for 0.0.3! :)
+        <!-- not yet implemented - stay tuned for 0.2.0! :)
         <button class="btn btn-danger btn-md" id="btnDel">Delete Unused</button>
         -->
       </div>
@@ -96,7 +96,7 @@ $(document).ready(function() {
   var csrf = document.getElementById('csrfToken');
 
   var btnHash = document.getElementById('btnHash');
-  /* not yet implemented - stay tuned for 0.0.3! :)
+  /* not yet implemented - stay tuned for 0.2.0! :)
   var btnDel = document.getElementById('btnDel');
   */
   var btnSave = document.getElementById('btnSave');
@@ -139,7 +139,7 @@ $(document).ready(function() {
       }
     });
   });
-  /* not yet implemented - stay tuned for 0.0.3! :)
+  /* not yet implemented - stay tuned for 0.2.0! :)
   btnDel.addEventListener('click', function(e) {
     socket.emit('admin.plugins.SmoothShorts.deleteUnused', function(err) {
       if (err) {

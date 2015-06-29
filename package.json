@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-smoothshorts",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Seamless short URLs for topic and post links in NodeBB.",
   "author": {
     "name": "Raphael Beer",

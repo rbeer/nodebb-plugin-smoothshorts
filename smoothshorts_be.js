@@ -360,7 +360,7 @@ AdminSocket.plugins.SmoothShorts.hashMissing = function(socket, data, cb) {
       });
   });
 };
-/* not yet implemented - stay tuned for 0.0.3! :)
+/* not yet implemented - stay tuned for 0.2.0! :)
 AdminSocket.plugins.SmoothShorts.deleteUnused = function(socket, data, cb) {
 };
 */
