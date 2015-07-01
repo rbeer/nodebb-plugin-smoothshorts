@@ -3,7 +3,7 @@
 /*global socket*/
 
 (function(window) {
-  window.SmoothShorts = {
+  var SmoothShorts = SmoothShorts = {
 
     init: function() {
       // the link that has been right clicked when the
@@ -19,8 +19,8 @@
       this.forcedDomain = '';
 
       socket.emit('plugins.SmoothShorts.getConfig', function(config) {
-        window.SmoothShorts.modKey = config.modKey;
-        window.SmoothShorts.forcedDomain = config.forcedDomain;
+        SmoothShorts.modKey = config.modKey;
+        SmoothShorts.forcedDomain = config.forcedDomain;
       });
 
       $(window).on('action:ajaxify.contentLoaded', function(evt, data) {
@@ -41,10 +41,10 @@
                         if (err) {
                           return console.error(err);
                         } else {
-                          window.SmoothShorts.assignHashs('category', backData);
+                          SmoothShorts.assignHashs('category', backData);
                         }
                       });
-          window.SmoothShorts.setHooks();
+          SmoothShorts.setHooks();
         } else if (data.tpl === 'topic') {
           /* hash posts inside topics */
           // get all post ids
@@ -58,20 +58,20 @@
                         if (err) {
                           return console.error(err);
                         } else {
-                          window.SmoothShorts.assignHashs('topic', backData);
+                          SmoothShorts.assignHashs('topic', backData);
                         }
                       });
-          window.SmoothShorts.setHooks();
+          SmoothShorts.setHooks();
         }
       });
       return this;
     },
     setHooks: function() {
       document.addEventListener('contextmenu',
-                                window.SmoothShorts.replaceWithShortURL,
+                                SmoothShorts.replaceWithShortURL,
                                 false);
       document.addEventListener('mousedown',
-                                window.SmoothShorts.restoreOriginalURL,
+                                SmoothShorts.restoreOriginalURL,
                                 false);
     },
     assignHashs: function(type, hashs) {
@@ -105,9 +105,9 @@
     // follows a c-menu call, since this also qualifies as a
     // (right button) 'mousedown'. Neato, isn't it? :]
     restoreOriginalURL: function(evt) {
-      if (window.SmoothShorts.menuCalled) {
-        window.SmoothShorts.lastTarget.href = window.SmoothShorts.originalURL;
-        window.SmoothShorts.menuCalled = false;
+      if (SmoothShorts.menuCalled) {
+        SmoothShorts.lastTarget.href = SmoothShorts.originalURL;
+        SmoothShorts.menuCalled = false;
       }
     },
 
@@ -115,8 +115,8 @@
     // right-clicked to open the c-menu
     replaceWithShortURL: function(evt) {
       var target;
-      if (window.SmoothShorts.modKey !== '' &&
-          !evt[window.SmoothShorts.modKey + 'Key']) {
+      if (SmoothShorts.modKey !== '' &&
+          !evt[SmoothShorts.modKey + 'Key']) {
         return;
       }
       if (evt.target.tagName === 'A') {
@@ -128,16 +128,16 @@
         return;
       }
       if (target.dataset.smoothhash !== void 0) {
-        window.SmoothShorts.menuCalled = true;
-        window.SmoothShorts.lastTarget = target;
-        window.SmoothShorts.originalURL = target.href;
-        window.SmoothShorts.lastTarget.href =
-          window.SmoothShorts.prepareUrl(target.dataset.smoothhash);
+        SmoothShorts.menuCalled = true;
+        SmoothShorts.lastTarget = target;
+        SmoothShorts.originalURL = target.href;
+        SmoothShorts.lastTarget.href =
+          SmoothShorts.prepareUrl(target.dataset.smoothhash);
       }
     },
     prepareUrl: function(hash) {
-      if (window.SmoothShorts.forcedDomain !== '') {
-        return '//' + window.SmoothShorts.forcedDomain + '/ss/' + hash;
+      if (SmoothShorts.forcedDomain !== '') {
+        return '//' + SmoothShorts.forcedDomain + '/ss/' + hash;
       } else {
         return '/ss/' + hash;
       }
