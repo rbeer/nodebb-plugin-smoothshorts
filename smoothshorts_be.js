@@ -1,8 +1,9 @@
 'use strict';
 
-var db = require.main.require('./src/database');
+var nconf = require.main.require('nconf');
 var winston = require.main.require('winston');
 var async = require.main.require('async');
+var db = require.main.require('./src/database');
 var PluginSocket = require.main.require('./src/socket.io/plugins');
 var AdminSocket = require.main.require('./src/socket.io/admin');
 
@@ -146,9 +147,14 @@ SmoothShorts.resolveHash = function(req, res, cb) {
 };
 SmoothShorts.shortenTopic = function(topicData, cb) {
   /** topics:smoothshorts sortedSet **/
+  // key is generated from 'NodeBB secret'
+  var key = nconf.get('secret');
+  key = parseInt('0x' + key.substring(0, key.indexOf('-')), 16);
   // hash topic object
-  var hash = xxh.hash(new Buffer(JSON.stringify(topicData)),
-                      0xCAFEBABE).toString(16);
+  var hash = xxh.hash(new Buffer(JSON.stringify(topicData)), key).toString(16);
+  // don't take any chances of leaking the secret around;
+  // not even just parts of it. ;)
+  key = null;
   db.sortedSetAdd('topics:smoothshorts', topicData.tid, hash, function(err) {
     if (!err) {
       winston.verbose('[plugin:smoothshorts] Hashed \'' + topicData.title +
@@ -176,9 +182,15 @@ SmoothShorts.purgeTopic = function(tid) {
 };
 SmoothShorts.shortenPost = function(postData, cb) {
   /** posts:smoothshorts sortedSet **/
+  // key is generated from 'NodeBB secret'
+  var key = nconf.get('secret');
+  key = parseInt('0x' + key.substring(0, key.indexOf('-')), 16);
+  console.log(key);
   // hash post object
-  var hash = xxh.hash(new Buffer(JSON.stringify(postData)),
-                      0xCAFEBABE).toString(16);
+  var hash = xxh.hash(new Buffer(JSON.stringify(postData)), key).toString(16);
+  // don't take any chances of leaking the secret around;
+  // not even just parts of it. ;)
+  key = null;
   db.sortedSetAdd('posts:smoothshorts', postData.pid, hash, function(err) {
     if (!err) {
       winston.verbose('[plugin:smoothshorts] Hashed post ID ' + postData.pid);
