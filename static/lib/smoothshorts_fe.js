@@ -3,7 +3,7 @@
 /*global socket*/
 
 (function(window) {
-  var SmoothShorts = SmoothShorts = {
+  var SmoothShorts = window.SmoothShorts = {
 
     init: function() {
       // the link that has been right clicked when the
@@ -23,48 +23,65 @@
         SmoothShorts.forcedDomain = config.forcedDomain;
       });
 
-      $(window).on('action:ajaxify.contentLoaded', function(evt, data) {
-        var sel = '';   // query selector
-        var doms;       // DOM elements found by 'sel'
-        var ids = [];   // topic or post ids
-        var i = 0;      // for counter
-        if (data.tpl === 'category') {
-          /* hash topics in category listings */
-          // get all topic ids
-          sel = '[data-tid]';
-          doms = document.querySelectorAll(sel);
-          for (i = doms.length - 1; i >= 0; i--) {
-            ids.push(doms[i].dataset.tid);
-          }
-          socket.emit('plugins.SmoothShorts.getTopicHashs', ids,
-                      function(err, backData) {
-                        if (err) {
-                          return console.error(err);
-                        } else {
-                          SmoothShorts.assignHashs('category', backData);
-                        }
-                      });
-          SmoothShorts.setHooks();
-        } else if (data.tpl === 'topic') {
-          /* hash posts inside topics */
-          // get all post ids
-          sel = '[data-pid]';
-          doms = document.querySelectorAll(sel);
-          for (i = doms.length - 1; i >= 0; i--) {
-            ids.push(doms[i].dataset.pid);
-          }
-          socket.emit('plugins.SmoothShorts.getPostHashs', ids,
-                      function(err, backData) {
-                        if (err) {
-                          return console.error(err);
-                        } else {
-                          SmoothShorts.assignHashs('topic', backData);
-                        }
-                      });
-          SmoothShorts.setHooks();
-        }
-      });
+      $(window).on('action:ajaxify.contentLoaded', this.parseLinks);
+      $(window).on('action:posts.loaded', this.parseLinks);
       return this;
+    },
+    parseLinks: function(evt, data) {
+      var sel = '';   // query selector
+      var doms;       // DOM elements found by 'sel'
+      var ids = [];   // topic or post ids
+      var i = 0;      // for counter
+      if (data.tpl === 'category') {
+        /* hash topics in category listings */
+        // get all topic ids
+        sel = '[data-tid]';
+        doms = document.querySelectorAll(sel);
+        for (i = doms.length - 1; i >= 0; i--) {
+          ids.push(doms[i].dataset.tid);
+        }
+        socket.emit('plugins.SmoothShorts.getTopicHashs', ids,
+                    function(err, backData) {
+                      if (err) {
+                        return console.error(err);
+                      } else {
+                        SmoothShorts.assignHashs('category', backData);
+                      }
+                    });
+        SmoothShorts.setHooks();
+      } else if (data.tpl === 'topic') {
+        /* hash posts inside topics */
+        // get all post ids
+        sel = '[data-pid]';
+        doms = document.querySelectorAll(sel);
+        for (i = doms.length - 1; i >= 0; i--) {
+          ids.push(doms[i].dataset.pid);
+        }
+        socket.emit('plugins.SmoothShorts.getPostHashs', ids,
+                    function(err, backData) {
+                      if (err) {
+                        return console.error(err);
+                      } else {
+                        SmoothShorts.assignHashs('topic', backData);
+                      }
+                    });
+        SmoothShorts.setHooks();
+      } else if (data.posts) {
+        /* hash posts on inf-scroll */
+        sel = '[data-pid]:not([data-smoothhash])';
+        doms = document.querySelectorAll(sel);
+        for (i = doms.length - 1; i >= 0; i--) {
+          ids.push(doms[i].dataset.pid);
+        }
+        socket.emit('plugins.SmoothShorts.getPostHashs', ids,
+                    function(err, backData) {
+                      if (err) {
+                        return console.error(err);
+                      } else {
+                        SmoothShorts.assignHashs('topic', backData);
+                      }
+                    });
+      }
     },
     setHooks: function() {
       document.addEventListener('contextmenu',
