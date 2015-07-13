@@ -22,7 +22,9 @@
           <p>User has to hold modkey while right clicking in order to replace the link.</p>
             <div class="input-group">
               <span class="input-group-addon">
-                <input type="checkbox" id="useModKey"<!-- IF useModKey --> checked<!-- ENDIF useModKey -->>
+                <label style="margin-bottom: -1px;">
+                  <input type="checkbox" id="useModKey"<!-- IF useModKey --> checked<!-- ENDIF useModKey -->>
+                </label>
               </span>
               <select class="form-control" id="modKey"<!-- IF !useModKey --> disabled<!-- ENDIF !useModKey -->>
                 <option<!-- IF modKey.ctrl --> selected<!-- ENDIF modKey.ctrl -->>Ctrl</option>
@@ -36,7 +38,9 @@
             <p>Force short urls to use this domain, no matter which the user used to visit your NodeBB.</p>
             <div class="input-group">
               <span class="input-group-addon">
-                <input type="checkbox" id="useDomain"<!-- IF useDomain --> checked<!-- ENDIF useDomain -->>
+                <label style="margin-bottom: -1px;">
+                  <input type="checkbox" id="useDomain"<!-- IF useDomain --> checked<!-- ENDIF useDomain -->>
+                </label>
               </span>
               <input type="text" class="form-control" id="domain" value="{forcedDomain}"<!-- IF !useDomain --> disabled<!-- ENDIF !useDomain -->/>
             </div>
