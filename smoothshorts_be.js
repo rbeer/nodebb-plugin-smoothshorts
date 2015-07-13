@@ -159,11 +159,15 @@ SmoothShorts.shortenTopic = function(topicData, cb) {
     if (!err) {
       winston.verbose('[plugin:smoothshorts] Hashed \'' + topicData.title +
                       '\' (ID: ' + topicData.tid + ')');
-      if (cb) cb();
+      if (cb) {
+        cb();
+      }
     } else {
       winston.error('[plugin:smoothshorts] Writing hash to DB failed.' +
                     '(tid=' + topicData.tid + ')');
-      if (cb) cb(err);
+      if (cb) {
+        cb(err);
+      }
     }
   });
   // next(null, topicData);
@@ -194,12 +198,16 @@ SmoothShorts.shortenPost = function(postData, cb) {
   db.sortedSetAdd('posts:smoothshorts', postData.pid, hash, function(err) {
     if (!err) {
       winston.verbose('[plugin:smoothshorts] Hashed post ID ' + postData.pid);
-      if (cb) cb();
+      if (cb) {
+        cb();
+      }
     } else {
       winston.error('[plugin:smoothshorts] Writing hash to DB failed.' +
                     '(pid=' + postData.pid + ')');
       winston.error(err);
-      if (cb) cb(err);
+      if (cb) {
+        cb(err);
+      }
     }
   });
 };
@@ -284,7 +292,7 @@ SmoothShorts.Admin.render = function(req, res, next) {
     res.render('admin/plugins/smoothshorts', data);
   });
 };
-SmoothShorts.Admin.saveSettings = function(req, res, next) {
+SmoothShorts.Admin.saveSettings = function(req, res) {
   var dbData = {
     useModKey: req.body.useModKey,
     modKey: req.body.modKey,
