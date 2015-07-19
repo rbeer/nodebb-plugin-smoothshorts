@@ -189,7 +189,6 @@ SmoothShorts.shortenPost = function(postData, cb) {
   // key is generated from 'NodeBB secret'
   var key = nconf.get('secret');
   key = parseInt('0x' + key.substring(0, key.indexOf('-')), 16);
-  console.log(key);
   // hash post object
   var hash = xxh.hash(new Buffer(JSON.stringify(postData)), key).toString(16);
   // don't take any chances of leaking the secret around;
