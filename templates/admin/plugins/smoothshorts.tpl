@@ -124,7 +124,7 @@ $(document).ready(function() {
     $.post(config.relative_path + '/api/admin/plugins/smoothshorts/save', {
       _csrf : csrf.value,
       useModKey: useModKey.checked,
-      modKey : ddModKey.selectedOptions.item().value.toLowerCase(),
+      modKey : ddModKey.selectedOptions.item(0).value.toLowerCase(),
       useDomain : useDomain.checked,
       domain: txtDomain.value
     }, function(data) {
