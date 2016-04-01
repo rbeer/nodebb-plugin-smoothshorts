@@ -1,6 +1,9 @@
+﻿### 0.1.3
+  - FIXED: Failing to save settings in ACP.
+
 ### 0.1.2
   - FIXED: ACP | .input-group-addon misplaced.
-  - FIXED: ACP | Checkbox-<input>s not clickable due to core changes.
+  - FIXED: ACP | Checkbox-\<input\>s not clickable due to core changes.
 
 ### 0.1.0
   - Added ACP page.
