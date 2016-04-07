@@ -5,15 +5,15 @@ define('plugins/smoothshorts/helper', function() {
 
   var helper = {};
 
-  helper.ArrayFromNodeList = function(linkNodes) {
+  helper.ArrayFromNodeList = function(nodeList) {
     if (!Array.from) {
-      var linksArray = [];
-      for (var i = 0; i < linkNodes.length; i++) {
-        linksArray.push(linkNodes.item(i));
+      var nodeArray = [];
+      for (var i = 0; i < nodeList.length; i++) {
+        nodeArray.push(nodeList.item(i));
       }
-      return linksArray;
+      return nodeArray;
     } else {
-      return Array.from(linksNodes);
+      return Array.from(nodeList);
     }
   };
 
