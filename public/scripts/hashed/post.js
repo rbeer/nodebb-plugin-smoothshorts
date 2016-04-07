@@ -34,10 +34,11 @@ define('plugins/smoothshorts/hashed/post', ['plugins/smoothshorts/helper'], func
   HashedPost.prototype.addButton = function(handler) {
     // move to template; cause i18n,
     // easier customizable for other templates, yada, yada :]
+    var self = this;
     this.anchors[0].insertAdjacentHTML('afterend', this.button.outerHTML);
     this.button = this.anchors[0].nextSibling;
     $(this.button).tooltip();
-    this.button.addEventListener('click', handler);
+    this.button.addEventListener('click', handler.call(null, self));
   };
 
   function createButton() {

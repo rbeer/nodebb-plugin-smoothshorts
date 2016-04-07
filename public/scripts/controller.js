@@ -91,7 +91,7 @@
       hashedObjects.forEach(function(obj) {
         obj.addHashToAnchor();
         if (obj instanceof HashedPost && hasButton()) {
-          obj.addButton(buttonHandler);
+          obj.addButton(buttonClickDelegate);
         }
       });
     }
@@ -101,14 +101,11 @@
       return tplRegX.test(ajaxify.data.template.name);
     }
 
-    function buttonHandler(icon, link) {
-      icon.addEventListener('click', function() {
-        copyShortUrl(link);
-      });
-    }
-
-    function copyShortUrl(link) {
-      console.log(link);
+    function buttonClickDelegate(hashedPost) {
+      var copyShortUrl = function() {
+        console.log('hashedPost', hashedPost);
+      };
+      return copyShortUrl;
     }
 
     config.load(function() {
