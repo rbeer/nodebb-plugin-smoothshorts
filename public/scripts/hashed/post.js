@@ -1,4 +1,4 @@
-/* global define */
+/* global define ajaxify */
 
 define('plugins/smoothshorts/hashed/post', ['plugins/smoothshorts/helper'], function(helper) {
   'use strict';
@@ -20,7 +20,8 @@ define('plugins/smoothshorts/hashed/post', ['plugins/smoothshorts/helper'], func
     this.index = !isNaN(data.index) ? data.index : data.url.match(/\d*(?:#.*)?$/);
     this.anchors = getAnchors(this.url, data.topicData.title);
     this.hash = null;
-    this.button = createButton();
+    this.button = null;
+    this.copyContainer = null;
     return this;
   };
 
@@ -32,8 +33,6 @@ define('plugins/smoothshorts/hashed/post', ['plugins/smoothshorts/helper'], func
   };
 
   HashedPost.prototype.addButton = function(handler) {
-    // move to template; cause i18n,
-    // easier customizable for other templates, yada, yada :]
     var self = this;
     this.anchors[0].insertAdjacentHTML('afterend', this.button.outerHTML);
     this.button = this.anchors[0].nextSibling;
@@ -41,13 +40,42 @@ define('plugins/smoothshorts/hashed/post', ['plugins/smoothshorts/helper'], func
     this.button.addEventListener('click', handler.call(null, self));
   };
 
-  function createButton() {
+  HashedPost.prototype.hasButton = function() {
+    var tplRegX = /^topic$|(?:account|groups)\/(?:posts|profile|best|(?:up|down)voted|details|favourites)/;
+    var elements;
+    var itHas = true;
+
+    switch(false) {
+    case (itHas = document.queryCommandSupported('copy')):
+      break;
+    case (itHas = tplRegX.test(ajaxify.data.template.name)):
+      break;
+    case !!this.button:
+      elements = createButtonElements(this.hash);
+      this.button = elements.button;
+      this.copyContainer = elements.copyContainer;
+      break;
+    }
+    return itHas;
+  };
+
+  function createButtonElements(hash) {
+    // move to template
     var icon = document.createElement('i');
+    var shortUrlSpan = document.createElement('span');
+    
+    shortUrlSpan.className = 'shorturl-hidden';
+    shortUrlSpan.innerHTML = 'http://localhost:4567/ss/' + hash;
+
     icon.dataset.toggle = 'tooltip';
     icon.dataset.placement = 'top';
     icon.dataset.title = 'Click to copy this posts short url!';
     icon.className = 'fa fa-hashtag pointer hashedpost-button';
-    return icon;
+    icon.appendChild(shortUrlSpan);
+    return {
+      button: icon,
+      copyContainer: shortUrlSpan
+    };
   }
 
   function getAnchors(url, topicTitle) {
