@@ -37,7 +37,9 @@
         sockets.getHashes('posts', data.posts.map(postsMap), addHashes);
       } else {
         var dataSet = data.topics || data.categories;
-        sockets.getHashes('posts', dataSet.filter(teaserFilter).map(teaserMap), addHashes);
+        if (dataSet) {
+          sockets.getHashes('posts', dataSet.filter(teaserFilter).map(teaserMap), addHashes);
+        }
         if (data.topics) {
           sockets.getHashes('topics', dataSet.map(topicsMap), addHashes);
         }
