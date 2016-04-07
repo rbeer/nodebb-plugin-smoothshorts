@@ -46,6 +46,11 @@
       }
     }
 
+    function addOnScrollLoad(event, data) {
+      var type = event.type.split(':')[1];
+      sockets.getHashes(type, data[type].map(postsMap), addHashes);
+    }
+
     function topicsMap(topic) {
       console.log(topic);
       return new HashedTopic({
@@ -97,7 +102,7 @@
     }
 
     function hasButton() {
-      var tplRegX = /[^\/]topic$|(?:account|groups)\/(?:posts|profile|best|(?:up|down)voted|details|favourites)/;
+      var tplRegX = /^topic$|(?:account|groups)\/(?:posts|profile|best|(?:up|down)voted|details|favourites)/;
       return tplRegX.test(ajaxify.data.template.name);
     }
 
@@ -113,6 +118,8 @@
 
     config.load(function() {
       $(window).on('action:ajaxify.contentLoaded', parseAjaxifyData);
+      $(window).on('action:posts.loaded', addOnScrollLoad);
+      $(window).on('action:topics.loaded', addOnScrollLoad);
     });
   });
 
