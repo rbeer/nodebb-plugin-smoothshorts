@@ -57,13 +57,16 @@
     }
 
     function postsMap(post) {
+      var topicTitle = post.topic ? post.topic.title : ajaxify.data.title;
+      var topicSlug = post.topic ? post.topic.slug : ajaxify.data.slug;
+      var index = post.topic ? post.index : post.index + 1;
       return new HashedPost({
         pid: post.pid,
         url: null,
-        index: post.index + 1,
+        index: index,
         topicData: {
-          title: ajaxify.data.title,
-          slug: ajaxify.data.slug
+          title: topicTitle,
+          slug: topicSlug
         }
       });
     }
