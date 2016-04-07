@@ -90,10 +90,15 @@
     function addHashes(type, hashedObjects) {
       hashedObjects.forEach(function(obj) {
         obj.addHashToAnchor();
-        if (ajaxify.data.template.topic && obj instanceof HashedPost) {
+        if (obj instanceof HashedPost && hasButton()) {
           obj.addButton(buttonHandler);
         }
       });
+    }
+
+    function hasButton() {
+      var tplRegX = /[^\/]topic$|(?:account|groups)\/(?:posts|profile|best|(?:up|down)voted|details|favourites)/;
+      return tplRegX.test(ajaxify.data.template.name);
     }
 
     function buttonHandler(icon, link) {
