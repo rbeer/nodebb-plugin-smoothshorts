@@ -31,7 +31,7 @@ define('plugins/smoothshorts/hashed/topic', ['plugins/smoothshorts/helper'], fun
     var anchors = document.querySelectorAll('[component="category/topic"] a');
     return helper.ArrayFromNodeList(anchors).filter(function(element) {
       return (postcount === '1' && element.getAttribute('href') === url) ||
-             (element.textContent === title);
+             (element.textContent.trim() === title);
     });
   }
 
