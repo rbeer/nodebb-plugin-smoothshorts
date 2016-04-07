@@ -35,6 +35,7 @@ define('plugins/smoothshorts/hashed/post', ['plugins/smoothshorts/helper'], func
     // move to template; cause i18n,
     // easier customizable for other templates, yada, yada :]
     this.anchors[0].insertAdjacentHTML('afterend', this.button.outerHTML);
+    this.button = this.anchors[0].nextSibling;
     $(this.button).tooltip();
     this.button.addEventListener('click', handler);
   };
