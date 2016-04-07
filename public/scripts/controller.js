@@ -97,7 +97,7 @@
     }
 
     function hasButton() {
-      var tplRegX = /[^\/]topic$|(?:account|groups)\/(?:posts|profile|best|(?:up|down)voted|details|favourites)/;
+      var tplRegX = /^topic$|(?:account|groups)\/(?:posts|profile|best|(?:up|down)voted|details|favourites)/;
       return tplRegX.test(ajaxify.data.template.name);
     }
 
