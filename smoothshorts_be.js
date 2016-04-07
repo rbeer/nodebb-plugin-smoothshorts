@@ -41,7 +41,7 @@ SmoothShorts.init = function(app, cb) {
   });
 
   PluginSocket.SmoothShorts = {};
-  PluginSocket.SmoothShorts.getTopicHashs = function(socket, tids, cb) {
+  PluginSocket.SmoothShorts.getTopicHashes = function(socket, tids, cb) {
     async.map(tids, SmoothShorts.getHashForTid, function(err, hashs) {
       if (err) {
         return cb(err);
@@ -49,7 +49,7 @@ SmoothShorts.init = function(app, cb) {
       cb(null, hashs);
     });
   };
-  PluginSocket.SmoothShorts.getPostHashs = function(socket, pids, cb) {
+  PluginSocket.SmoothShorts.getPostHashes = function(socket, pids, cb) {
     async.map(pids, SmoothShorts.getHashForPid, function(err, hashs) {
       if (err) {
         return cb(err);
