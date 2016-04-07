@@ -35,5 +35,12 @@
   ],
   "nbbpm": {
     "compatibility": "^0.7.0"
+  },
+  "devDependencies": {
+    "ink-docstrap": "^1.1.4",
+    "minami": "^1.1.1"
+  },
+  "scripts": {
+    "build-docs": "jsdoc --configure .jsdoc -t node_modules/ink-docstrap/template/ -R ./README.md --verbose ./"
   }
 }
