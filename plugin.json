@@ -4,9 +4,9 @@
   "description": "Replaces long slug urls with short, hashed ones in NodeBB.",
   "url": "https://github.com/rbeer/nodebb-plugin-smoothshorts",
   "library": "./smoothshorts_be.js",
-  "staticDirs": {
-    "static": "./static"
-  },
+  "scripts": ["public/scripts/"],
+  "css": ["public/css/smoothshorts.css"],
+  "staticDirs": {"scripts": "static/scripts/", "css": "static/css/"},
   "hooks": [
     { "hook": "action:topic.save", "method": "shortenTopic" },
     { "hook": "action:topic.purge", "method": "purgeTopic" },
@@ -14,9 +14,6 @@
     { "hook": "action:post.purge", "method": "purgePost" },
     { "hook": "filter:admin.header.build", "method": "Admin.addMenuItem" },
     { "hook": "static:app.load", "method": "init" }
-  ],
-  "scripts": [ 
-    "./static/lib/smoothshorts_fe.js"
   ],
   "templates": "./templates"
 }
