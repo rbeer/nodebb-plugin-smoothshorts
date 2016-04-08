@@ -7,6 +7,8 @@
   "scripts": ["public/scripts/"],
   "css": ["public/css/smoothshorts.css"],
   "templates": "public/templates",
+  "languages": "public/locales",
+  "defaultLang": "en_GB",
   "staticDirs": {"scripts": "static/scripts/", "css": "static/css/"},
   "hooks": [
     { "hook": "action:topic.save", "method": "shortenTopic" },
