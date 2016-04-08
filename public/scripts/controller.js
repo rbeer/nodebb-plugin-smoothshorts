@@ -85,20 +85,21 @@
 
     function buttonClickDelegate(hashedPost) {
       var copyShortUrl = function() {
+        var isCopied, msg;
+        var url = hashedPost.shortUrlContainer.value;
         hashedPost.shortUrlContainer.select();
-        var isCopied = document.execCommand('copy');
-        var msg = isCopied ?
-                  'Copied \'' + hashedPost.shortUrlContainer.value + '\'' :
-                  'Copy command failed.';
+        isCopied = document.execCommand('copy');
+        msg = isCopied ? config.i18nStrings.hashbutton.success.replace('%1', url) :
+                         config.i18nStrings.hashbutton.error;
         isCopied ? app.alertSuccess(msg) : app.alertError;
       };
       return copyShortUrl;
     }
 
     config.load(function() {
+
       $(window).on('action:ajaxify.contentLoaded', parseAjaxifyData);
-      $(window).on('action:posts.loaded', addOnScrollLoad);
-      $(window).on('action:topics.loaded', addOnScrollLoad);
+      $(window).on('action:topics.loaded action:posts.loaded', addOnScrollLoad);
       parseAjaxifyData();
     });
   });
