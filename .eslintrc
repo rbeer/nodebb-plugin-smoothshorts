@@ -47,7 +47,7 @@
     "key-spacing": [2, { "beforeColon": false, "afterColon": true }],
     "linebreak-style": 0,
     "max-depth": 0,
-    "max-len": [1, 80, 2],
+    "max-len": [1, 90, 2],
     "max-nested-callbacks": 0,
     "max-params": 0,
     "max-statements": 0,
