@@ -13,6 +13,7 @@ define('plugins/smoothshorts/config', function() {
     socket.emit('plugins.SmoothShorts.getConfig', function(config) {
       ssConfig.modKey = config.modKey;
       ssConfig.forcedDomain = config.forcedDomain;
+      console.debug('Config:', config);
       return cb();
     });
   };

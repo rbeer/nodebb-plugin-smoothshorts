@@ -1,90 +1,86 @@
-/* global define ajaxify */
+/* global define ajaxify app */
 
-define('plugins/smoothshorts/hashed/post', ['plugins/smoothshorts/helper'], function(helper) {
-  'use strict';
+(function() {
 
-  /**
-   * Data object for HashedPost constructor
-   * @typedef {HashedPostData}
-   * @property {!string} pid
-   * @property {?string} url
-   * @property {?number} index
-   * @property {?Object} topicData
-   * @property {string}  topicData.title
-   * @property {string}  topicData.slug
-   */
+  var deps = [
+    'plugins/smoothshorts/config',
+    'plugins/smoothshorts/helper'
+  ];
 
-  var HashedPost = function(data) {
-    this.url = data.url || '/topic/' + data.topicData.slug + '/' + data.index;
-    this.pid = data.pid;
-    this.index = !isNaN(data.index) ? data.index : data.url.match(/\d*(?:#.*)?$/);
-    this.anchors = getAnchors(this.url, data.topicData.title);
-    this.hash = null;
-    this.button = null;
-    this.copyContainer = null;
-    return this;
-  };
+  define('plugins/smoothshorts/hashed/post', deps, function(config, helper) {
+    'use strict';
 
-  HashedPost.prototype.addHashToAnchor = function() {
-    var self = this;
-    this.anchors.forEach(function(anchor) {
-      anchor.dataset.smoothhash = self.hash;
-    });
-  };
+    /**
+     * Data object for HashedPost constructor
+     * @typedef {HashedPostData}
+     * @property {!string} pid
+     * @property {?string} url
+     * @property {?number} index
+     * @property {?Object} topicData
+     * @property {string}  topicData.title
+     * @property {string}  topicData.slug
+     */
 
-  HashedPost.prototype.addButton = function(handler) {
-    var self = this;
-    this.anchors[0].insertAdjacentHTML('afterend', this.button.outerHTML);
-    this.button = this.anchors[0].nextSibling;
-    $(this.button).tooltip();
-    this.button.addEventListener('click', handler.call(null, self));
-  };
-
-  HashedPost.prototype.hasButton = function() {
-    var tplRegX = /^topic$|(?:account|groups)\/(?:posts|profile|best|(?:up|down)voted|details|favourites)/;
-    var elements;
-    var itHas = true;
-
-    switch(false) {
-    case (itHas = document.queryCommandSupported('copy')):
-      break;
-    case (itHas = tplRegX.test(ajaxify.data.template.name)):
-      break;
-    case !!this.button:
-      elements = createButtonElements(this.hash);
-      this.button = elements.button;
-      this.copyContainer = elements.copyContainer;
-      break;
-    }
-    return itHas;
-  };
-
-  function createButtonElements(hash) {
-    // move to template
-    var icon = document.createElement('i');
-    var shortUrlSpan = document.createElement('span');
-    
-    shortUrlSpan.className = 'shorturl-hidden';
-    shortUrlSpan.innerHTML = 'http://localhost:4567/ss/' + hash;
-
-    icon.dataset.toggle = 'tooltip';
-    icon.dataset.placement = 'top';
-    icon.dataset.title = 'Click to copy this posts short url!';
-    icon.className = 'fa fa-hashtag pointer hashedpost-button';
-    icon.appendChild(shortUrlSpan);
-    return {
-      button: icon,
-      copyContainer: shortUrlSpan
+    var HashedPost = function(data) {
+      this.url = data.url || '/topic/' + data.topicData.slug + '/' + data.index;
+      this.pid = data.pid;
+      this.index = !isNaN(data.index) ? data.index : data.url.match(/\d*(?:#.*)?$/);
+      this.anchors = getAnchors(this.url, data.topicData.title);
+      this.hash = null;
+      this.button = null;
+      this.shortUrlContainer = null;
+      return this;
     };
-  }
 
-  function getAnchors(url, topicTitle) {
-    var anchors = document.querySelectorAll(':not([component="notifications/list"]) a[href="' + url + '"]');
-    return helper.ArrayFromNodeList(anchors).filter(function(anchor) {
-      return anchor.textContent !== topicTitle;
-    });
-  }
+    HashedPost.prototype.addHashToAnchor = function() {
+      var self = this;
+      this.anchors.forEach(function(anchor) {
+        anchor.dataset.smoothhash = self.hash;
+      });
+    };
 
-  return HashedPost;
+    HashedPost.prototype.addButton = function(handler) {
+      var self = this;
+      var buttonData = { shortUrl: buildShortUrl(this.hash) };
+      app.parseAndTranslate('smoothshorts/copybutton', buttonData, function($element) {
+        $(self.anchors[0]).after($element);
+        $element.tooltip();
+        self.button = $element[0];
+        self.shortUrlContainer = self.button.querySelector('input');
+        self.button.addEventListener('click', handler.call(null, self));
+      });
+    };
 
-});
+    HashedPost.prototype.shouldHaveButton = function() {
+      var tplRegX = /^topic$|(?:account|groups)\/(?:posts|profile|best|(?:up|down)voted|details|favourites)/;
+      var itShould = true;
+      switch(false) {
+        case (itShould = document.queryCommandSupported('copy')): break;
+        case (itShould = tplRegX.test(ajaxify.data.template.name)): break;
+      }
+      return itShould;
+    };
+
+    HashedPost.prototype.hasButton = function() {
+      return !!this.button;
+    };
+
+    function buildShortUrl(hash) {
+      var origin = config.forcedDomain ?
+                   location.origin.replace(location.host, config.forcedDomain) :
+                   location.origin;
+      var path = '/ss/' + hash;
+      return origin + path;
+    }
+
+    function getAnchors(url, topicTitle) {
+      var anchors = document.querySelectorAll(':not([component="notifications/list"]) a[href="' + url + '"]');
+      return helper.ArrayFromNodeList(anchors).filter(function(anchor) {
+        return anchor.textContent !== topicTitle;
+      });
+    }
+
+    return HashedPost;
+
+  });
+})();

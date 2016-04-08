@@ -13,24 +13,6 @@
 
   require(deps, function(config, dom, sockets, HashedPost, HashedTopic) {
 
-    /*function parsePage(event, data) {
-      var ids;
-      links = dom.parseForLinks(data.tpl);
-      console.log(links);
-      if (links.posts) {
-        ids = links.posts.map(function(link) {
-          return link.pid;
-        });
-        sockets.getHashes('posts', ids, addHashes);
-      }
-      if (links.topics) {
-        ids = links.topics.map(function(link) {
-          return link.tid;
-        });
-        sockets.getHashes('topics', ids, addHashes);
-      }
-    }*/
-
     function parseAjaxifyData() {
       var data = ajaxify.data;
       if (data.posts) {
@@ -90,7 +72,7 @@
     function addHashes(type, hashedObjects) {
       hashedObjects.forEach(function(obj) {
         obj.addHashToAnchor();
-        if (obj.hasButton && obj.hasButton()) {
+        if (obj instanceof HashedPost && obj.shouldHaveButton() && !obj.hasButton()) {
           obj.addButton(buttonClickDelegate);
         }
       });
@@ -98,7 +80,8 @@
 
     function buttonClickDelegate(hashedPost) {
       var copyShortUrl = function() {
-        console.log('hashedPost', hashedPost);
+        hashedPost.shortUrlContainer.select();
+        console.log(document.execCommand('copy'));
       };
       return copyShortUrl;
     }
