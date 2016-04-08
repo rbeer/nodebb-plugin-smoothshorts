@@ -95,6 +95,7 @@
       $(window).on('action:ajaxify.contentLoaded', parseAjaxifyData);
       $(window).on('action:posts.loaded', addOnScrollLoad);
       $(window).on('action:topics.loaded', addOnScrollLoad);
+      parseAjaxifyData();
     });
   });
 
