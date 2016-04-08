@@ -1,4 +1,4 @@
-/* global require ajaxify */
+/* global require ajaxify app */
 
 (function() {
   'use strict';
@@ -86,7 +86,11 @@
     function buttonClickDelegate(hashedPost) {
       var copyShortUrl = function() {
         hashedPost.shortUrlContainer.select();
-        console.log(document.execCommand('copy'));
+        var isCopied = document.execCommand('copy');
+        var msg = isCopied ?
+                  'Copied \'' + hashedPost.shortUrlContainer.value + '\'' :
+                  'Copy command failed.';
+        isCopied ? app.alertSuccess(msg) : app.alertError;
       };
       return copyShortUrl;
     }
