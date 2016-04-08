@@ -16,9 +16,9 @@
      * @property {!string} pid
      * @property {?string} url
      * @property {?number} index
-     * @property {?Object} topicData
-     * @property {string}  topicData.title
-     * @property {string}  topicData.slug
+     * @property {!Object} topicData
+     * @property {!string} topicData.title
+     * @property {?string} topicData.slug
      */
 
     var HashedPost = function(data) {
@@ -41,7 +41,7 @@
 
     HashedPost.prototype.addButton = function(handler) {
       var self = this;
-      var buttonData = { shortUrl: buildShortUrl(this.hash) };
+      var buttonData = { shortUrl: buildShortUrl(this.hash), i18n: config.i18nStrings };
       app.parseAndTranslate('smoothshorts/copybutton', buttonData, function($element) {
         $(self.anchors[0]).after($element);
         $element.tooltip();

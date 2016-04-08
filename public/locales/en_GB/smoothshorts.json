@@ -1,3 +1,7 @@
 {
-  "hashbutton.title": "Click to copy short url!"
+  "hashbutton": {
+    "title": "Click to copy short url!",
+    "success": "Copied %1",
+    "error": "Copy command failed."
+  }
 }
