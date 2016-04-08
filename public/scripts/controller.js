@@ -5,73 +5,39 @@
 
   var deps = [
     'plugins/smoothshorts/config',
-    'plugins/smoothshorts/dom',
+    'plugins/smoothshorts/helper',
     'plugins/smoothshorts/sockets',
     'plugins/smoothshorts/hashed/post',
     'plugins/smoothshorts/hashed/topic'
   ];
 
-  require(deps, function(config, dom, sockets, HashedPost, HashedTopic) {
+  require(deps, function(config, helper, sockets, HashedPost, HashedTopic) {
 
     function parseAjaxifyData() {
       var data = ajaxify.data;
       if (data.posts) {
-        sockets.getHashes('posts', data.posts.map(postsMap), addHashes);
+        sockets.getHashes('posts', data.posts.map(mapHelperDelegate('posts')), addHashes);
       } else {
         var dataSet = data.topics || data.categories;
         if (dataSet) {
-          sockets.getHashes('posts', dataSet.filter(teaserFilter).map(teaserMap), addHashes);
+          sockets.getHashes('posts', dataSet.filter(helper.teaserFilter).map(mapHelperDelegate('teaser')), addHashes);
         }
         if (data.topics) {
-          sockets.getHashes('topics', dataSet.map(topicsMap), addHashes);
+          sockets.getHashes('topics', dataSet.map(mapHelperDelegate('topics')), addHashes);
         }
       }
     }
 
+    function mapHelperDelegate(type) {
+      return function(mapObj) {
+        var fn = helper[type + 'Map'];
+        return fn(mapObj, type === 'topics' ? HashedTopic : HashedPost);
+      };
+    };
+
     function addOnScrollLoad(event, data) {
       var type = event.type.split(':')[1];
-      sockets.getHashes(type, data[type].map(postsMap), addHashes);
-    }
-
-    function topicsMap(topic) {
-      console.log(topic);
-      return new HashedTopic({
-        slug: topic.slug,
-        tid: topic.tid,
-        postcount: topic.postcount,
-        title: topic.title
-      });
-    }
-
-    function postsMap(post) {
-      var topicTitle = post.topic ? post.topic.title : ajaxify.data.title;
-      var topicSlug = post.topic ? post.topic.slug : ajaxify.data.slug;
-      var index = post.topic ? post.index : post.index + 1;
-      return new HashedPost({
-        pid: post.pid,
-        url: null,
-        index: index,
-        topicData: {
-          title: topicTitle,
-          slug: topicSlug
-        }
-      });
-    }
-
-    function teaserMap(topic) {
-      return new HashedPost({
-        pid: topic.teaser.pid,
-        url: topic.teaser.url,
-        index: topic.teaser.index,
-        topicData: {
-          title: topic.title,
-          slug: topic.slug
-        }
-      });
-    }
-
-    function teaserFilter(obj) {
-      return !!obj.teaser;
+      sockets.getHashes(type, data[type].map(mapHelperDelegate(type)), addHashes);
     }
 
     function addHashes(type, hashedObjects) {

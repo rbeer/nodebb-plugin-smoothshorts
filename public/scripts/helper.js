@@ -1,4 +1,4 @@
-/* global define */
+/* global define ajaxify */
 
 define('plugins/smoothshorts/helper', function() {
   'use strict';
@@ -15,6 +15,46 @@ define('plugins/smoothshorts/helper', function() {
     } else {
       return Array.from(nodeList);
     }
+  };
+
+  helper.topicsMap = function(topic, HashedTopic) {
+    return new HashedTopic({
+      slug: topic.slug,
+      tid: topic.tid,
+      postcount: topic.postcount,
+      title: topic.title
+    });
+  };
+
+  helper.postsMap = function(post, HashedPost) {
+    var topicTitle = post.topic ? post.topic.title : ajaxify.data.title;
+    var topicSlug = post.topic ? post.topic.slug : ajaxify.data.slug;
+    var index = post.topic ? post.index : post.index + 1;
+    return new HashedPost({
+      pid: post.pid,
+      url: null,
+      index: index,
+      topicData: {
+        title: topicTitle,
+        slug: topicSlug
+      }
+    });
+  };
+
+  helper.teaserMap = function(topic, HashedPost) {
+    return new HashedPost({
+      pid: topic.teaser.pid,
+      url: topic.teaser.url,
+      index: topic.teaser.index,
+      topicData: {
+        title: topic.title,
+        slug: topic.slug
+      }
+    });
+  };
+
+  helper.teaserFilter = function(obj) {
+    return !!obj.teaser;
   };
 
   return helper;
