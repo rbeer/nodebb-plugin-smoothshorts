@@ -28,6 +28,11 @@
       }
     }
 
+    function addOnScrollLoad(event, data) {
+      var type = event.type.split(':')[1];
+      sockets.getHashes(type, data[type].map(postsMap), addHashes);
+    }
+
     function topicsMap(topic) {
       console.log(topic);
       return new HashedTopic({
@@ -88,6 +93,8 @@
 
     config.load(function() {
       $(window).on('action:ajaxify.contentLoaded', parseAjaxifyData);
+      $(window).on('action:posts.loaded', addOnScrollLoad);
+      $(window).on('action:topics.loaded', addOnScrollLoad);
     });
   });
 
