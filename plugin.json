@@ -6,6 +6,7 @@
   "library": "./smoothshorts_be.js",
   "scripts": ["public/scripts/"],
   "css": ["public/css/smoothshorts.css"],
+  "templates": "public/templates",
   "staticDirs": {"scripts": "static/scripts/", "css": "static/css/"},
   "hooks": [
     { "hook": "action:topic.save", "method": "shortenTopic" },
@@ -14,6 +15,5 @@
     { "hook": "action:post.purge", "method": "purgePost" },
     { "hook": "filter:admin.header.build", "method": "Admin.addMenuItem" },
     { "hook": "static:app.load", "method": "init" }
-  ],
-  "templates": "./templates"
+  ]
 }
