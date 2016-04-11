@@ -44,7 +44,7 @@
       var buttonData = { shortUrl: buildShortUrl(this.hash), i18n: config.i18nStrings };
       app.parseAndTranslate('smoothshorts/copybutton', buttonData, function($element) {
         $(self.anchors[0]).after($element);
-        $element.tooltip();
+        $element.children('i').tooltip();
         self.button = $element[0];
         self.shortUrlContainer = self.button.querySelector('input');
         self.button.addEventListener('click', handler.call(null, self));
