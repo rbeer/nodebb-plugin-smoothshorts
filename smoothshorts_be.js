@@ -236,7 +236,7 @@ SmoothShorts.getHashForPid = function(pid, cb) {
   db.getSortedSetRangeByScore('posts:smoothshorts', 0, -1, pid, pid,
                               function(err, hash) {
                                 if (err) {
-                                  cb(err);
+                                  return cb(err);
                                 }
                                 cb(null, {pid: pid, hash: hash[0]});
                               });
