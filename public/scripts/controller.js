@@ -29,7 +29,7 @@
     }
 
     function mapHelperDelegate(type) {
-      return function(mapObj) {
+      return function mapHelper(mapObj) {
         var fn = helper[type + 'Map'];
         return fn(mapObj, type === 'topics' ? HashedTopic : HashedPost);
       };
@@ -66,12 +66,15 @@
       return copyShortUrl;
     }
 
-    config.load(function() {
+    function init() {
 
       $(window).on('action:ajaxify.contentLoaded', parseAjaxifyData);
       $(window).on('action:topics.loaded action:posts.loaded', addOnScrollLoad);
       parseAjaxifyData();
-    });
+    }
+
+    // ENTRY POINT
+    config.load(init);
   });
 
 })();
