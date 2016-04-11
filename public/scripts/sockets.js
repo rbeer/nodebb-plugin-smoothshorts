@@ -9,7 +9,6 @@ define('plugins/smoothshorts/sockets', function() {
     var ids = hashedObjects.map(function(obj) {
       return obj[getHashesType[type][1]];
     });
-    console.info('Requesting hashes from:', getHashesType[type][0]);
     socket.emit('plugins.SmoothShorts.' + getHashesType[type][0], ids, function(err, hashes) {
       if (err) {
         return console.error(err);
