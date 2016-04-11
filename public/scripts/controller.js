@@ -55,13 +55,19 @@
         var url = hashedPost.shortUrlContainer.value;
         hashedPost.shortUrlContainer.select();
         isCopied = document.execCommand('copy');
-        msg = isCopied ? config.i18nStrings.hashbutton.success.replace('%1', url) :
-                         config.i18nStrings.hashbutton.error;
-        if (isCopied) {
-          app.alertSuccess(msg);
-        } else {
-          app.alertError(msg);
-        }
+        require(['translator'], function(translator) {
+          var stringTag = translator.compile('smoothshorts:hashbutton.' +
+                                             (isCopied ? 'success' : 'error'),
+                                             (isCopied ? url : void 0));
+
+          translator.translate(stringTag, 'en_GB', function(message) {
+            if (isCopied) {
+              app.alertSuccess(message);
+            } else {
+              app.alertError(message);
+            }
+          });
+        });
       };
       return copyShortUrl;
     }
