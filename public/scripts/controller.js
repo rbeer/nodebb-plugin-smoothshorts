@@ -7,11 +7,12 @@
     'plugins/smoothshorts/config',
     'plugins/smoothshorts/helper',
     'plugins/smoothshorts/sockets',
+    'plugins/smoothshorts/contextmenu',
     'plugins/smoothshorts/hashed/post',
     'plugins/smoothshorts/hashed/topic'
   ];
 
-  require(deps, function(config, helper, sockets, HashedPost, HashedTopic) {
+  require(deps, function(config, helper, sockets, cmenu, HashedPost, HashedTopic) {
 
     function parseAjaxifyData() {
       var data = ajaxify.data;
@@ -43,6 +44,7 @@
     function addHashes(type, hashedObjects) {
       hashedObjects.forEach(function(obj) {
         obj.addHashToAnchor();
+        cmenu.setHooks(obj);
         if (obj instanceof HashedPost && obj.shouldHaveButton() && !obj.hasButton()) {
           obj.addButton(buttonClickDelegate);
         }
