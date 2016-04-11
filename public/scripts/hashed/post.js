@@ -41,7 +41,7 @@
 
     HashedPost.prototype.addButton = function(handler) {
       var self = this;
-      var buttonData = { shortUrl: buildShortUrl(this.hash), i18n: config.i18nStrings };
+      var buttonData = { shortUrl: buildShortUrl(this.hash) };
       app.parseAndTranslate('smoothshorts/copybutton', buttonData, function($element) {
         $(self.anchors[0]).after($element);
         $element.children('i').tooltip();
