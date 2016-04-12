@@ -20,7 +20,7 @@ That's why these shorts are seamlessly woven into the NodeBB experience, your us
 
 ### One-click button
 
-Given that the client's browser supports the [execCommand](https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand "execCommand documentation at MDN")('copy'), SmoothShorts will add an icon next to post links, which copies the short URL with a single click. The [context menu](#contextmenu) method is always available.
+Given that the client's browser supports the [execCommand](https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand "execCommand documentation at MDN")('copy'), SmoothShorts will add an icon next to post links, which copies the short URL with a single click. The [context menu](#context-menu) method is always available.
 
 ![SmoothShorts one-click button](assets/copyButton.png)
 
