@@ -34,7 +34,7 @@
     "seamless"
   ],
   "nbbpm": {
-    "compatibility": "^0.7.0"
+    "compatibility": "^0.9.0 || ^1.0.0"
   },
   "devDependencies": {
     "ink-docstrap": "^1.1.4",
