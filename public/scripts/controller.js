@@ -16,17 +16,25 @@
 
     function parseAjaxifyData() {
       var data = ajaxify.data;
+      var dataKey = data.topics ? 'topics' : data.categories ? 'categories' : null;
       if (data.posts) {
         sockets.getHashes('posts', data.posts.map(mapHelperDelegate('posts')), addHashes);
-      } else {
-        var dataSet = data.topics || data.categories;
-        if (dataSet) {
-          sockets.getHashes('posts', dataSet.filter(helper.teaserFilter).map(mapHelperDelegate('teaser')), addHashes);
+      } else if (dataKey) {
+        if (canShortenTeaser(data[dataKey])) {
+          sockets.getHashes('posts', data[dataKey].filter(helper.teaserFilter).map(mapHelperDelegate('teaser')), addHashes);
+        } else {
+          console.info(config.noTeaserInfo);
         }
-        if (data.topics) {
-          sockets.getHashes('topics', dataSet.map(mapHelperDelegate('topics')), addHashes);
+        if (dataKey === 'topics') {
+          sockets.getHashes('topics', data[dataKey].map(mapHelperDelegate('topics')), addHashes);
         }
       }
+    }
+
+    function canShortenTeaser(entries) {
+      return entries.reduce(function(reduced, current) {
+        return reduced || (current.teaser && current.teaser.pid !== void 0);
+      }, false);
     }
 
     function mapHelperDelegate(type) {
