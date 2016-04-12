@@ -18,7 +18,15 @@ That's why these shorts are seamlessly woven into the NodeBB experience, your us
 
 ## Features
 
-### General
+### One-click button
+
+Given that the client's browser supports the [execCommand](https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand "execCommand documentation at MDN")('copy'), SmoothShorts will add an icon next to post links, which copies the short URL with a single click. The [context menu](#contextmenu) method is always available.
+
+![SmoothShorts one-click button](assets/copyButton.png)
+
+**NOTE**: If you are using NodeBB >=1.0.0, you have a more suitable icon `fa-hashtag` available. The plugin's default `fa-external-link` ensures backwards compatibility. You can change the icon class in the template ([copybutton.tpl](public/templates/smoothshorts/copybutton.tpl)).
+
+### Context menu
 
 Once a user opens the browser's context menu upon a topic link, the href value of that link gets replaced with its assigned hash:
 
@@ -29,13 +37,11 @@ This also works on posts:
 ![SmoothShorts on a post link](assets/onPost.png?raw=true "SmoothShorts on a post link")
 (not all themes have those links; posts are hashed, regardless of used theme)
 
-The now copied address is of the form `https://yourNodeBB.org/ss/HASH`. Visiting it will set some logic in motion, finding the associated post or topic and redirecting accordingly:
+The now copied address is of the form `https://yourNodeBB.org/ss/HASH`. Visiting it will redirect to the associated post or topic:
 
 ![SmoothShorts resolving a hash](assets/resolving.png?raw=true "SmoothShorts resolving a hash")
 
-The original address is restored on any next `mousedown` event. This way, even if the just replaced and copied link is clicked, the user will be visiting that original. (Tested in FireFox 38.05 and Chrome 43.0; [please let me know if your browser doesn't work](https://github.com/rbeer/nodebb-plugin-smoothshorts/issues "")!)
-
-## Settings
+## Settings (ACP/Plugins/SmoothShorts)
 
 ###- Modifier key
   
