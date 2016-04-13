@@ -4,7 +4,7 @@
   'use strict';
 
   var deps = [
-    'plugins/smoothshorts/config',
+    'plugins/smoothshorts/settings',
     'plugins/smoothshorts/helper',
     'plugins/smoothshorts/sockets',
     'plugins/smoothshorts/contextmenu',
@@ -12,7 +12,7 @@
     'plugins/smoothshorts/hashed/topic'
   ];
 
-  require(deps, function(config, helper, sockets, cmenu, HashedPost, HashedTopic) {
+  require(deps, function(settings, helper, sockets, cmenu, HashedPost, HashedTopic) {
 
     function parseAjaxifyData() {
       var data = ajaxify.data;
@@ -101,7 +101,7 @@
     }
 
     // ENTRY POINT
-    config.load(init);
+    settings.load(init);
   });
 
 })();
