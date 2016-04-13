@@ -36,8 +36,6 @@ define('plugins/smoothshorts/contextmenu', ['plugins/smoothshorts/config'], func
     var clickedAnchor = event.target.dataset.smoothhash ?
                         event.target :
                         $(event.target).parents('[data-smoothhash]')[0];
-    console.debug(event);
-    console.debug(clickedAnchor);
     if ((config.modKey !== '' && !event[config.modKey + 'Key']) || !clickedAnchor) {
       return;
     }
