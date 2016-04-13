@@ -13,7 +13,6 @@ define('plugins/smoothshorts/contextmenu', ['plugins/smoothshorts/config'], func
       obj.addEventListener('contextmenu', replaceWithShortURL, false);
     });
     document.addEventListener('mousedown', restoreOriginalURL, false);
-    console.debug('Hooks set for:', HashedObject.url);
   };
 
   // restore original URL on the link, that has
@@ -22,14 +21,11 @@ define('plugins/smoothshorts/contextmenu', ['plugins/smoothshorts/config'], func
   // follows a c-menu call, since this also qualifies as a
   // (right button) 'mousedown'. Neato, isn't it? :]
   function restoreOriginalURL(event) {
-    console.debug('menuCalled:', cmenu.menuCalled);
     if (cmenu.menuCalled) {
-      console.debug('Restoring link for:', cmenu.lastOriginalURL);
       cmenu.lastCalledOn.href = cmenu.lastOriginalURL;
       cmenu.lastOriginalURL = '';
       cmenu.menuCalled = false;
       cmenu.lastCalledOn = null;
-      console.debug('... done;');
     }
   }
 
