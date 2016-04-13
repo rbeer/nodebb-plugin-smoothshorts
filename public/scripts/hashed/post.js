@@ -3,11 +3,11 @@
 (function() {
 
   var deps = [
-    'plugins/smoothshorts/config',
+    'plugins/smoothshorts/settings',
     'plugins/smoothshorts/helper'
   ];
 
-  define('plugins/smoothshorts/hashed/post', deps, function(config, helper) {
+  define('plugins/smoothshorts/hashed/post', deps, function(settings, helper) {
     'use strict';
 
     /**
@@ -66,8 +66,8 @@
     };
 
     function buildShortUrl(hash) {
-      var origin = config.forcedDomain ?
-                   location.origin.replace(location.host, config.forcedDomain) :
+      var origin = settings.forcedDomain ?
+                   location.origin.replace(location.host, settings.forcedDomain) :
                    location.origin;
       var path = '/ss/' + hash;
       return origin + path;

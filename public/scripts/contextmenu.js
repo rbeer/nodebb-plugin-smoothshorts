@@ -1,6 +1,6 @@
 /* global define */
 
-define('plugins/smoothshorts/contextmenu', ['plugins/smoothshorts/config'], function(config) {
+define('plugins/smoothshorts/contextmenu', ['plugins/smoothshorts/settings'], function(settings) {
 
   var cmenu = {
     menuCalled: false,
@@ -36,7 +36,7 @@ define('plugins/smoothshorts/contextmenu', ['plugins/smoothshorts/config'], func
     var clickedAnchor = event.target.dataset.smoothhash ?
                         event.target :
                         $(event.target).parents('[data-smoothhash]')[0];
-    if ((config.modKey !== '' && !event[config.modKey + 'Key']) || !clickedAnchor) {
+    if ((settings.modKey !== '' && !event[settings.modKey + 'Key']) || !clickedAnchor) {
       return;
     }
     hash = clickedAnchor.dataset.smoothhash;
@@ -47,8 +47,8 @@ define('plugins/smoothshorts/contextmenu', ['plugins/smoothshorts/config'], func
   }
 
   function prepareUrl(hash) {
-    if (config.forcedDomain !== '') {
-      return '//' + config.forcedDomain + '/ss/' + hash;
+    if (settings.forcedDomain !== '') {
+      return '//' + settings.forcedDomain + '/ss/' + hash;
     } else {
       return '/ss/' + hash;
     }

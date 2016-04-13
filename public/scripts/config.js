@@ -1,21 +1,21 @@
 /* global define socket */
 
-define('plugins/smoothshorts/config', ['translator'], function(i18n) {
-  var ssConfig = {
+define('plugins/smoothshorts/settings', ['translator'], function(i18n) {
+  var settings = {
     // modifier key (ctrl, alt or shift) to enable uri replacement
     modKey: '',
     // Short URLs will use this domain, if set
     forcedDomain: ''
   };
 
-  ssConfig.load = function(cb) {
-    socket.emit('plugins.SmoothShorts.getConfig', function(config) {
-      ssConfig.modKey = config.modKey;
-      ssConfig.forcedDomain = config.forcedDomain;
+  settings.load = function(cb) {
+    socket.emit('plugins.SmoothShorts.getConfig', function(data) {
+      settings.modKey = data.modKey;
+      settings.forcedDomain = data.forcedDomain;
       return cb();
     });
   };
 
-  return ssConfig;
+  return settings;
 
 });
