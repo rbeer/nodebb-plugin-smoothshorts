@@ -17,24 +17,35 @@
     function parseAjaxifyData() {
       var data = ajaxify.data;
       var dataKey = data.topics ? 'topics' : data.categories ? 'categories' : null;
+      var pageData = dataKey ? data[dataKey] : void 0;
+
       if (data.posts) {
         sockets.getHashes('posts', data.posts.map(mapHelperDelegate('posts')), addHashes);
-      } else if (dataKey) {
-        if (canShortenTeaser(data[dataKey])) {
-          sockets.getHashes('posts', data[dataKey].filter(helper.teaserFilter).map(mapHelperDelegate('teaser')), addHashes);
-        } else {
-          console.info(config.noTeaserInfo);
-        }
+      } else if (pageData) {
+        ensureTeaserPids(pageData);
+        sockets.getHashes('posts', data[dataKey].filter(helper.teaserFilter).map(mapHelperDelegate('teaser', pageData)), addHashes);
         if (dataKey === 'topics') {
           sockets.getHashes('topics', data[dataKey].map(mapHelperDelegate('topics')), addHashes);
         }
       }
     }
 
-    function canShortenTeaser(entries) {
-      return entries.reduce(function(reduced, current) {
-        return reduced || (current.teaser && current.teaser.pid !== void 0);
-      }, false);
+    function ensureTeaserPids(pageData) {
+      if (teasersHavePids(pageData)) {
+        return pageData;
+      }
+      return pageData.map(function(dataObject) {
+        if (dataObject.teaser) {
+          dataObject.teaser.pid = dataObject.posts[0].pid;
+        }
+        return dataObject;
+      });
+    }
+
+    function teasersHavePids(pageData) {
+      return pageData.some(function(dataObject) {
+        return dataObject.teaser && dataObject.teaser.pid !== void 0;
+      });
     }
 
     function mapHelperDelegate(type) {
@@ -61,7 +72,7 @@
 
     function buttonClickDelegate(hashedPost) {
       var copyShortUrl = function() {
-        var isCopied, msg;
+        var isCopied;
         var url = hashedPost.shortUrlContainer.value;
         hashedPost.shortUrlContainer.select();
         isCopied = document.execCommand('copy');
