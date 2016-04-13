@@ -1,4 +1,7 @@
-﻿### 0.2.0
+﻿### 0.2.1
+  - ADD: Fallback for missing teaser post ids in NodeBB versions <1.0.3 .
+
+### 0.2.0
   - REWORK: Front-end scripts:
     - Detect and enable topic/post links on every page (e.g. /unread, /popular), including teasers and listings in users' profiles.
   - ADD: Button to copy short url with a single click. (At posts in topic view, only.)
