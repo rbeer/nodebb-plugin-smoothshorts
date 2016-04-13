@@ -1,6 +1,6 @@
 /* global define, socket */
 
-define('plugins/smoothshorts/settings', ['translator'], function(i18n) {
+define('plugins/smoothshorts/settings', function() {
   var settings = {
     // modifier key (ctrl, alt or shift) to enable uri replacement
     modKey: '',
