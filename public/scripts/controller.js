@@ -1,4 +1,4 @@
-/* global require ajaxify app */
+/* global require, ajaxify, app */
 
 (function() {
   'use strict';

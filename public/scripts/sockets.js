@@ -1,4 +1,4 @@
-/* global define socket */
+/* global define, socket */
 
 define('plugins/smoothshorts/sockets', function() {
   'use strict';

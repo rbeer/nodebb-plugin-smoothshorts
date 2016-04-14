@@ -1,4 +1,4 @@
-/* global define socket */
+/* global define, socket */
 
 define('plugins/smoothshorts/config', ['translator'], function(i18n) {
   var ssConfig = {

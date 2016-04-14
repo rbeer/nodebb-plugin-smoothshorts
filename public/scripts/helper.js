@@ -1,4 +1,4 @@
-/* global define ajaxify */
+/* global define, ajaxify */
 
 define('plugins/smoothshorts/helper', function() {
   'use strict';

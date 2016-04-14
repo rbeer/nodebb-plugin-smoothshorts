@@ -1,4 +1,4 @@
-/* global define ajaxify app */
+/* global define, ajaxify, app */
 
 (function() {
 
