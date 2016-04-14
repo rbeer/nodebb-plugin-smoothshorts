@@ -3,8 +3,19 @@
 define('plugins/smoothshorts/helper', function() {
   'use strict';
 
+  /**
+   * Provides helper functions (for e.g. [].map, [].filter)
+   * @exports plugins/smoothshorts/helper
+   * @namespace helper
+   */
   var helper = {};
 
+  /**
+   * Polyfill for Array.from
+   * @memberOf helper
+   * @static
+   * @param {NodeList} nodeList - List of HTMLAnchorElements
+   */
   helper.ArrayFromNodeList = function(nodeList) {
     if (!Array.from) {
       var nodeArray = [];
@@ -17,6 +28,14 @@ define('plugins/smoothshorts/helper', function() {
     }
   };
 
+  /**
+   * Maps controller~TopicData into HashedTopic objects
+   * @memberOf helper
+   * @static
+   * @param  {controller~TopicData} topic
+   * @param  {HashedTopic} HashedTopic - NOT an instance!
+   * @return {HashedTopic}             - New HashedTopic instance
+   */
   helper.topicsMap = function(topic, HashedTopic) {
     return new HashedTopic({
       slug: topic.slug,
@@ -26,6 +45,14 @@ define('plugins/smoothshorts/helper', function() {
     });
   };
 
+  /**
+   * Maps controller~PostData into HashedPost objects
+   * @memberOf helper
+   * @static
+   * @param  {controller~PostData} post
+   * @param  {HashedPost} HashedPost - NOT an instance!
+   * @return {HashedPost}            - New HashedPost instance
+   */
   helper.postsMap = function(post, HashedPost) {
     var topicTitle = post.topic ? post.topic.title : ajaxify.data.title;
     var topicSlug = post.topic ? post.topic.slug : ajaxify.data.slug;
@@ -41,6 +68,14 @@ define('plugins/smoothshorts/helper', function() {
     });
   };
 
+  /**
+   * Maps controller~TeaserData into HashedPost objects
+   * @memberOf helper
+   * @static
+   * @param  {controller~TeaserData} topic
+   * @param  {HashedPost} HashedPost - NOT an instance!
+   * @return {HashedPost}            - New HashedPost instance
+   */
   helper.teaserMap = function(topic, HashedPost) {
     return new HashedPost({
       pid: topic.teaser.pid,
@@ -53,6 +88,13 @@ define('plugins/smoothshorts/helper', function() {
     });
   };
 
+  /**
+   * Filters out TopicData or CategoryData objects without TeaserData member
+   * @memberOf helper
+   * @static
+   * @param  {controller~TopicData|controller~CategoryData} obj [description]
+   * @return {bool}
+   */
   helper.teaserFilter = function(obj) {
     return !!obj.teaser;
   };

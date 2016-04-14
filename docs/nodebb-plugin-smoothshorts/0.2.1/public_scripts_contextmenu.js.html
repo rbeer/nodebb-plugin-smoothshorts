@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Documentation Source: public/scripts/contextmenu.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.paper.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Documentation</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="contextmenu.html">contextmenu</a></li><li><a href="controller.html">controller</a></li><li><a href="helper.html">helper</a></li><li><a href="settings.html">settings</a></li><li><a href="sockets.html">sockets</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="HashedPost.html">HashedPost</a></li><li><a href="HashedTopic.html">HashedTopic</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html#SmoothShorts">SmoothShorts</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+		<div class="col-sm-3 col-md-3">
+            <form class="navbar-form" role="search">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			
+
+		<h1 class="page-title">Source: public/scripts/contextmenu.js</h1>
+    
+<section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">/* global define */
+
+define('plugins/smoothshorts/contextmenu', ['plugins/smoothshorts/settings'], function(settings) {
+
+  /**
+   * Provides context menu method
+   * @exports plugins/smoothshorts/contextmenu
+   * @namespace contextmenu
+   */
+  var cmenu = {
+    /**
+     * Indicates whether context menu is open
+     * @memberof contextmenu
+     * @type {Boolean}
+     */
+    menuCalled: false,
+    /**
+     * Element context menu has been called on
+     * @memberof contextmenu
+     * @type {HTMLAnchorElement}
+     */
+    lastCalledOn: null,
+    /**
+     * href value to restore on [lastCalledOn]{@link contextmenu.lastCalledOn}
+     * @memberof contextmenu
+     * @type {String}
+     */
+    lastOriginalURL: ''
+  };
+
+  /**
+   * Sets hooks 'contextmenu' on given HashedPost|Topic's anchors
+   * and 'mousedown' on document.
+   * @memberof contextmenu
+   * @param {(HashedPost|HashedTopic)} HashedObject
+   */
+  cmenu.setHooks = function(HashedObject) {
+    HashedObject.anchors.forEach(function(obj) {
+      obj.addEventListener('contextmenu', replaceWithShortURL, false);
+    });
+    document.addEventListener('mousedown', restoreOriginalURL, false);
+  };
+
+  /**
+   * Restores [lastOriginalURL]{@link module:plugins/smoothshorts/contextmenu.lastOriginalURL}
+   * on [lastCalledOn]{@link contextmenu.lastCalledOn}
+   * @memberof contextmenu
+   * @inner
+   * @param  {MouseEvent} event
+   */
+  function restoreOriginalURL(event) {
+    if (cmenu.menuCalled) {
+      cmenu.lastCalledOn.href = cmenu.lastOriginalURL;
+      cmenu.lastOriginalURL = '';
+      cmenu.menuCalled = false;
+      cmenu.lastCalledOn = null;
+    }
+  }
+
+  /**
+   * Replaces href of an anchor with short URL.
+   * @memberof contextmenu
+   * @inner
+   * @param  {MouseEvent} event
+   */
+  function replaceWithShortURL(event) {
+    var hash;
+    var clickedAnchor = event.target.dataset.smoothhash ?
+                        event.target :
+                        $(event.target).parents('[data-smoothhash]')[0];
+    if ((settings.modKey !== '' &amp;&amp; !event[settings.modKey + 'Key']) || !clickedAnchor) {
+      return;
+    }
+    hash = clickedAnchor.dataset.smoothhash;
+    cmenu.menuCalled = true;
+    cmenu.lastCalledOn = clickedAnchor;
+    cmenu.lastOriginalURL = cmenu.lastCalledOn.href;
+    cmenu.lastCalledOn.href = prepareUrl(hash);
+  }
+
+  /**
+   * Builds short URL.
+   * @memberof contextmenu
+   * @inner
+   * @param  {string} hash
+   * @return {string}
+   */
+  function prepareUrl(hash) {
+    if (settings.forcedDomain !== '') {
+      return '//' + settings.forcedDomain + '/ss/' + hash;
+    } else {
+      return '/ss/' + hash;
+    }
+  }
+
+  return cmenu;
+
+});
+</pre>
+    </article>
+</section>
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+<div class="modal fade" id="searchResults">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Search results</h4>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+<footer>
+
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a>
+	
+		on 2016-04-14T06:45:43+02:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+<script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			var id = $( heading ).attr( "id" );
+			return id && id.replace(/\~/g, '-inner-').replace(/\./g, '-static-') || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		SearcherDisplay.init();
+	});
+</script>
+
+</body>
+</html>

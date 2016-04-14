@@ -3,8 +3,21 @@
 define('plugins/smoothshorts/sockets', function() {
   'use strict';
 
+  /**
+   * Provides socket.io connections to backend
+   * @exports plugins/smoothshorts/sockets
+   * @namespace sockets
+   */
   var sockets = {};
 
+  /**
+   * Requests hashes
+   * @memberOf sockets
+   * @static
+   * @param  {controller~hashedType}  type
+   * @param  {HashedPost|HashedTopic} hashedObjects - Objects to get hashes for
+   * @param  {controller~addHashes}   cb
+   */
   sockets.getHashes = function(type, hashedObjects, cb) {
     var ids = hashedObjects.map(function(obj) {
       return obj[getHashesType[type][1]];
