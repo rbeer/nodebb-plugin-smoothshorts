@@ -1,8 +1,0 @@
-[component="smoothshorts/copybutton"] {
-  display: inline;
-}
-
-[component="smoothshorts/copybutton"] input {
-  opacity: 0;
-  width: 5px;
-}
