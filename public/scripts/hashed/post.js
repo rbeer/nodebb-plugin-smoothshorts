@@ -41,7 +41,7 @@
 
     HashedPost.prototype.addButton = function(handler) {
       var self = this;
-      var buttonData = { shortUrl: buildShortUrl(this.hash) };
+      var buttonData = { shortUrl: helper.buildShortURL(this.hash) };
       app.parseAndTranslate('smoothshorts/copybutton', buttonData, function($element) {
         $(self.anchors[0]).after($element);
         $element.children('i').tooltip();
@@ -64,14 +64,6 @@
     HashedPost.prototype.hasButton = function() {
       return !!this.button;
     };
-
-    function buildShortUrl(hash) {
-      var origin = settings.forcedDomain ?
-                   location.origin.replace(location.host, settings.forcedDomain) :
-                   location.origin;
-      var path = '/ss/' + hash;
-      return origin + path;
-    }
 
     function getAnchors(url, topicTitle) {
       var anchors = document.querySelectorAll(':not([component="notifications/list"]) a[href="' + url + '"]');

@@ -29,7 +29,7 @@
                   <input type="checkbox" id="useDomain"<!-- IF useDomain --> checked<!-- ENDIF useDomain -->>
                 </label>
               </span>
-              <input type="text" class="form-control" id="domain" value="{forcedDomain}"<!-- IF !useDomain --> disabled<!-- ENDIF !useDomain -->/>
+              <input type="text" class="form-control" id="domain" placeholder="short.com" value="{forcedDomain}"<!-- IF !useDomain --> disabled<!-- ENDIF !useDomain -->/>
             </div>
           </div>
           <button class="btn btn-primary btn-md" id="btnSave">Save Settings</button>

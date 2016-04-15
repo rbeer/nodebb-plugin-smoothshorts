@@ -1,6 +1,6 @@
 /* global define, ajaxify */
 
-define('plugins/smoothshorts/helper', function() {
+define('plugins/smoothshorts/helper', ['plugins/smoothshorts/settings'], function(settings) {
   'use strict';
 
   var helper = {};
@@ -55,6 +55,14 @@ define('plugins/smoothshorts/helper', function() {
 
   helper.teaserFilter = function(obj) {
     return !!obj.teaser;
+  };
+
+  helper.buildShortURL = function(hash) {
+    var origin = settings.forcedDomain ?
+                 location.origin.replace(location.hostname, settings.forcedDomain) :
+                 location.origin;
+    var path = '/ss/' + hash;
+    return origin + path;
   };
 
   return helper;
