@@ -1,0 +1,10 @@
+.cout-warn {
+  border-left-width: 5px;
+  border-left-color: #D52222;
+  border-right-width: 5px;
+  border-right-color: #D52222;
+}
+.cout {
+  -webkit-transition: border 1s;
+  transition: border 1s;
+}
