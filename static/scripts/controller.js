@@ -1,4 +1,4 @@
-/* global app, socket, config */
+/* global app, socket */
 $(document).ready(function() {
   'use strict';
 
@@ -6,12 +6,8 @@ $(document).ready(function() {
   var ddModKey = document.getElementById('modKey');
   var useDomain = document.getElementById('useDomain');
   var txtDomain = document.getElementById('domain');
-  var csrf = document.getElementById('csrfToken');
 
   var btnHash = document.getElementById('btnHash');
-  /* not yet implemented - stay tuned for 0.2.0! :)
-  var btnDel = document.getElementById('btnDel');
-  */
   var btnSave = document.getElementById('btnSave');
 
   var counter = {
@@ -23,29 +19,31 @@ $(document).ready(function() {
     postWell: document.getElementById('postWell')
   };
 
-  useModKey.addEventListener('click', function handleUseModKey(evt) {
-    ddModKey.disabled = !evt.target.checked;
+  useModKey.addEventListener('click', function handleUseModKey(event) {
+    ddModKey.disabled = !event.target.checked;
   });
-  useDomain.addEventListener('click', function handleUseDomain(evt) {
-    txtDomain.disabled = !evt.target.checked;
+
+  useDomain.addEventListener('click', function handleUseDomain(event) {
+    txtDomain.disabled = !event.target.checked;
   });
-  btnSave.addEventListener('click', function(e) {
-    $.post(config.relative_path + '/api/admin/plugins/smoothshorts/save', {
-      _csrf: csrf.value,
+
+  btnSave.addEventListener('click', function(event) {
+    socket.emit('admin.plugins.SmoothShorts.saveSettings', {
       useModKey: useModKey.checked,
       modKey: ddModKey.selectedOptions.item(0).value.toLowerCase(),
       useDomain: useDomain.checked,
-      domain: txtDomain.value
-    }, function(data) {
-      if (data === 'OK') {
-        app.alertSuccess('Settings saved.');
-      } else {
+      forcedDomain: txtDomain.value
+    }, function(err) {
+      if (err) {
         app.alertError('Couldn\'t save settings.');
+        return console.error(err);
       }
+      app.alertSuccess('Settings saved.');
     });
-    e.preventDefault();
+    event.preventDefault();
   });
-  btnHash.addEventListener('click', function(e) {
+
+  btnHash.addEventListener('click', function(event) {
     socket.emit('admin.plugins.SmoothShorts.hashMissing', function(err) {
       if (err) {
         return app.alertError(err.message);

@@ -32,7 +32,6 @@
               <input type="text" class="form-control" id="domain" value="{forcedDomain}"<!-- IF !useDomain --> disabled<!-- ENDIF !useDomain -->/>
             </div>
           </div>
-          <input id="csrfToken" type="hidden" value="{csrf}" />
           <button class="btn btn-primary btn-md" id="btnSave">Save Settings</button>
         </form>
       </div>
