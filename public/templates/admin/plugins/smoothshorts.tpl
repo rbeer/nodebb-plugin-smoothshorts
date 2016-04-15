@@ -6,7 +6,7 @@
         <form>
           <div class="form-group">
           <label for="modKey">Modifier Key</label><br />
-          <p>User has to hold modkey while right clicking in order to replace the link.</p>
+          <p>User has to hold the modifier key while right clicking a link in order to replace its URL.</p>
             <div class="input-group">
               <span class="input-group-addon">
                 <label style="margin-bottom: -1px;">
@@ -22,7 +22,7 @@
           </div>
           <div class="form-group">
             <label for="domain">Force Domain</label>
-            <p>Force short urls to use this domain, no matter which the user used to visit your NodeBB.</p>
+            <p>Force short URLs to use this domain, no matter which the user used to visit your NodeBB.</p>
             <div class="input-group">
               <span class="input-group-addon">
                 <label style="margin-bottom: -1px;">
