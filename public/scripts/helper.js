@@ -58,11 +58,7 @@ define('plugins/smoothshorts/helper', ['plugins/smoothshorts/settings'], functio
   };
 
   helper.buildShortURL = function(hash) {
-    var origin = settings.forcedDomain ?
-                 location.origin.replace(location.hostname, settings.forcedDomain) :
-                 location.origin;
-    var path = '/ss/' + hash;
-    return origin + path;
+    return location.protocol + '//' + settings.shortFormat.replace(':hash', hash);
   };
 
   return helper;

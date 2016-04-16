@@ -18,15 +18,14 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="domain">Force Domain</label>
-      <p>Force short URLs to use this domain, no matter which the user used to visit your NodeBB.</p>
+      <label for="shortFormat">URL Format</label>
+      <p>Here you can define the format of your short URLs.<br />
+      Use ':hash' to insert post/topic hash, leave blank to use the default!</p>
       <div class="input-group">
         <span class="input-group-addon">
-          <label style="margin-bottom: -1px;">
-            <input type="checkbox" id="useDomain"<!-- IF useDomain --> checked<!-- ENDIF useDomain -->>
-          </label>
+          <span>http(s)://</span>
         </span>
-        <input type="text" class="form-control" id="domain" placeholder="short.com" value="{forcedDomain}"<!-- IF !useDomain --> disabled<!-- ENDIF !useDomain -->/>
+        <input type="text" class="form-control" id="shortFormat" placeholder="{shortFormatDefault}" value="{shortFormat}" data-toggle="tooltip" />
       </div>
     </div>
     <button class="btn btn-primary btn-md" id="btnSave">Save Settings</button>

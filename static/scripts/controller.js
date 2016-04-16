@@ -4,8 +4,8 @@ $(document).ready(function() {
 
   var useModKey = document.getElementById('useModKey');
   var ddModKey = document.getElementById('modKey');
-  var useDomain = document.getElementById('useDomain');
-  var txtDomain = document.getElementById('domain');
+  var shortFormat = document.getElementById('shortFormat');
+  var $shortFormat = $(shortFormat);
 
   var btnHash = document.getElementById('btnHash');
   var btnSave = document.getElementById('btnSave');
@@ -23,24 +23,31 @@ $(document).ready(function() {
     ddModKey.disabled = !event.target.checked;
   });
 
-  useDomain.addEventListener('click', function handleUseDomain(event) {
-    txtDomain.disabled = !event.target.checked;
-  });
-
   btnSave.addEventListener('click', function(event) {
+    event.preventDefault();
+    if (!validateShortFormat()) {
+      return app.alertError('Please define the position of post/topic hash with :hash !');
+    }
     socket.emit('admin.plugins.SmoothShorts.saveSettings', {
       useModKey: useModKey.checked,
       modKey: ddModKey.selectedOptions.item(0).value.toLowerCase(),
-      useDomain: useDomain.checked,
-      forcedDomain: txtDomain.value
+      shortFormat: shortFormat.value
     }, function(err) {
       if (err) {
         app.alertError('Couldn\'t save settings.');
         return console.error(err);
       }
-      app.alertSuccess('Settings saved.');
+      var alertOptions = {
+        title: 'Settings saved',
+        message: 'Please restart your NodeBB to apply the new settings!',
+        clickfn: function() {
+          require(['admin/modules/instance'], function(instance) {
+            instance.reload();
+          });
+        }
+      };
+      app.alert(alertOptions);
     });
-    event.preventDefault();
   });
 
   btnHash.addEventListener('click', function(event) {
@@ -51,6 +58,10 @@ $(document).ready(function() {
     });
   });
 
+  function validateShortFormat() {
+    return shortFormat.value.length === 0 || shortFormat.value.indexOf(':hash') !== -1;
+  }
+
   function handleNewHash(data) {
     var target = counter[data.type];
     var total = counter[data.type + 'Total'];
@@ -60,5 +71,37 @@ $(document).ready(function() {
       app.alertSuccess('All ' + data.type + ' hashed.');
     }
   }
+
   socket.on('event:smoothshorts.newhash', handleNewHash);
+
+  $shortFormat.tooltip({
+    html: true,
+    placement: 'top',
+    template: '<div class="format-tooltip tooltip" role="tooltip"><div class="format-tooltip-arrow tooltip-arrow"></div><div class="format-tooltip-inner tooltip-inner">Beware!</div></div>',
+    title: 'Beware!<br />Changing this setting will invalidate<br />all short URLs issued so far.',
+    trigger: 'focus',
+    container: 'body'
+  });
+
+  $shortFormat.on('shown.bs.tooltip', function(event) {
+    var mouseEnter = function() {
+      window.clearTimeout(hideID);
+    };
+    var mouseLeave = function() {
+      $shortFormat.tooltip('hide');
+    };
+    var scrollHide = function() {
+      $shortFormat.tooltip('hide');
+      window.clearTimeout(hideID);
+      document.removeEventListener('scroll', scrollHide);
+    };
+    var formatTooltipId = event.target.attributes.getNamedItem('aria-describedby').value;
+    var formatTooltip = document.getElementById(formatTooltipId);
+    formatTooltip.addEventListener('mouseenter', mouseEnter);
+    formatTooltip.addEventListener('mouseleave', mouseLeave);
+    document.body.addEventListener('scroll', scrollHide);
+    var hideID = window.setTimeout(function() {
+      $shortFormat.tooltip('hide');
+    }, 7000);
+  });
 });

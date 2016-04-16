@@ -8,3 +8,13 @@
   -webkit-transition: border 1s;
   transition: border 1s;
 }
+
+.format-tooltip-arrow {
+  border-top-color: #F44336 !important;
+}
+.format-tooltip-inner {
+  max-width: 300px;
+  background-color: #F44336;
+  font-weight: bold;
+  font-size: 14px;
+}
