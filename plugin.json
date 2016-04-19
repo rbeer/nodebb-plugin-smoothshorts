@@ -9,7 +9,7 @@
   "templates": "public/templates",
   "languages": "public/locales",
   "defaultLang": "en_GB",
-  "staticDirs": {"scripts": "static/scripts/", "css": "static/css/"},
+  "staticDirs": {"scripts": "public/static/scripts/", "css": "public/static/css/"},
   "hooks": [
     { "hook": "action:topic.save", "method": "shortenTopic" },
     { "hook": "action:topic.purge", "method": "purgeTopic" },
