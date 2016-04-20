@@ -1,9 +1,12 @@
 /* global define, socket */
 
 define('plugins/smoothshorts/settings', function() {
+  'use strict';
+
   var settings = {
     modKey: '',
-    forcedDomain: ''
+    shortFormat: '',
+    copyButtonClass: 'fa-external-link'
   };
 
   settings.load = function(cb) {
