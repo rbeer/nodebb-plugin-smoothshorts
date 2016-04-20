@@ -6,6 +6,7 @@ $(document).ready(function() {
   var ddModKey = document.getElementById('modKey');
   var shortFormat = document.getElementById('shortFormat');
   var $shortFormat = $(shortFormat);
+  var copyButtonIcon = document.getElementById('copyButtonIcon');
 
   var btnHash = document.getElementById('btnHash');
   var btnSave = document.getElementById('btnSave');
@@ -31,7 +32,8 @@ $(document).ready(function() {
     socket.emit('admin.plugins.SmoothShorts.saveSettings', {
       useModKey: useModKey.checked,
       modKey: ddModKey.selectedOptions.item(0).value.toLowerCase(),
-      shortFormat: shortFormat.value
+      shortFormat: shortFormat.value,
+      copyButtonClass: copyButtonIcon.firstElementChild.value
     }, function(err) {
       if (err) {
         app.alertError('Couldn\'t save settings.');
@@ -104,4 +106,12 @@ $(document).ready(function() {
       $shortFormat.tooltip('hide');
     }, 7000);
   });
+
+  copyButtonIcon.addEventListener('click', function(event) {
+    event.preventDefault();
+    require(['iconSelect'], function(iconSelect) {
+      iconSelect.init($(event.target.firstElementChild || event.target));
+    });
+  });
+
 });
