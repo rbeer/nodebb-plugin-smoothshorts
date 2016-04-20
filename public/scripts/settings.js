@@ -10,6 +10,7 @@ define('plugins/smoothshorts/settings', function() {
     socket.emit('plugins.SmoothShorts.getConfig', function(data) {
       settings.modKey = data.modKey;
       settings.shortFormat = data.shortFormat;
+      settings.copyButtonClass = data.copyButtonClass;
       return cb();
     });
   };
