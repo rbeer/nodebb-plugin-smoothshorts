@@ -52,7 +52,7 @@ $(document).ready(function() {
     });
   });
 
-  btnHash.addEventListener('click', function(event) {
+  btnHash.addEventListener('click', function() {
     socket.emit('admin.plugins.SmoothShorts.hashMissing', function(err) {
       if (err) {
         return app.alertError(err.message);

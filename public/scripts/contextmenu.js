@@ -22,12 +22,7 @@
       document.addEventListener('mousedown', restoreOriginalURL, false);
     };
 
-    // restore original URL on the link, that has
-    // been right clicked to open the context menu.
-    // the 'mousedown' handler also fires when a c-menu call
-    // follows a c-menu call, since this also qualifies as a
-    // (right button) 'mousedown'. Neato, isn't it? :]
-    function restoreOriginalURL(event) {
+    function restoreOriginalURL() {
       if (cmenu.menuCalled) {
         cmenu.lastCalledOn.href = cmenu.lastOriginalURL;
         cmenu.lastOriginalURL = '';
@@ -36,8 +31,6 @@
       }
     }
 
-    // replace href on the link that has been
-    // right-clicked to open the c-menu
     function replaceWithShortURL(event) {
       var hash;
       var clickedAnchor = event.target.dataset.smoothhash ?
