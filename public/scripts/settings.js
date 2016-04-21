@@ -1,7 +1,8 @@
-/* global define socket */
+/* global define, socket */
 
 define('plugins/smoothshorts/settings', function() {
-  
+  'use strict';
+
   /**
    * Provides plugin's settings
    * @exports plugins/smoothshorts/settings
@@ -10,14 +11,27 @@ define('plugins/smoothshorts/settings', function() {
   var settings = {
     /**
      * Modifier key (ctrl, alt or shift) to enable URL replacement
+     * @memberOf settings
      * @type {string}
      */
     modKey: '',
     /**
-     * Short URLs will use this domain, if set
+     * Short URLs will be built with this format
+     * @memberOf settings
      * @type {string}
+     * @example
+     * 'short.com/ss/:hash'
+     * 'short.com/:hash'
+     * 'short.com/:hash/yolo'
      */
-    forcedDomain: ''
+    shortFormat: '',
+    /**
+     * CSS class name for copy button icon
+     * @memberOf settings
+     * @type {String}
+     * @default fa-external-link
+     */
+    copyButtonClass: 'fa-external-link'
   };
 
   /**
@@ -28,7 +42,8 @@ define('plugins/smoothshorts/settings', function() {
   settings.load = function(cb) {
     socket.emit('plugins.SmoothShorts.getConfig', function(data) {
       settings.modKey = data.modKey;
-      settings.forcedDomain = data.forcedDomain;
+      settings.shortFormat = data.shortFormat;
+      settings.copyButtonClass = data.copyButtonClass;
       return cb();
     });
   };

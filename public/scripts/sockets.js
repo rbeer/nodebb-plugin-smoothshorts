@@ -1,4 +1,4 @@
-/* global define socket */
+/* global define, socket */
 
 define('plugins/smoothshorts/sockets', function() {
   'use strict';
@@ -20,9 +20,12 @@ define('plugins/smoothshorts/sockets', function() {
    */
   sockets.getHashes = function(type, hashedObjects, cb) {
     var ids = hashedObjects.map(function(obj) {
-      return obj[getHashesType[type][1]];
+      return obj[getHashesType[type]];
     });
-    socket.emit('plugins.SmoothShorts.' + getHashesType[type][0], ids, function(err, hashes) {
+    socket.emit('plugins.SmoothShorts.getHashes', {
+      ids: ids,
+      type: type
+    }, function(err, hashes) {
       if (err) {
         return console.error(err);
       }
@@ -34,8 +37,8 @@ define('plugins/smoothshorts/sockets', function() {
   };
 
   var getHashesType = {
-    posts: ['getPostHashes', 'pid'],
-    topics: ['getTopicHashes', 'tid']
+    posts: 'pid',
+    topics: 'tid'
   };
 
   return sockets;

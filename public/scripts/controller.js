@@ -1,4 +1,4 @@
-/* global require ajaxify app */
+/* global require, ajaxify, app */
 
 (function() {
   'use strict';
@@ -25,7 +25,7 @@
      * @property {?Array.<controller~PostData>}     posts
      * @property {?Array.<controller~TopicData>}    topics
      */
-    
+
     /**
      * Ajaxify data, describing a teaser
      * (showing only properties plugin is working with)
@@ -34,7 +34,7 @@
      * @property {?string} pid          - Introduced in NodeBB v1.0.3; earlier versions need to get it with {@link controller~ensureTeaserPids}
      * @property {string}  url          - URL to post
      */
-    
+
     /**
      * Ajaxify data, describing a category
      * (showing only properties plugin is working with)
@@ -42,7 +42,7 @@
      * @property {Array.<controller~PostData>} posts - First entry is the teaser post. {@link controller~ensureTeaserPids} uses it, when [teaser object]{@link controller~TeaserData} has no pid.
      * @property {controller~TeaserData} teaser
      */
-    
+
     /**
      * Ajaxify data, describing a topic
      * (showing only properties plugin is working with)
@@ -54,7 +54,7 @@
      * @property {string}      title     - Topic's title
      * @property {?controller~TeaserData} teaser    - Topic's teaser
      */
-    
+
     /**
      * Ajaxify data, describing a post
      * (showing only properties plugin is working with)
@@ -200,6 +200,7 @@
       parseAjaxifyData();
     }
 
+    // ENTRY POINT
     settings.load(init);
   });
 

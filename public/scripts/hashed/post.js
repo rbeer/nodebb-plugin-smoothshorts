@@ -1,4 +1,4 @@
-/* global define ajaxify app */
+/* global define, ajaxify, app */
 
 (function() {
 
@@ -91,7 +91,10 @@
      */
     HashedPost.prototype.addButton = function(handler) {
       var self = this;
-      var buttonData = { shortUrl: buildShortUrl(this.hash) };
+      var buttonData = {
+        shortUrl: helper.buildShortURL(this.hash),
+        copyButtonClass: settings.copyButtonClass
+      };
       app.parseAndTranslate('smoothshorts/copybutton', buttonData, function($element) {
         $(self.anchors[0]).after($element);
         $element.children('i').tooltip();
@@ -127,22 +130,6 @@
     HashedPost.prototype.hasButton = function() {
       return !!this.button;
     };
-
-    /**
-     * Builds short URL from [hash]{@link HashedPost#hash} and
-     * [forcedDomain]{@link settings.forcedDomain} or current location.host
-     * @inner
-     * @memberOf HashedPost
-     * @param  {HashedPost#hash} hash - Instances hash
-     * @return {string}
-     */
-    function buildShortUrl(hash) {
-      var origin = settings.forcedDomain ?
-                   location.origin.replace(location.host, settings.forcedDomain) :
-                   location.origin;
-      var path = '/ss/' + hash;
-      return origin + path;
-    }
 
     /**
      * Collects anchor elements from DOM and stores them

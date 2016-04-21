@@ -1,6 +1,6 @@
-/* global define ajaxify */
+/* global define, ajaxify */
 
-define('plugins/smoothshorts/helper', function() {
+define('plugins/smoothshorts/helper', ['plugins/smoothshorts/settings'], function(settings) {
   'use strict';
 
   /**
@@ -97,6 +97,18 @@ define('plugins/smoothshorts/helper', function() {
    */
   helper.teaserFilter = function(obj) {
     return !!obj.teaser;
+  };
+
+  /**
+   * Builds short URL from [hash]{@link HashedPost#hash} and
+   * [forcedDomain]{@link settings.forcedDomain} or current location.host
+   * @inner
+   * @memberOf helper
+   * @param  {HashedPost#hash|HashedTopic#hash} hash - Instances hash
+   * @return {string}
+   */
+  helper.buildShortURL = function(hash) {
+    return location.protocol + '//' + settings.shortFormat.replace(':hash', hash);
   };
 
   return helper;
