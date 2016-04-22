@@ -1,22 +1,22 @@
 /* global define, socket */
 
+/**
+ * Provides socket.io connections to backend
+ * @memberOf client
+ * @module sockets
+ */
 define('plugins/smoothshorts/sockets', function() {
   'use strict';
 
-  /**
-   * Provides socket.io connections to backend
-   * @exports plugins/smoothshorts/sockets
-   * @namespace sockets
-   */
+  /** @alias module:sockets */
   var sockets = {};
 
   /**
    * Requests hashes
-   * @memberOf sockets
-   * @static
-   * @param  {controller~hashedType}  type
-   * @param  {HashedPost|HashedTopic} hashedObjects - Objects to get hashes for
-   * @param  {controller~addHashes}   cb
+   * @memberOf client.module:sockets
+   * @param  {client.controller~hashedType}  type
+   * @param  {Array<client.HashedPost|client.HashedTopic>} hashedObjects - Objects to get hashes for
+   * @param  {client.controller~addHashes}   cb
    */
   sockets.getHashes = function(type, hashedObjects, cb) {
     var ids = hashedObjects.map(function(obj) {

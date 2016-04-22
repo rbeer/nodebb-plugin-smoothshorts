@@ -7,40 +7,42 @@
     'plugins/smoothshorts/settings'
   ];
 
+  /**
+   * Provides context menu method
+   * @memberOf client
+   * @module contextmenu
+   */
   define('plugins/smoothshorts/contextmenu', deps, function(helper, settings) {
 
-    /**
-     * Provides context menu method
-     * @exports plugins/smoothshorts/contextmenu
-     * @namespace contextmenu
-     */
+    /** @alias module:contextmenu */
     var cmenu = {
+
       /**
        * Indicates whether context menu is open
-       * @memberof contextmenu
+       * @memberof client.module:contextmenu
        * @type {Boolean}
        * @default false
        */
       menuCalled: false,
       /**
        * Element context menu has been called on
-       * @memberof contextmenu
+       * @memberof client.module:contextmenu
        * @type {HTMLAnchorElement}
        * @default null
        */
       lastCalledOn: null,
       /**
-       * href value to restore on [lastCalledOn]{@link contextmenu.lastCalledOn}
-       * @memberof contextmenu
+       * href value to restore on [lastCalledOn]{@link client.module:contextmenu.lastCalledOn}
+       * @memberof client.module:contextmenu
        * @type {String}
        */
       lastOriginalURL: ''
     };
 
     /**
-     * Sets hooks 'contextmenu' on given HashedPost|Topic's anchors
+     * Sets hooks 'contextmenu' on given [HashedPost]{@link client.HashedPost}|[HashedTopic]{@link client.HashedTopic}'s anchors
      * and 'mousedown' on document.
-     * @memberof contextmenu
+     * @memberof client.module:contextmenu
      * @param {(HashedPost|HashedTopic)} HashedObject
      */
     cmenu.setHooks = function(HashedObject) {
@@ -51,9 +53,9 @@
     };
 
     /**
-     * Restores [lastOriginalURL]{@link module:plugins/smoothshorts/contextmenu.lastOriginalURL}
-     * on [lastCalledOn]{@link contextmenu.lastCalledOn}
-     * @memberof contextmenu
+     * Restores [lastOriginalURL]{@link client.module:contextmenu.lastOriginalURL}
+     * on [lastCalledOn]{@link client.module:contextmenu.lastCalledOn}
+     * @memberof client.module:contextmenu
      * @inner
      */
     function restoreOriginalURL() {
@@ -67,7 +69,7 @@
 
     /**
      * Replaces href of an anchor with short URL.
-     * @memberof contextmenu
+     * @memberof client.module:contextmenu
      * @inner
      * @param  {MouseEvent} event
      */

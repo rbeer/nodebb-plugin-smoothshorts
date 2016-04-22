@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Documentation Source: lib/hashing.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.paper.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Documentation</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="acp.html">acp</a></li><li><a href="acp.controller.html">acp.controller</a></li><li><a href="backend.html">backend</a></li><li><a href="client.html">client</a></li><li><a href="client.controller.html">client.controller</a></li><li><a href="nodebb-core.html">nodebb-core</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="backend.module_hashing.html">backend.hashing</a></li><li><a href="backend.module_SmoothShorts.html">backend.SmoothShorts</a></li><li><a href="client.module_contextmenu.html">client.contextmenu</a></li><li><a href="client.module_helper.html">client.helper</a></li><li><a href="client.module_settings.html">client.settings</a></li><li><a href="client.module_sockets.html">client.sockets</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="client.HashedPost.html">client.HashedPost</a></li><li><a href="client.HashedTopic.html">client.HashedTopic</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="nodebb-core.html#.event:%2522action:post.purge%2522">nodebb-core.event:"action:post.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:post.save%2522">nodebb-core.event:"action:post.save"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.purge%2522">nodebb-core.event:"action:topic.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.save%2522">nodebb-core.event:"action:topic.save"</a></li><li><a href="nodebb-core.html#.event:%2522filter:admin.header.build%2522">nodebb-core.event:"filter:admin.header.build"</a></li><li><a href="nodebb-core.html#.event:%2522static:app.load%2522">nodebb-core.event:"static:app.load"</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+		<div class="col-sm-3 col-md-3">
+            <form class="navbar-form" role="search">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			
+
+		<h1 class="page-title">Source: lib/hashing.js</h1>
+    
+<section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">'use strict';
+
+var async = require.main.require('async');
+var nconf = require.main.require('nconf');
+var winston = require.main.require('winston');
+var db = require.main.require('./src/database');
+var xxh = require('xxhash');
+
+/**
+ * Provides methods for internal URL shortening and request resolving
+ * @memberOf backend
+ * @module hashing
+ */
+
+/** @alias module:hashing */
+var hashing = {};
+
+/**
+ * Maps 'topics'/'posts' to id key
+ * @type {Object}
+ * @property {string} topics - 'tid'
+ * @property {string} posts  - 'pid'
+ * @todo This was once an array. Deserves to be deprecated, since
+ * something like `(topics|posts).substr(0, 1) + 'id'` would be sufficient
+ */
+var hashType = {
+  topics: 'tid',
+  posts: 'pid'
+};
+
+/**
+ * Reads hashes from DB
+ * @param  {number}   id   - Topic or post id
+ * @param  {string}   type - [hashType]{@link backend.module:hashing.hashType} key
+ * @param  {Function} cb
+ */
+hashing.getHashForId = function(id, type, cb) {
+  db.getSortedSetRangeByScore(type + ':smoothshorts', 0, -1, id, id,
+    function(err, hash) {
+      if (err) {
+        return cb(err);
+      }
+      var res = { hash: hash[0] };
+      res[hashType[type]] = id;
+      cb(null, res);
+    });
+};
+
+hashing.getHashDelegate = function(type) {
+  return function(id, cb) {
+    hashing.getHashForId.call(this, id, type, cb);
+  };
+};
+
+/**
+ * New post event handler
+ * @memberOf backend.module:hashing
+ * @param  {Object}   postData
+ * @param  {Function} cb
+ * @listens nodebb-core.event:"action:post.save"
+ */
+hashing.shortenPost = function(postData, cb) {
+  shorten(postData, 'posts', cb);
+};
+
+/**
+ * New topic event handler
+ * @memberOf backend.module:hashing
+ * @param  {Object}   topicData
+ * @param  {Function} cb
+ * @listens nodebb-core.event:"action:topic.save"
+ */
+hashing.shortenTopic = function(topicData, cb) {
+  shorten(topicData, 'topics', cb);
+};
+
+/**
+ * Purge post event handler
+ * @memberOf backend.module:hashing
+ * @param  {number} id
+ * @listens nodebb-core.event:"action:post.purge"
+ */
+hashing.purgePost = function(id) {
+  purge(id, 'posts');
+};
+
+/**
+ * Purge topic event handler
+ * @memberOf backend.module:hashing
+ * @param  {number} id
+ * @listens nodebb-core.event:"action:topic.purge"
+ */
+hashing.purgeTopic = function(id) {
+  purge(id, 'topics');
+};
+
+/**
+ * Resolves a short URL request and redirects to associated topic/post
+ * @memberOf backend.module:hashing
+ * @param  {request}  req - Express request instance
+ * @param  {response} res - Express response instance
+ * @param  {Function} cb
+ */
+hashing.resolveHash = function(req, res, cb) {
+  var hash = req.params.hash;
+
+  async.parallel({
+    isPost: function(next) {
+      db.isSortedSetMember('posts:smoothshorts', hash, next);
+    },
+    isTopic: function(next) {
+      db.isSortedSetMember('topics:smoothshorts', hash, next);
+    }
+  }, function(err, result) {
+    if (err) {
+      return cb(err);
+    } else if (result.isPost) {
+      async.waterfall([
+        function(next) {
+          db.sortedSetScore('posts:smoothshorts', hash, next);
+        },
+        function(pid, next) {
+          db.getObjectField('post:' + pid, 'tid', function(err, tid) {
+            if (err) {
+              return cb(err);
+            }
+            return next(null, {pid: pid, tid: tid});
+          });
+        },
+        function(data, next) {
+          async.parallel({
+            rank: function(next) {
+              db.sortedSetRank('tid:' + data.tid + ':posts', data.pid, next);
+            },
+            slug: function(next) {
+              db.getObjectField('topic:' + data.tid, 'slug', next);
+            }
+          }, function(err, result) {
+            if (err) {
+              return cb(err);
+            }
+            var pIndex = (result.rank !== null) ?
+                         (parseInt(result.rank, 10) + 2).toString() : '1';
+            var uri = '/topic/' + result.slug + '/' + pIndex;
+            next(null, uri);
+          });
+        }
+      ], function(err, uri) {
+        if (err) {
+          return cb(err);
+        }
+        winston.verbose('[plugins:SmoothShorts] Redirecting ' + hash +
+                        ' to ' + uri);
+        res.redirect(uri);
+      });
+    } else if (result.isTopic) {
+      /* if this hash points to a topic */
+      async.waterfall([
+        function(next) {
+          db.sortedSetScore('topics:smoothshorts', hash, next);
+        },
+        function(tid, next) {
+          db.getObjectField('topic:' + tid, 'slug', next);
+        }
+      ], function(err, slug) {
+        if (err) {
+          return cb(err);
+        }
+        // build URI
+        var uri = '/topic/' + slug + '/';
+        winston.verbose('[plugins:SmoothShorts] Redirecting ' + hash +
+                        ' to ' + uri);
+        // redirect user to URI
+        res.redirect(uri);
+      });
+    } else {
+      winston.warn('[plugins:SmoothShorts] Couldn\'t resolve ' + hash);
+      cb(null);
+    }
+  });
+};
+
+/**
+ * Stores new hashes in DB
+ * @memberOf backend.module:hashing
+ * @inner
+ * @param  {topicData|postdata} data
+ * @param  {string}             type - [hashType]{@link backend.module:hashing.hashType} key
+ * @param  {Function}           cb
+ */
+function shorten(data, type, cb) {
+  var hash = hashData(data);
+  db.sortedSetAdd(type + ':smoothshorts', data[hashType[type]], hash, function(err) {
+    if (!err) {
+      winston.error('[plugin:smoothshorts] Writing hash to DB failed.' +
+                    '(' + hashType[type] + '=' + data[hashType[type]] + ')');
+      winston.error(err);
+      return cb ? cb(err) : void 0;
+    }
+    winston.verbose(type === 'posts' ?
+                    '[plugin:smoothshorts] Hashed post ID ' + data.pid :
+                    '[plugin:smoothshorts] Hashed \'' + data.title + '\' (ID: ' + data.tid + ')');
+    return cb ? cb() : void 0;
+  });
+}
+
+/**
+ * Deletes hashes from DB
+ * @memberOf backend.module:hashing
+ * @inner
+ * @param  {number} id
+ * @param  {string} type - [hashType]{@link backend.module:hashing.hashType} key
+ */
+function purge(id, type) {
+  db.sortedSetsRemoveRangeByScore([type + ':smoothshorts'], id, id, function(err) {
+    if (err) {
+      return winston.error('[plugin:smoothshorts] Deleting hash from DB failed.' +
+                    '(' + hashType[type] + '=' + id + ')');
+    }
+    winston.verbose('[plugin:smoothshorts] Deleted hash for ' + type.substring(0, type.length - 1) + ' ID ' + id);
+  });
+}
+
+/**
+ * Creates hashes for short URLs
+ * @memberOf backend.module:hashing
+ * @inner
+ * @param  {topicData|postData} data
+ */
+function hashData(data) {
+  var key = nconf.get('secret');
+  key = parseInt('0x' + key.substring(0, key.indexOf('-')), 16);
+  var hash = xxh.hash(new Buffer(JSON.stringify(data)), key).toString(16);
+  // don't take any chances of leaking the secret around;
+  // not even just parts of it. ;)
+  key = null;
+  return hash;
+}
+
+module.exports = hashing;
+</pre>
+    </article>
+</section>
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+<div class="modal fade" id="searchResults">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Search results</h4>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+<footer>
+
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a>
+	
+		on 2016-04-22T06:55:56+02:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+<script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			var id = $( heading ).attr( "id" );
+			return id && id.replace(/\~/g, '-inner-').replace(/\./g, '-static-') || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		SearcherDisplay.init();
+	});
+</script>
+
+</body>
+</html>

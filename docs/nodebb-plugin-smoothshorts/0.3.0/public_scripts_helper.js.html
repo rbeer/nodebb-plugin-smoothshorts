@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Documentation Source: public/scripts/helper.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.paper.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Documentation</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="acp.html">acp</a></li><li><a href="acp.controller.html">acp.controller</a></li><li><a href="backend.html">backend</a></li><li><a href="client.html">client</a></li><li><a href="client.controller.html">client.controller</a></li><li><a href="nodebb-core.html">nodebb-core</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="backend.module_hashing.html">backend.hashing</a></li><li><a href="backend.module_SmoothShorts.html">backend.SmoothShorts</a></li><li><a href="client.module_contextmenu.html">client.contextmenu</a></li><li><a href="client.module_helper.html">client.helper</a></li><li><a href="client.module_settings.html">client.settings</a></li><li><a href="client.module_sockets.html">client.sockets</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="client.HashedPost.html">client.HashedPost</a></li><li><a href="client.HashedTopic.html">client.HashedTopic</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="nodebb-core.html#.event:%2522action:post.purge%2522">nodebb-core.event:"action:post.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:post.save%2522">nodebb-core.event:"action:post.save"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.purge%2522">nodebb-core.event:"action:topic.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.save%2522">nodebb-core.event:"action:topic.save"</a></li><li><a href="nodebb-core.html#.event:%2522filter:admin.header.build%2522">nodebb-core.event:"filter:admin.header.build"</a></li><li><a href="nodebb-core.html#.event:%2522static:app.load%2522">nodebb-core.event:"static:app.load"</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+		<div class="col-sm-3 col-md-3">
+            <form class="navbar-form" role="search">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			
+
+		<h1 class="page-title">Source: public/scripts/helper.js</h1>
+    
+<section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">/* global define, ajaxify */
+
+(function() {
+  /**
+   * Provides helper functions (for e.g. [].map, [].filter)
+   * @memberOf client
+   * @module helper
+   */
+  define('plugins/smoothshorts/helper', ['plugins/smoothshorts/settings'], function(settings) {
+    'use strict';
+
+    /** @alias module:helper */
+    var helper = {};
+
+    /**
+     * Polyfill for Array.from
+     * @memberOf client.module:helper
+     * @param {NodeList} nodeList - List of HTMLElements
+     * @return {Array}
+     */
+    helper.ArrayFromNodeList = function(nodeList) {
+      if (!Array.from) {
+        var nodeArray = [];
+        for (var i = 0; i &lt; nodeList.length; i++) {
+          nodeArray.push(nodeList.item(i));
+        }
+        return nodeArray;
+      } else {
+        return Array.from(nodeList);
+      }
+    };
+
+    /**
+     * Maps [TopicData]{@link client.controller~TopicData} into [HashedTopic]{@link client.HashedTopic} objects
+     * @memberOf client.module:helper
+     * @param  {client.controller~TopicData} topic
+     * @param  {client.HashedTopic} HashedTopic - NOT an instance!
+     * @return {client.HashedTopic}             - New HashedTopic instance
+     */
+    helper.topicsMap = function(topic, HashedTopic) {
+      return new HashedTopic({
+        slug: topic.slug,
+        tid: topic.tid,
+        postcount: topic.postcount,
+        title: topic.title
+      });
+    };
+
+    /**
+     * Maps [PostData]{@link client.controller~PostData} into [HashedPost]{@link client.HashedPost} objects
+     * @memberOf client.module:helper
+     * @param  {client.controller~PostData} post
+     * @param  {client.HashedPost} HashedPost - NOT an instance!
+     * @return {client.HashedPost}            - New HashedPost instance
+     */
+    helper.postsMap = function(post, HashedPost) {
+      var topicTitle = post.topic ? post.topic.title : ajaxify.data.title;
+      var topicSlug = post.topic ? post.topic.slug : ajaxify.data.slug;
+      var index = post.topic ? post.index : post.index + 1;
+      return new HashedPost({
+        pid: post.pid,
+        url: null,
+        index: index,
+        topicData: {
+          title: topicTitle,
+          slug: topicSlug
+        }
+      });
+    };
+
+    /**
+     * Maps [TeaserData]{@link client.controller~TeaserData} into [HashedPost]{@link client.HashedPost} objects
+     * @memberOf client.module:helper
+     * @param  {client.controller~TeaserData} topic
+     * @param  {client.HashedPost} HashedPost - NOT an instance!
+     * @return {client.HashedPost}            - New HashedPost instance
+     */
+    helper.teaserMap = function(topic, HashedPost) {
+      return new HashedPost({
+        pid: topic.teaser.pid,
+        url: topic.teaser.url,
+        index: topic.teaser.index,
+        topicData: {
+          title: topic.title,
+          slug: topic.slug
+        }
+      });
+    };
+
+    /**
+     * Filters [TopicData]{@link client.controller~TopicData} or [CategoryData]{@link client.controller~CategoryData} objects without [TeaserData]{@link client.controller~TeaserData} member
+     * @memberOf client.module:helper
+     * @param  {client.controller~TopicData|client.controller~CategoryData} obj [description]
+     * @return {bool}
+     */
+    helper.teaserFilter = function(obj) {
+      return !!obj.teaser;
+    };
+
+    /**
+     * Builds short URL from [hash]{@link client.HashedPost#hash}, using
+     * [shortFormat]{@link client.module:settings.shortFormat}
+     * @memberOf client.module:helper
+     * @param  {client.HashedPost#hash|client.HashedTopic#hash} hash
+     * @return {string}
+     */
+    helper.buildShortURL = function(hash) {
+      return location.protocol + '//' + settings.shortFormat.replace(':hash', hash);
+    };
+
+    return helper;
+
+  });
+});
+</pre>
+    </article>
+</section>
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+<div class="modal fade" id="searchResults">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Search results</h4>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+<footer>
+
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a>
+	
+		on 2016-04-22T06:55:56+02:00
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+<script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			var id = $( heading ).attr( "id" );
+			return id && id.replace(/\~/g, '-inner-').replace(/\./g, '-static-') || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		SearcherDisplay.init();
+	});
+</script>
+
+</body>
+</html>

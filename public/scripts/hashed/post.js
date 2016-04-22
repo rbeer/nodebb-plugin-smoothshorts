@@ -11,8 +11,9 @@
     'use strict';
 
     /**
-     * Represents a shortened post URL
-     * @constructs HashedPost
+     * Represents a shortened post URL.
+     * This URL can belong to multiple HTMLAnchorElements in the DOM.
+     * @constructs client.HashedPost
      * @param {!Object} data
      * @param {!string} data.pid
      * @param {?string} data.url
@@ -69,10 +70,10 @@
     };
 
     /**
-     * Adds data-smoothhash="[hash]{@link HashedPost#hash}" to
-     * all [anchors]{@link HashedPost#anchors}
+     * Adds data-smoothhash="[hash]{@link client.HashedPost#hash}" to
+     * all [anchors]{@link client.HashedPost#anchors}
      * @instance
-     * @memberOf HashedPost
+     * @memberOf client.HashedPost
      * @todo Extract superclass - DRY with {@link HashedTopic#addHashToAnchor}
      */
     HashedPost.prototype.addHashToAnchor = function() {
@@ -83,11 +84,11 @@
     };
 
     /**
-     * Inserts instances [button]{@link HashedPost#button} directly
-     * after all [anchors]{@link HashedPost#anchors}
+     * Inserts instances [button]{@link client.HashedPost#button} directly
+     * after all [anchors]{@link client.HashedPost#anchors}
      * @instance
-     * @memberOf HashedPost
-     * @param {controller.buttonClickDelegate} handler - Called on click
+     * @memberOf client.HashedPost
+     * @param {client.controller.buttonClickDelegate} handler - Called on click
      */
     HashedPost.prototype.addButton = function(handler) {
       var self = this;
@@ -106,9 +107,9 @@
 
     /**
      * Performs tests (e.g. 'copy' command availabilty) whether
-     * [button]{@link HashedPost#button} should be added or not.
+     * [button]{@link client.HashedPost#button} should be added or not.
      * @instance
-     * @memberOf HashedPost
+     * @memberOf client.HashedPost
      * @return {bool} False as soon as one test fails
      */
     HashedPost.prototype.shouldHaveButton = function() {
@@ -124,7 +125,7 @@
     /**
      * Tests whether instance already has a button
      * @instance
-     * @memberOf HashedPost
+     * @memberOf client.HashedPost
      * @return {Boolean}
      */
     HashedPost.prototype.hasButton = function() {
@@ -133,12 +134,12 @@
 
     /**
      * Collects anchor elements from DOM and stores them
-     * in instances [anchors]{@link HashedPost#anchors}
+     * in instances [anchors]{@link client.HashedPost#anchors}
      * @inner
-     * @memberOf HashedPost
+     * @memberOf client.HashedPost
      * @param {string} url        - URL to find anchors
      * @param {string} topicTitle - Title of post's topic to filter topic links
-     * @todo Extract superclass - DRY with {@link HashedTopic~getAnchors}
+     * @todo Extract superclass - DRY with {@link client.HashedTopic~getAnchors}
      */
     function getAnchors(url, topicTitle) {
       var anchors = document.querySelectorAll(':not([component="notifications/list"]) a[href="' + url + '"]');

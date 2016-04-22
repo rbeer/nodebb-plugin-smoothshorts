@@ -4,8 +4,9 @@ define('plugins/smoothshorts/hashed/topic', ['plugins/smoothshorts/helper'], fun
   'use strict';
 
   /**
-   * Represents a shortened topic URL
-   * @constructs HashedTopic
+   * Represents a shortened topic URL.
+   * This URL can belong to multiple HTMLAnchorElements in the DOM.
+   * @constructs client.HashedTopic
    * @param {!Object} data
    * @param {!string} data.slug
    * @param {!string} data.tid
@@ -41,11 +42,11 @@ define('plugins/smoothshorts/hashed/topic', ['plugins/smoothshorts/helper'], fun
   };
 
   /**
-   * Adds data-smoothhash="[hash]{@link HashedTopic#hash}" to
-   * all [anchors]{@link HashedTopic#anchors}
+   * Adds data-smoothhash="[hash]{@link client.HashedTopic#hash}" to
+   * all [anchors]{@link client.HashedTopic#anchors}
    * @instance
-   * @memberOf HashedTopic
-   * @todo Extract superclass - DRY with {@link HashedPost#addHashToAnchor}
+   * @memberOf client.HashedTopic
+   * @todo Extract superclass - DRY with {@link client.HashedPost#addHashToAnchor}
    */
   HashedTopic.prototype.addHashToAnchor = function() {
     var self = this;
@@ -56,13 +57,13 @@ define('plugins/smoothshorts/hashed/topic', ['plugins/smoothshorts/helper'], fun
 
   /**
    * Collects anchor elements from DOM and stores them
-   * in instances [anchors]{@link HashedTopic#anchors}
+   * in instances [anchors]{@link client.HashedTopic#anchors}
    * @inner
-   * @memberOf HashedTopic
+   * @memberOf client.HashedTopic
    * @param {!string} url       - URL to find anchors
    * @param {!string} postcount - Topic's postcount to filter out something - forgot what, though; might even be deprecated... ^_^
    * @param {!string} title     - Topic's title to filter out false selector positives
-   * @todo Extract superclass - DRY with {@link HashedPost~getAnchors}
+   * @todo Extract superclass - DRY with {@link client.HashedPost~getAnchors}
    */
   function getAnchors(url, postcount, title) {
     var anchors = document.querySelectorAll('[component="category/topic"] a');

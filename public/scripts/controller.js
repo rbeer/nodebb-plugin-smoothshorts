@@ -14,66 +14,66 @@
 
   require(deps, function(settings, helper, sockets, cmenu, HashedPost, HashedTopic) {
 
-    /** @namespace controller */
+    /**
+     * @namespace controller
+     * @memberOf client
+     */
 
     /**
      * NodeBB's ajaxify.data object
      * (showing only properties plugin is working with)
-     * @typedef  {Object} controller~AjaxifyData
-     * @memberOf controller
-     * @property {?Array.<controller~CategoryData>} categories
-     * @property {?Array.<controller~PostData>}     posts
-     * @property {?Array.<controller~TopicData>}    topics
+     * @typedef  {Object} client.controller~AjaxifyData
+     * @property {?Array.<client.controller~CategoryData>} categories
+     * @property {?Array.<client.controller~PostData>}     posts
+     * @property {?Array.<client.controller~TopicData>}    topics
      */
 
     /**
      * Ajaxify data, describing a teaser
      * (showing only properties plugin is working with)
-     * @typedef  {Object}  controller~TeaserData
-     * @memberOf controller
-     * @property {?string} pid          - Introduced in NodeBB v1.0.3; earlier versions need to get it with {@link controller~ensureTeaserPids}
+     * @typedef  {Object}  client.controller~TeaserData
+     * @property {?string} pid          - Introduced in NodeBB v1.0.3; earlier versions need to get it with {@link client.controller~ensureTeaserPids}
      * @property {string}  url          - URL to post
      */
 
     /**
      * Ajaxify data, describing a category
      * (showing only properties plugin is working with)
-     * @typedef  {Object}                      controller~CategoryData
-     * @property {Array.<controller~PostData>} posts - First entry is the teaser post. {@link controller~ensureTeaserPids} uses it, when [teaser object]{@link controller~TeaserData} has no pid.
-     * @property {controller~TeaserData} teaser
+     * @typedef  {Object} client.controller~CategoryData
+     * @property {Array.<client.controller~PostData>} posts - First entry is the teaser post. {@link client.controller~ensureTeaserPids} uses it, when [teaser object]{@link client.controller~TeaserData} has no pid.
+     * @property {client.controller~TeaserData} teaser
      */
 
     /**
      * Ajaxify data, describing a topic
      * (showing only properties plugin is working with)
-     * @typedef  {Object} controller~TopicData
-     * @memberOf controller
+     * @typedef  {Object} client.controller~TopicData
      * @property {string}      slug      - Topic's URL slug
      * @property {string}      tid       - Topic's ID
      * @property {string}      postcount - Total number of posts in topic
      * @property {string}      title     - Topic's title
-     * @property {?controller~TeaserData} teaser    - Topic's teaser
+     * @property {?client.controller~TeaserData} teaser    - Topic's teaser
      */
 
     /**
      * Ajaxify data, describing a post
      * (showing only properties plugin is working with)
-     * @typedef  {Object} controller~PostData
-     * @memberOf controller
-     * @property {controller~TopicData} topic - Topic the post belongs to
+     * @typedef  {Object} client.controller~PostData
+     * @property {client.controller~TopicData} topic - Topic the post belongs to
      * @property {number}               index - Index of post in topic
      * @property {string}               pid   - Post's ID
      */
 
     /**
-     * Type identifier for HashedPost or HashedTopic
-     * @typedef {string} controller~hashedType
-     * @memberOf controller
+     * Type identifier for [HashedPost]{@link client.HashedPost} or [HashedTopic]{@link client.HashedTopic}
+     * @typedef {string} client.controller~hashedType
+     * @example
+     * 'topics' or 'posts'
      */
 
     /**
-     * Parses [AjaxifyData]{@link controller~AjaxifyData} for posts/categories/topics
-     * @memberOf controller
+     * Parses [AjaxifyData]{@link client.controller~AjaxifyData} for posts/categories/topics
+     * @memberOf client.controller
      * @inner
      */
     function parseAjaxifyData() {
@@ -94,9 +94,9 @@
 
     /**
      * Ensures that teaser objects have a pid.
-     * @memberOf controller
+     * @memberOf client.controller
      * @inner
-     * @param {controller~AjaxifyData} pageData
+     * @param {client.controller~AjaxifyData} pageData
      */
     function ensureTeaserPids(pageData) {
       if (teasersHavePids(pageData)) {
@@ -112,9 +112,9 @@
 
     /**
      * Checks whether current pages teaser objects have pids
-     * @memberOf controller
+     * @memberOf client.controller
      * @inner
-     * @param  {controller~AjaxifyData} pageData
+     * @param  {client.controller~AjaxifyData} pageData
      * @return {bool} - Result of an [].some() run. If one teaser has a pid, all do.
      */
     function teasersHavePids(pageData) {
@@ -133,10 +133,10 @@
     /**
      * Parses incoming controller~AjaxifyData when user scrolling
      * triggers loading new entries
-     * @memberOf controller
+     * @memberOf client.controller
      * @inner
      * @param {SomeJQueryEventObject} event
-     * @param {controller~AjaxifyData} data
+     * @param {client.controller~AjaxifyData} data
      */
     function addOnScrollLoad(event, data) {
       var type = event.type.split(':')[1];
@@ -145,10 +145,10 @@
 
     /**
      * Adds from backend received hashes to topic and post links
-     * @memberOf controller
+     * @memberOf client.controller
      * @inner
-     * @param {controller~hashedType} type
-     * @param {Array.<HashedPost|HashedTopic>} hashedObjects - Objects to add hashes for
+     * @param {client.controller~hashedType} type
+     * @param {Array.<client.HashedPost|client.HashedTopic>} hashedObjects - Objects to add hashes for
      */
     function addHashes(type, hashedObjects) {
       hashedObjects.forEach(function(obj) {
@@ -163,7 +163,7 @@
     function buttonClickDelegate(hashedPost) {
       /**
        * One-click button click handler
-       * @memberOf controller
+       * @memberOf client.controller
        * @inner
        */
       var copyShortUrl = function() {
@@ -190,7 +190,7 @@
 
     /**
      * Entry point; sets hooks
-     * @memberOf controller
+     * @memberOf client.controller
      * @inner
      */
     function init() {

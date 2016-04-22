@@ -1,23 +1,24 @@
 /* global define, socket */
 
+/**
+ * Provides plugin's settings
+ * @memberOf client
+ * @module settings
+ */
 define('plugins/smoothshorts/settings', function() {
   'use strict';
 
-  /**
-   * Provides plugin's settings
-   * @exports plugins/smoothshorts/settings
-   * @namespace settings
-   */
+  /** @alias module:settings */
   var settings = {
     /**
      * Modifier key (ctrl, alt or shift) to enable URL replacement
-     * @memberOf settings
+     * @memberOf client.module:settings
      * @type {string}
      */
     modKey: '',
     /**
      * Short URLs will be built with this format
-     * @memberOf settings
+     * @memberOf client.module:settings
      * @type {string}
      * @example
      * 'short.com/ss/:hash'
@@ -27,7 +28,7 @@ define('plugins/smoothshorts/settings', function() {
     shortFormat: '',
     /**
      * CSS class name for copy button icon
-     * @memberOf settings
+     * @memberOf client.module:settings
      * @type {String}
      * @default fa-external-link
      */
@@ -36,7 +37,7 @@ define('plugins/smoothshorts/settings', function() {
 
   /**
    * Load settings from backend
-   * @memberOf settings
+   * @memberOf client.module:settings
    * @param  {Function} cb - Called when settings have been received
    */
   settings.load = function(cb) {
