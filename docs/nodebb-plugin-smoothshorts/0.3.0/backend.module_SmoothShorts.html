@@ -40,7 +40,7 @@
 			<li class="dropdown">
 				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="backend.module_hashing.html">backend.hashing</a></li><li><a href="backend.module_SmoothShorts.html">backend.SmoothShorts</a></li><li><a href="client.module_contextmenu.html">client.contextmenu</a></li><li><a href="client.module_helper.html">client.helper</a></li><li><a href="client.module_settings.html">client.settings</a></li><li><a href="client.module_sockets.html">client.sockets</a></li>
+					<li><a href="backend.module_hashing.html">backend.hashing</a></li><li><a href="backend.module_settings.html">backend.settings</a></li><li><a href="backend.module_SmoothShorts.html">backend.SmoothShorts</a></li><li><a href="backend.module_sockets.html">backend.sockets</a></li><li><a href="client.module_contextmenu.html">client.contextmenu</a></li><li><a href="client.module_helper.html">client.helper</a></li><li><a href="client.module_settings.html">client.settings</a></li><li><a href="client.module_sockets.html">client.sockets</a></li>
 				</ul>
 			</li>
 			
@@ -54,7 +54,7 @@
 			<li class="dropdown">
 				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="nodebb-core.html#.event:%2522action:post.purge%2522">nodebb-core.event:"action:post.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:post.save%2522">nodebb-core.event:"action:post.save"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.purge%2522">nodebb-core.event:"action:topic.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.save%2522">nodebb-core.event:"action:topic.save"</a></li><li><a href="nodebb-core.html#.event:%2522filter:admin.header.build%2522">nodebb-core.event:"filter:admin.header.build"</a></li><li><a href="nodebb-core.html#.event:%2522static:app.load%2522">nodebb-core.event:"static:app.load"</a></li>
+					<li><a href="backend.module_sockets.html#.event:%2522event:smoothshorts.newhash%2522">backend.sockets.event:"event:smoothshorts.newhash"</a></li><li><a href="nodebb-core.html#.event:%2522action:post.purge%2522">nodebb-core.event:"action:post.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:post.save%2522">nodebb-core.event:"action:post.save"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.purge%2522">nodebb-core.event:"action:topic.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.save%2522">nodebb-core.event:"action:topic.save"</a></li><li><a href="nodebb-core.html#.event:%2522filter:admin.header.build%2522">nodebb-core.event:"filter:admin.header.build"</a></li><li><a href="nodebb-core.html#.event:%2522static:app.load%2522">nodebb-core.event:"static:app.load"</a></li>
 				</ul>
 			</li>
 			
@@ -169,16 +169,6 @@
 
     
 
-    
-        <h3 class="subsection-title">Requires</h3>
-
-        <ul>
-            <li>module:backend.module:hashing</li>
-        
-            <li>module:backend.module:settings</li>
-        
-            <li>module:backend.module:sockets</li>
-        </ul>
     
 
     
@@ -325,7 +315,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="lib_controller.js.html">lib/controller.js</a>,
-				 <a href="lib_controller.js.html#sunlight-1-line-53">line 53</a>
+				 <a href="lib_controller.js.html#sunlight-1-line-50">line 50</a>
 			</li>
 		</ul>
 	</dd>
@@ -492,7 +482,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="lib_controller.js.html">lib/controller.js</a>,
-				 <a href="lib_controller.js.html#sunlight-1-line-34">line 34</a>
+				 <a href="lib_controller.js.html#sunlight-1-line-31">line 31</a>
 			</li>
 		</ul>
 	</dd>
@@ -530,7 +520,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".openSockets"><span class="type-signature">&lt;static> </span>openSockets()</h4>
+    <h4 class="name" id="~openSockets"><span class="type-signature">&lt;inner> </span>openSockets()</h4>
     
     
 </dt>
@@ -585,7 +575,7 @@
 		<ul class="dummy">
 			<li>
 				<a href="lib_controller.js.html">lib/controller.js</a>,
-				 <a href="lib_controller.js.html#sunlight-1-line-74">line 74</a>
+				 <a href="lib_controller.js.html#sunlight-1-line-72">line 72</a>
 			</li>
 		</ul>
 	</dd>
@@ -618,7 +608,193 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".setRoutes"><span class="type-signature">&lt;static> </span>setRoutes(router, middleware)</h4>
+    <h4 class="name" id="~renderAdmin"><span class="type-signature">&lt;inner> </span>renderAdmin(req, res, next)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Gathers data for and renders ACP page</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>req</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">request</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Express request instance</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>res</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">response</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Express response instance</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>next</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="lib_controller.js.html">lib/controller.js</a>,
+				 <a href="lib_controller.js.html#sunlight-1-line-122">line 122</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="~setRoutes"><span class="type-signature">&lt;inner> </span>setRoutes(router, middleware)</h4>
     
     
 </dt>
@@ -747,7 +923,196 @@
 		<ul class="dummy">
 			<li>
 				<a href="lib_controller.js.html">lib/controller.js</a>,
-				 <a href="lib_controller.js.html#sunlight-1-line-85">line 85</a>
+				 <a href="lib_controller.js.html#sunlight-1-line-84">line 84</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="~validateHash"><span class="type-signature">&lt;inner> </span>validateHash(req, res, next)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Validates that a request is meant for the plugin.
+The <a href="backend.module_settings.html#.shortFormat">format of short URLs'</a> can be
+as basic as domain.com/:hash, which could conflict with other plugin routes,
+e.g. those from <a href="https://github.com/psychobunny/nodebb-plugin-custom-pages">nodebb-plugin-custom-pages</a>.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>req</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">request</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Express request instance</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>res</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">response</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Express response instance</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>next</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="lib_controller.js.html">lib/controller.js</a>,
+				 <a href="lib_controller.js.html#sunlight-1-line-110">line 110</a>
 			</li>
 		</ul>
 	</dd>
@@ -824,7 +1189,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a>
 	
-		on 2016-04-22T06:55:56+02:00
+		on 2016-04-22T10:44:32+02:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

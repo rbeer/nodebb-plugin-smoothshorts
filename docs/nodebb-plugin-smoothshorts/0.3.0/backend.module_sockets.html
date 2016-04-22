@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Namespace: helper</title>
+	<title>Documentation Module: sockets</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -33,14 +33,14 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="acp.html">acp</a></li><li><a href="backend.html">backend</a></li><li><a href="client.html">client</a></li><li><a href="frontend.client.controller.html">frontend.client.controller</a></li><li><a href="helper.html">helper</a></li><li><a href="settings.html">settings</a></li><li><a href="sockets.html">sockets</a></li>
+					<li><a href="acp.html">acp</a></li><li><a href="acp.controller.html">acp.controller</a></li><li><a href="backend.html">backend</a></li><li><a href="client.html">client</a></li><li><a href="client.controller.html">client.controller</a></li><li><a href="nodebb-core.html">nodebb-core</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="client.module_contextmenu.html">client.contextmenu</a></li>
+					<li><a href="backend.module_hashing.html">backend.hashing</a></li><li><a href="backend.module_settings.html">backend.settings</a></li><li><a href="backend.module_SmoothShorts.html">backend.SmoothShorts</a></li><li><a href="backend.module_sockets.html">backend.sockets</a></li><li><a href="client.module_contextmenu.html">client.contextmenu</a></li><li><a href="client.module_helper.html">client.helper</a></li><li><a href="client.module_settings.html">client.settings</a></li><li><a href="client.module_sockets.html">client.sockets</a></li>
 				</ul>
 			</li>
 			
@@ -48,6 +48,13 @@
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
 					<li><a href="client.HashedPost.html">client.HashedPost</a></li><li><a href="client.HashedTopic.html">client.HashedTopic</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="backend.module_sockets.html#.event:%2522event:smoothshorts.newhash%2522">backend.sockets.event:"event:smoothshorts.newhash"</a></li><li><a href="nodebb-core.html#.event:%2522action:post.purge%2522">nodebb-core.event:"action:post.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:post.save%2522">nodebb-core.event:"action:post.save"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.purge%2522">nodebb-core.event:"action:topic.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.save%2522">nodebb-core.event:"action:topic.save"</a></li><li><a href="nodebb-core.html#.event:%2522filter:admin.header.build%2522">nodebb-core.event:"filter:admin.header.build"</a></li><li><a href="nodebb-core.html#.event:%2522static:app.load%2522">nodebb-core.event:"static:app.load"</a></li>
 				</ul>
 			</li>
 			
@@ -77,15 +84,10 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Namespace: helper</h1>
+	<h1 class="page-title">Module: sockets</h1>
 <section>
 
 <header>
-    
-        <h2>
-        helper
-        </h2>
-        
     
 </header>
 
@@ -94,7 +96,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Provides helper functions (for e.g. [].map, [].filter)</p></div>
+            <div class="description"><p>Socket.io methods</p></div>
         
 
         
@@ -132,8 +134,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="public_scripts_helper.js.html">public/scripts/helper.js</a>,
-				 <a href="public_scripts_helper.js.html#sunlight-1-line-6">line 6</a>
+				<a href="lib_sockets.js.html">lib/sockets.js</a>,
+				 <a href="lib_sockets.js.html#sunlight-1-line-10">line 10</a>
 			</li>
 		</ul>
 	</dd>
@@ -170,7 +172,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".ArrayFromNodeList"><span class="type-signature">&lt;static> </span>ArrayFromNodeList(nodeList)</h4>
+    <h4 class="name" id=".sockets.admin.hashMissing"><span class="type-signature">&lt;static> </span>sockets.admin.hashMissing(socket, cb)</h4>
     
     
 </dt>
@@ -178,7 +180,8 @@
 
     
     <div class="description">
-        <p>Polyfill for Array.from</p>
+        <p>Compares # of topics/posts with # of topic/post hashes
+and creates new hashes for all missing</p>
     </div>
     
 
@@ -213,13 +216,13 @@
 
         <tr>
             
-                <td class="name"><code>nodeList</code></td>
+                <td class="name"><code>socket</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">NodeList</span>
+<span class="param-type">Socket</span>
 
 
 
@@ -230,7 +233,31 @@
 
             
 
-            <td class="description last"><p>List of HTMLAnchorElements</p></td>
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
         </tr>
 
     
@@ -274,8 +301,199 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="public_scripts_helper.js.html">public/scripts/helper.js</a>,
-				 <a href="public_scripts_helper.js.html#sunlight-1-line-19">line 19</a>
+				<a href="lib_sockets.js.html">lib/sockets.js</a>,
+				 <a href="lib_sockets.js.html#sunlight-1-line-80">line 80</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+    <h5>Fires:</h5>
+    <ul>
+        <li><a href="backend.module_sockets.html#.event:%2522event:smoothshorts.newhash%2522">backend.module:sockets.event:"event:smoothshorts.newhash"</a></li>
+    </ul>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".sockets.admin.saveSettings"><span class="type-signature">&lt;static> </span>sockets.admin.saveSettings(socket, data, cb)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Receives settings from ACP</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>socket</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Socket</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Settings object</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Called when settings are saved</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="lib_sockets.js.html">lib/sockets.js</a>,
+				 <a href="lib_sockets.js.html#sunlight-1-line-61">line 61</a>
 			</li>
 		</ul>
 	</dd>
@@ -308,7 +526,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".buildShortURL"><span class="type-signature">&lt;static> </span>buildShortURL(hash)</h4>
+    <h4 class="name" id=".sockets.plugin.getConfig"><span class="type-signature">&lt;static> </span>sockets.plugin.getConfig(socket, cb)</h4>
     
     
 </dt>
@@ -316,8 +534,7 @@
 
     
     <div class="description">
-        <p>Builds short URL from hash and
-forcedDomain or current location.host</p>
+        <p>Sends settings to client</p>
     </div>
     
 
@@ -352,16 +569,13 @@ forcedDomain or current location.host</p>
 
         <tr>
             
-                <td class="name"><code>hash</code></td>
+                <td class="name"><code>socket</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">HashedPost#hash</span>
-|
-
-<span class="param-type">HashedTopic#hash</span>
+<span class="param-type">Socket</span>
 
 
 
@@ -372,7 +586,31 @@ forcedDomain or current location.host</p>
 
             
 
-            <td class="description last"><p>Instances hash</p></td>
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
         </tr>
 
     
@@ -416,8 +654,8 @@ forcedDomain or current location.host</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="public_scripts_helper.js.html">public/scripts/helper.js</a>,
-				 <a href="public_scripts_helper.js.html#sunlight-1-line-110">line 110</a>
+				<a href="lib_sockets.js.html">lib/sockets.js</a>,
+				 <a href="lib_sockets.js.html#sunlight-1-line-46">line 46</a>
 			</li>
 		</ul>
 	</dd>
@@ -442,84 +680,186 @@ forcedDomain or current location.host</p>
     
 
     
-    <h5>Returns:</h5>
+
     
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".sockets.plugin.getHashes"><span class="type-signature">&lt;static> </span>sockets.plugin.getHashes(socket, data, cb)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Sends hashes for a set of topic/post ids to client</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>socket</code></td>
             
 
+            <td class="type">
+            
+                
+<span class="param-type">Socket</span>
 
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6 class="method-params-label method-subparams-label">Properties</h6>
+                
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
         
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>ids</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">string</span>
 
 
 
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
             
-<hr>
-<dt>
-    <h4 class="name" id=".postsMap"><span class="type-signature">&lt;static> </span>postsMap(post, HashedPost)</h4>
-    
-    
-</dt>
-<dd>
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>hashType key</p></td>
+        </tr>
 
     
-    <div class="description">
-        <p>Maps controller~PostData into HashedPost objects</p>
-    </div>
-    
+    </tbody>
+</table>
 
-    
+            </td>
+        </tr>
 
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>post</code></td>
+                <td class="name"><code>cb</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">controller~PostData</span>
+<span class="param-type">function</span>
 
 
 
@@ -534,30 +874,6 @@ forcedDomain or current location.host</p>
         </tr>
 
     
-
-        <tr>
-            
-                <td class="name"><code>HashedPost</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">HashedPost</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>NOT an instance!</p></td>
-        </tr>
-
-    
     </tbody>
 </table>
 
@@ -598,8 +914,8 @@ forcedDomain or current location.host</p>
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="public_scripts_helper.js.html">public/scripts/helper.js</a>,
-				 <a href="public_scripts_helper.js.html#sunlight-1-line-56">line 56</a>
+				<a href="lib_sockets.js.html">lib/sockets.js</a>,
+				 <a href="lib_sockets.js.html#sunlight-1-line-31">line 31</a>
 			</li>
 		</ul>
 	</dd>
@@ -624,569 +940,6 @@ forcedDomain or current location.host</p>
     
 
     
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <ul>
-<li>New HashedPost instance</li>
-</ul>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">HashedPost</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id=".teaserFilter"><span class="type-signature">&lt;static> </span>teaserFilter(obj)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Filters out TopicData or CategoryData objects without TeaserData member</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>obj</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">controller~TopicData</span>
-|
-
-<span class="param-type">controller~CategoryData</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>[description]</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="public_scripts_helper.js.html">public/scripts/helper.js</a>,
-				 <a href="public_scripts_helper.js.html#sunlight-1-line-98">line 98</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">bool</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id=".teaserMap"><span class="type-signature">&lt;static> </span>teaserMap(topic, HashedPost)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Maps controller~TeaserData into HashedPost objects</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>topic</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">controller~TeaserData</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>HashedPost</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">HashedPost</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>NOT an instance!</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="public_scripts_helper.js.html">public/scripts/helper.js</a>,
-				 <a href="public_scripts_helper.js.html#sunlight-1-line-79">line 79</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <ul>
-<li>New HashedPost instance</li>
-</ul>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">HashedPost</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id=".topicsMap"><span class="type-signature">&lt;static> </span>topicsMap(topic, HashedTopic)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        <p>Maps controller~TopicData into HashedTopic objects</p>
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>topic</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">controller~TopicData</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>HashedTopic</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">HashedTopic</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>NOT an instance!</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<ul class="dummy">
-			<li>
-				<a href="public_scripts_helper.js.html">public/scripts/helper.js</a>,
-				 <a href="public_scripts_helper.js.html#sunlight-1-line-39">line 39</a>
-			</li>
-		</ul>
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    <ul>
-<li>New HashedTopic instance</li>
-</ul>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">HashedTopic</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
 
     
 </dd>
@@ -1196,6 +949,200 @@ forcedDomain or current location.host</p>
 
     
 
+    
+        <h3 class="subsection-title">Events</h3>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id=".event:%22event:smoothshorts.newhash%22">"event:smoothshorts.newhash"</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Reports a newly hashed topic or post</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
+
+<table class="props table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>'post' or 'topic'</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+</dl>
+
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="lib_sockets.js.html">lib/sockets.js</a>,
+				 <a href="lib_sockets.js.html#sunlight-1-line-65">line 65</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        </dl>
     
 </article>
 
@@ -1239,7 +1186,7 @@ forcedDomain or current location.host</p>
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a>
 	
-		on 2016-04-21T23:34:40+02:00
+		on 2016-04-22T10:44:32+02:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

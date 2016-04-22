@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: public/scripts/helper.js</title>
+	<title>Documentation Source: lib/sockets.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -84,125 +84,156 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: public/scripts/helper.js</h1>
+		<h1 class="page-title">Source: lib/sockets.js</h1>
     
 <section>
     <article>
         <pre
-            class="sunlight-highlight-javascript linenums">/* global define, ajaxify */
+            class="sunlight-highlight-javascript linenums">'use strict';
 
-(function() {
-  /**
-   * Provides helper functions (for e.g. [].map, [].filter)
-   * @memberOf client
-   * @module helper
-   */
-  define('plugins/smoothshorts/helper', ['plugins/smoothshorts/settings'], function(settings) {
-    'use strict';
+var async = require.main.require('async');
+var nconf = require.main.require('nconf');
+var db = require.main.require('./src/database');
 
-    /** @alias module:helper */
-    var helper = {};
+var hashing = require('./hashing');
+var settings = require('./settings');
 
-    /**
-     * Polyfill for Array.from
-     * @memberOf client.module:helper
-     * @param {NodeList} nodeList - List of HTMLElements
-     * @return {Array}
-     */
-    helper.ArrayFromNodeList = function(nodeList) {
-      if (!Array.from) {
-        var nodeArray = [];
-        for (var i = 0; i &lt; nodeList.length; i++) {
-          nodeArray.push(nodeList.item(i));
-        }
-        return nodeArray;
-      } else {
-        return Array.from(nodeList);
-      }
-    };
+/**
+ * Socket.io methods
+ * @memberOf backend
+ * @module sockets
+ */
 
-    /**
-     * Maps [TopicData]{@link client.controller~TopicData} into [HashedTopic]{@link client.HashedTopic} objects
-     * @memberOf client.module:helper
-     * @param  {client.controller~TopicData} topic
-     * @param  {client.HashedTopic} HashedTopic - NOT an instance!
-     * @return {client.HashedTopic}             - New HashedTopic instance
-     */
-    helper.topicsMap = function(topic, HashedTopic) {
-      return new HashedTopic({
-        slug: topic.slug,
-        tid: topic.tid,
-        postcount: topic.postcount,
-        title: topic.title
-      });
-    };
+/** @alias module:sockets */
+var sockets = {
+  admin: {},
+  plugin: {}
+};
 
-    /**
-     * Maps [PostData]{@link client.controller~PostData} into [HashedPost]{@link client.HashedPost} objects
-     * @memberOf client.module:helper
-     * @param  {client.controller~PostData} post
-     * @param  {client.HashedPost} HashedPost - NOT an instance!
-     * @return {client.HashedPost}            - New HashedPost instance
-     */
-    helper.postsMap = function(post, HashedPost) {
-      var topicTitle = post.topic ? post.topic.title : ajaxify.data.title;
-      var topicSlug = post.topic ? post.topic.slug : ajaxify.data.slug;
-      var index = post.topic ? post.index : post.index + 1;
-      return new HashedPost({
-        pid: post.pid,
-        url: null,
-        index: index,
-        topicData: {
-          title: topicTitle,
-          slug: topicSlug
-        }
-      });
-    };
-
-    /**
-     * Maps [TeaserData]{@link client.controller~TeaserData} into [HashedPost]{@link client.HashedPost} objects
-     * @memberOf client.module:helper
-     * @param  {client.controller~TeaserData} topic
-     * @param  {client.HashedPost} HashedPost - NOT an instance!
-     * @return {client.HashedPost}            - New HashedPost instance
-     */
-    helper.teaserMap = function(topic, HashedPost) {
-      return new HashedPost({
-        pid: topic.teaser.pid,
-        url: topic.teaser.url,
-        index: topic.teaser.index,
-        topicData: {
-          title: topic.title,
-          slug: topic.slug
-        }
-      });
-    };
-
-    /**
-     * Filters [TopicData]{@link client.controller~TopicData} or [CategoryData]{@link client.controller~CategoryData} objects without [TeaserData]{@link client.controller~TeaserData} member
-     * @memberOf client.module:helper
-     * @param  {client.controller~TopicData|client.controller~CategoryData} obj [description]
-     * @return {bool}
-     */
-    helper.teaserFilter = function(obj) {
-      return !!obj.teaser;
-    };
-
-    /**
-     * Builds short URL from [hash]{@link client.HashedPost#hash}, using
-     * [shortFormat]{@link client.module:settings.shortFormat}
-     * @memberOf client.module:helper
-     * @param  {client.HashedPost#hash|client.HashedTopic#hash} hash
-     * @return {string}
-     */
-    helper.buildShortURL = function(hash) {
-      return location.protocol + '//' + settings.shortFormat.replace(':hash', hash);
-    };
-
-    return helper;
-
+/**
+ * Sends hashes for a set of topic/post ids to client
+ * @memberOf backend.module:sockets
+ * @param {Socket}         socket
+ * @param {Object}         data
+ * @param {Array.&lt;number>} data.ids
+ * @param {string}         data.type - [hashType]{@link backend.module:hashing.hashType} key
+ * @param {Function} cb
+ */
+sockets.plugin.getHashes = function(socket, data, cb) {
+  async.map(data.ids, hashing.getHashDelegate.call(this, data.type), function(err, hashes) {
+    if (err) {
+      return cb(err);
+    }
+    cb(null, hashes);
   });
-});
+};
+
+/**
+ * Sends settings to client
+ * @memberOf backend.module:sockets
+ * @param {Socket}   socket
+ * @param {Function} cb
+ */
+sockets.plugin.getConfig = function(socket, cb) {
+  cb({
+    modKey: (settings.local.useModKey) ? settings.local.modKey : '',
+    shortFormat: !settings.local.shortFormat ? nconf.get('url').replace(/http[s]?:\/\//, '') + '/ss/:hash' : settings.local.shortFormat,
+    copyButtonClass: settings.local.copyButtonClass
+  });
+};
+
+/**
+ * Receives settings from ACP
+ * @memberOf backend.module:sockets
+ * @param {Socket}   socket
+ * @param {Object}   data   - Settings object
+ * @param {Function} cb     - Called when settings are saved
+ */
+sockets.admin.saveSettings = function(socket, data, cb) {
+  settings.set(data, cb);
+};
+
+/**
+ * Reports a newly hashed topic or post
+ * @event backend.module:sockets."event:smoothshorts.newhash"
+ * @property {Object} data
+ * @property {string} data.type - 'post' or 'topic'
+ */
+
+/**
+ * Compares # of topics/posts with # of topic/post hashes
+ * and creates new hashes for all missing
+ * @memberOf backend.module:sockets
+ * @param {Socket}   socket
+ * @param {Function} cb
+ * @emits backend.module:sockets."event:smoothshorts.newhash"
+ */
+sockets.admin.hashMissing = function(socket, data, cb) {
+  async.parallel({
+    postIds: function(next) {
+      db.getSortedSetRevRange('posts:pid', 0, -1, next);
+    },
+    topicIds: function(next) {
+      db.getSortedSetRevRange('topics:tid', 0, -1, next);
+    }
+  }, function(err, result) {
+    if (err) {
+      return cb(err);
+    }
+    db.getSortedSetRevRangeWithScores('posts:smoothshorts', 0, -1,
+      function(err, hashSet) {
+        if (err) {
+          cb(err);
+        }
+        if (hashSet.length &lt; result.postIds.length) {
+          result.postIds.forEach(function(pid) {
+            for (var i = 0; i &lt; hashSet.length; i++) {
+              if (hashSet[i].score === pid) {
+                return;
+              }
+            }
+            db.getObject('post:' + pid, function(err, postData) {
+              if (err) {
+                return;
+              }
+              hashing.shortenPost(postData, function(err) {
+                if (!err) {
+                  socket.emit('event:smoothshorts.newhash', {type: 'post'});
+                }
+              });
+            });
+          });
+        }
+      });
+    db.getSortedSetRevRangeWithScores('topics:smoothshorts', 0, -1,
+      function(err, hashSet) {
+        if (err) {
+          cb(err);
+        }
+        if (hashSet.length &lt; result.topicIds.length) {
+          result.topicIds.forEach(function(tid) {
+            for (var i = 0; i &lt; hashSet.length; i++) {
+              if (hashSet[i].score === tid) {
+                return;
+              }
+            }
+            db.getObject('topic:' + tid, function(err, topicData) {
+              if (err) {
+                return;
+              }
+              hashing.shortenTopic(topicData, function(err) {
+                if (!err) {
+                  socket.emit('event:smoothshorts.newhash', {type: 'topic'});
+                }
+              });
+            });
+          });
+        }
+      });
+  });
+};
+
+module.exports = sockets;
 </pre>
     </article>
 </section>

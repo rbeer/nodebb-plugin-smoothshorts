@@ -40,7 +40,7 @@
 			<li class="dropdown">
 				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="backend.module_hashing.html">backend.hashing</a></li><li><a href="backend.module_SmoothShorts.html">backend.SmoothShorts</a></li><li><a href="client.module_contextmenu.html">client.contextmenu</a></li><li><a href="client.module_helper.html">client.helper</a></li><li><a href="client.module_settings.html">client.settings</a></li><li><a href="client.module_sockets.html">client.sockets</a></li>
+					<li><a href="backend.module_hashing.html">backend.hashing</a></li><li><a href="backend.module_settings.html">backend.settings</a></li><li><a href="backend.module_SmoothShorts.html">backend.SmoothShorts</a></li><li><a href="backend.module_sockets.html">backend.sockets</a></li><li><a href="client.module_contextmenu.html">client.contextmenu</a></li><li><a href="client.module_helper.html">client.helper</a></li><li><a href="client.module_settings.html">client.settings</a></li><li><a href="client.module_sockets.html">client.sockets</a></li>
 				</ul>
 			</li>
 			
@@ -54,7 +54,7 @@
 			<li class="dropdown">
 				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="nodebb-core.html#.event:%2522action:post.purge%2522">nodebb-core.event:"action:post.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:post.save%2522">nodebb-core.event:"action:post.save"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.purge%2522">nodebb-core.event:"action:topic.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.save%2522">nodebb-core.event:"action:topic.save"</a></li><li><a href="nodebb-core.html#.event:%2522filter:admin.header.build%2522">nodebb-core.event:"filter:admin.header.build"</a></li><li><a href="nodebb-core.html#.event:%2522static:app.load%2522">nodebb-core.event:"static:app.load"</a></li>
+					<li><a href="backend.module_sockets.html#.event:%2522event:smoothshorts.newhash%2522">backend.sockets.event:"event:smoothshorts.newhash"</a></li><li><a href="nodebb-core.html#.event:%2522action:post.purge%2522">nodebb-core.event:"action:post.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:post.save%2522">nodebb-core.event:"action:post.save"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.purge%2522">nodebb-core.event:"action:topic.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.save%2522">nodebb-core.event:"action:topic.save"</a></li><li><a href="nodebb-core.html#.event:%2522filter:admin.header.build%2522">nodebb-core.event:"filter:admin.header.build"</a></li><li><a href="nodebb-core.html#.event:%2522static:app.load%2522">nodebb-core.event:"static:app.load"</a></li>
 				</ul>
 			</li>
 			
@@ -198,6 +198,196 @@
         <h3 class="subsection-title">Events</h3>
 
         <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id=".event:%22event:smoothshorts.newhash%22">"event:smoothshorts.newhash"</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Reports a newly hashed topic or post</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
+
+<table class="props table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>'post' or 'topic'</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+</dl>
+
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="lib_sockets.js.html">lib/sockets.js</a>,
+				 <a href="lib_sockets.js.html#sunlight-1-line-65">line 65</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
             
 <hr>
 <dt>
@@ -1106,7 +1296,7 @@ function init(app, cb) {
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a>
 	
-		on 2016-04-22T06:55:56+02:00
+		on 2016-04-22T10:44:32+02:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

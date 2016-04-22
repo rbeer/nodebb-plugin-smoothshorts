@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Source: namespaces_dummy.js</title>
+	<title>Documentation Source: lib/settings.js</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -33,14 +33,14 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="acp.html">acp</a></li><li><a href="acp.controller.html">acp.controller</a></li><li><a href="backend.html">backend</a></li><li><a href="client.html">client</a></li><li><a href="client.controller.html">client.controller</a></li>
+					<li><a href="acp.html">acp</a></li><li><a href="acp.controller.html">acp.controller</a></li><li><a href="backend.html">backend</a></li><li><a href="client.html">client</a></li><li><a href="client.controller.html">client.controller</a></li><li><a href="nodebb-core.html">nodebb-core</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="client.module_contextmenu.html">client.contextmenu</a></li><li><a href="client.module_helper.html">client.helper</a></li><li><a href="client.module_settings.html">client.settings</a></li><li><a href="client.module_sockets.html">client.sockets</a></li>
+					<li><a href="backend.module_hashing.html">backend.hashing</a></li><li><a href="backend.module_settings.html">backend.settings</a></li><li><a href="backend.module_SmoothShorts.html">backend.SmoothShorts</a></li><li><a href="backend.module_sockets.html">backend.sockets</a></li><li><a href="client.module_contextmenu.html">client.contextmenu</a></li><li><a href="client.module_helper.html">client.helper</a></li><li><a href="client.module_settings.html">client.settings</a></li><li><a href="client.module_sockets.html">client.sockets</a></li>
 				</ul>
 			</li>
 			
@@ -48,6 +48,13 @@
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
 					<li><a href="client.HashedPost.html">client.HashedPost</a></li><li><a href="client.HashedTopic.html">client.HashedTopic</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="backend.module_sockets.html#.event:%2522event:smoothshorts.newhash%2522">backend.sockets.event:"event:smoothshorts.newhash"</a></li><li><a href="nodebb-core.html#.event:%2522action:post.purge%2522">nodebb-core.event:"action:post.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:post.save%2522">nodebb-core.event:"action:post.save"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.purge%2522">nodebb-core.event:"action:topic.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.save%2522">nodebb-core.event:"action:topic.save"</a></li><li><a href="nodebb-core.html#.event:%2522filter:admin.header.build%2522">nodebb-core.event:"filter:admin.header.build"</a></li><li><a href="nodebb-core.html#.event:%2522static:app.load%2522">nodebb-core.event:"static:app.load"</a></li>
 				</ul>
 			</li>
 			
@@ -77,23 +84,129 @@
 		<div id="main">
 			
 
-		<h1 class="page-title">Source: namespaces_dummy.js</h1>
+		<h1 class="page-title">Source: lib/settings.js</h1>
     
 <section>
     <article>
         <pre
-            class="sunlight-highlight-javascript linenums">/**
- * Backend scripts
- * @namespace backend
- */
+            class="sunlight-highlight-javascript linenums">'use strict';
+
+var winston = require.main.require('winston');
+var _ = require.main.require('underscore');
+var db = require.main.require('./src/database');
+
 /**
- * Frontend ACP scripts
- * @namespace acp
+ * Settings
+ * @memberOf backend
+ * @module settings
  */
+
+/** @alias module:settings */
+var settings = {
+  local: {
+    /**
+     * Indicates whether modifier key must be
+     * pressed to replace URLs in context menu method
+     * @memberOf backend.module:settings
+     * @type {Boolean}
+     * @default false
+     * @see backend.module:settings.modKey
+     */
+    useModKey: false,
+    /**
+     * Modifier key (ctrl, alt or shift) to enable URL
+     * replacement in context menu method
+     * @memberOf backend.module:settings
+     * @type {string}
+     */
+    modKey: '',
+    /**
+     * Short URLs will be built with this format
+     * @memberOf backend.module:settings
+     * @type {string}
+     * @example
+     * 'short.com/ss/:hash'
+     * 'short.com/:hash'
+     * 'short.com/:hash/yolo'
+     */
+    shortFormat: '',
+    /**
+     * CSS class name for copy button icon
+     * @memberOf backend.module:settings
+     * @type {String}
+     * @default fa-external-link
+     */
+    copyButtonClass: 'fa-external-link'
+  }
+};
+
 /**
- * Frontend client scripts
- * @namespace client
+ * Writes settings to database
+ * @memberOf backend.module:settings
+ * @param  {Function} cb
  */
+settings.persist = function(cb) {
+  db.setObject('settings:smoothshorts', settings.local, function(err) {
+    return cb(err ? err : null);
+  });
+};
+
+/**
+ * Sets and persists local settings object
+ * @memberOf backend.module:settings
+ * @param {Object}   data
+ * @param {Function} cb
+ */
+settings.set = function(data, cb) {
+  _.extendOwn(settings.local, parseBools(data));
+  settings.persist(cb);
+};
+
+/**
+ * Loads settings from database
+ * @memberOf backend.module:settings
+ * @param  {Function} cb
+ */
+settings.load = function(cb) {
+  db.getObject('settings:smoothshorts', function(err, stored) {
+    if (err) {
+      return cb(err);
+    }
+    stored = parseBools(stored);
+    if (stored.useDomain !== void 0 &amp;&amp; stored.forcedDomain !== void 0) {
+      db.deleteObjectFields('settings:smoothshorts', [
+        'useDomain', 'forcedDomain'
+      ], function() {});
+      winston.info('[plugins:SmoothShorts] Updated deprecated settings.');
+      stored.shortFormat = stored.useDomain &amp;&amp; stored.forcedDomain ? stored.forcedDomain + '/ss/:hash' : '';
+      delete stored.useDomain;
+      delete stored.forcedDomain;
+      return settings.set(stored, cb);
+    }
+    _.extendOwn(settings.local, stored);
+    return cb();
+  });
+};
+
+/**
+ * Parses an Object and replaces 'true'/'false' string
+ * values with their respective boolean
+ * @memberOf backend.module:settings
+ * @inner
+ * @param  {Object} obj
+ * @return {Object}
+ */
+function parseBools(obj) {
+  for (var name in obj) {
+    if (obj.hasOwnProperty(name)) {
+      if (obj[name] === 'true') obj[name] = true;
+      if (obj[name] === 'false') obj[name] = false;
+    }
+  }
+  return obj;
+}
+
+module.exports = settings;
 </pre>
     </article>
 </section>
@@ -133,7 +246,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a>
 	
-		on 2016-04-22T01:24:52+02:00
+		on 2016-04-22T10:44:32+02:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

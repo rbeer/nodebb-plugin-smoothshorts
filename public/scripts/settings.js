@@ -11,7 +11,8 @@ define('plugins/smoothshorts/settings', function() {
   /** @alias module:settings */
   var settings = {
     /**
-     * Modifier key (ctrl, alt or shift) to enable URL replacement
+     * Modifier key (ctrl, alt or shift) to enable URL
+     * replacement in context menu method
      * @memberOf client.module:settings
      * @type {string}
      */

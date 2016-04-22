@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Global</title>
+	<title>Documentation Module: settings</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -40,7 +40,7 @@
 			<li class="dropdown">
 				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="backend.module_SmoothShorts.html">backend.SmoothShorts</a></li><li><a href="client.module_contextmenu.html">client.contextmenu</a></li><li><a href="client.module_helper.html">client.helper</a></li><li><a href="client.module_settings.html">client.settings</a></li><li><a href="client.module_sockets.html">client.sockets</a></li>
+					<li><a href="backend.module_hashing.html">backend.hashing</a></li><li><a href="backend.module_settings.html">backend.settings</a></li><li><a href="backend.module_SmoothShorts.html">backend.SmoothShorts</a></li><li><a href="backend.module_sockets.html">backend.sockets</a></li><li><a href="client.module_contextmenu.html">client.contextmenu</a></li><li><a href="client.module_helper.html">client.helper</a></li><li><a href="client.module_settings.html">client.settings</a></li><li><a href="client.module_sockets.html">client.sockets</a></li>
 				</ul>
 			</li>
 			
@@ -54,14 +54,7 @@
 			<li class="dropdown">
 				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="nodebb-core.html#.event:%2522action:post.purge%2522">nodebb-core.event:"action:post.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:post.save%2522">nodebb-core.event:"action:post.save"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.purge%2522">nodebb-core.event:"action:topic.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.save%2522">nodebb-core.event:"action:topic.save"</a></li><li><a href="nodebb-core.html#.event:%2522filter:admin.header.build%2522">nodebb-core.event:"filter:admin.header.build"</a></li><li><a href="nodebb-core.html#.event:%2522static:app.load%2522">nodebb-core.event:"static:app.load"</a></li>
-				</ul>
-			</li>
-			
-			<li class="dropdown">
-				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
-				<ul class="dropdown-menu ">
-					<li><a href="global.html">Global</a></li>
+					<li><a href="backend.module_sockets.html#.event:%2522event:smoothshorts.newhash%2522">backend.sockets.event:"event:smoothshorts.newhash"</a></li><li><a href="nodebb-core.html#.event:%2522action:post.purge%2522">nodebb-core.event:"action:post.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:post.save%2522">nodebb-core.event:"action:post.save"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.purge%2522">nodebb-core.event:"action:topic.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.save%2522">nodebb-core.event:"action:topic.save"</a></li><li><a href="nodebb-core.html#.event:%2522filter:admin.header.build%2522">nodebb-core.event:"filter:admin.header.build"</a></li><li><a href="nodebb-core.html#.event:%2522static:app.load%2522">nodebb-core.event:"static:app.load"</a></li>
 				</ul>
 			</li>
 			
@@ -91,15 +84,10 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Global</h1>
+	<h1 class="page-title">Module: settings</h1>
 <section>
 
 <header>
-    
-        <h2>
-        
-        </h2>
-        
     
 </header>
 
@@ -107,6 +95,8 @@
 <article>
     <div class="container-overview">
     
+        
+            <div class="description"><p>Settings</p></div>
         
 
         
@@ -139,6 +129,16 @@
 
 
 
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="lib_settings.js.html">lib/settings.js</a>,
+				 <a href="lib_settings.js.html#sunlight-1-line-7">line 7</a>
+			</li>
+		</ul>
+	</dd>
 	
 
 	
@@ -169,14 +169,29 @@
         <dl>
             
 <hr>
-<dt class="name" id="module:contextmenu">
-    <h4><span class="type-signature"></span>module:contextmenu<span class="type-signature"></span></h4>
+<dt class="name" id=".copyButtonClass">
+    <h4><span class="type-signature">&lt;static> </span>copyButtonClass<span class="type-signature"> :String</span></h4>
 
     
 </dt>
 <dd>
     
+    <div class="description">
+        <p>CSS class name for copy button icon</p>
+    </div>
+    
 
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">String</span>
+
+
+
+            </li>
+        </ul>
     
 
     
@@ -206,6 +221,13 @@
 	
 
 	
+	<dt class="tag-default method-doc-label method-doc-details-label">Default Value:</dt>
+	<dd class="tag-default">
+		<ul class="dummy">
+			<li>fa-external-link</li>
+		</ul>
+	</dd>
+	
 
 
 
@@ -214,8 +236,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="public_scripts_contextmenu.js.html">public/scripts/contextmenu.js</a>,
-				 <a href="public_scripts_contextmenu.js.html#sunlight-1-line-18">line 18</a>
+				<a href="lib_settings.js.html">lib/settings.js</a>,
+				 <a href="lib_settings.js.html#sunlight-1-line-48">line 48</a>
 			</li>
 		</ul>
 	</dd>
@@ -235,14 +257,30 @@
         
             
 <hr>
-<dt class="name" id="module:helper">
-    <h4><span class="type-signature"></span>module:helper<span class="type-signature"></span></h4>
+<dt class="name" id=".modKey">
+    <h4><span class="type-signature">&lt;static> </span>modKey<span class="type-signature"> :string</span></h4>
 
     
 </dt>
 <dd>
     
+    <div class="description">
+        <p>Modifier key (ctrl, alt or shift) to enable URL
+replacement in context menu method</p>
+    </div>
+    
 
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">string</span>
+
+
+
+            </li>
+        </ul>
     
 
     
@@ -280,8 +318,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="public_scripts_helper.js.html">public/scripts/helper.js</a>,
-				 <a href="public_scripts_helper.js.html#sunlight-1-line-13">line 13</a>
+				<a href="lib_settings.js.html">lib/settings.js</a>,
+				 <a href="lib_settings.js.html#sunlight-1-line-31">line 31</a>
 			</li>
 		</ul>
 	</dd>
@@ -301,14 +339,29 @@
         
             
 <hr>
-<dt class="name" id="module:settings">
-    <h4><span class="type-signature"></span>module:settings<span class="type-signature"></span></h4>
+<dt class="name" id=".shortFormat">
+    <h4><span class="type-signature">&lt;static> </span>shortFormat<span class="type-signature"> :string</span></h4>
 
     
 </dt>
 <dd>
     
+    <div class="description">
+        <p>Short URLs will be built with this format</p>
+    </div>
+    
 
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">string</span>
+
+
+
+            </li>
+        </ul>
     
 
     
@@ -346,8 +399,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="public_scripts_settings.js.html">public/scripts/settings.js</a>,
-				 <a href="public_scripts_settings.js.html#sunlight-1-line-12">line 12</a>
+				<a href="lib_settings.js.html">lib/settings.js</a>,
+				 <a href="lib_settings.js.html#sunlight-1-line-41">line 41</a>
 			</li>
 		</ul>
 	</dd>
@@ -362,19 +415,43 @@
 
 
     
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">&#x27;short.com/ss/:hash&#x27;
+&#x27;short.com/:hash&#x27;
+&#x27;short.com/:hash/yolo&#x27;</pre>
+
+
+    
 </dd>
 
         
             
 <hr>
-<dt class="name" id="module:SmoothShorts">
-    <h4><span class="type-signature"></span>module:SmoothShorts<span class="type-signature"></span></h4>
+<dt class="name" id=".useModKey">
+    <h4><span class="type-signature">&lt;static> </span>useModKey<span class="type-signature"> :Boolean</span></h4>
 
     
 </dt>
 <dd>
     
+    <div class="description">
+        <p>Indicates whether modifier key must be
+pressed to replace URLs in context menu method</p>
+    </div>
+    
 
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Boolean</span>
+
+
+
+            </li>
+        </ul>
     
 
     
@@ -404,71 +481,12 @@
 	
 
 	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
+	<dt class="tag-default method-doc-label method-doc-details-label">Default Value:</dt>
+	<dd class="tag-default">
 		<ul class="dummy">
-			<li>
-				<a href="lib_controller.js.html">lib/controller.js</a>,
-				 <a href="lib_controller.js.html#sunlight-1-line-26">line 26</a>
-			</li>
+			<li>false</li>
 		</ul>
 	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="module:sockets">
-    <h4><span class="type-signature"></span>module:sockets<span class="type-signature"></span></h4>
-
-    
-</dt>
-<dd>
-    
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
 	
 
 
@@ -478,8 +496,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="public_scripts_sockets.js.html">public/scripts/sockets.js</a>,
-				 <a href="public_scripts_sockets.js.html#sunlight-1-line-12">line 12</a>
+				<a href="lib_settings.js.html">lib/settings.js</a>,
+				 <a href="lib_settings.js.html#sunlight-1-line-24">line 24</a>
 			</li>
 		</ul>
 	</dd>
@@ -487,6 +505,13 @@
 
 	
 
+	
+	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li><a href="backend.module_settings.html#.modKey">backend.module:settings.modKey</a></li>
+			</ul>
+	</dd>
 	
 
 	
@@ -500,15 +525,13 @@
     
 
     
-
-    
-        <h3 class="subsection-title">Type Definitions</h3>
+        <h3 class="subsection-title">Methods</h3>
 
         <dl>
-                
+            
 <hr>
 <dt>
-    <h4 class="name" id="headerBuildCB"><span class="type-signature"></span>headerBuildCB(err, custom_header)</h4>
+    <h4 class="name" id=".settings.load"><span class="type-signature">&lt;static> </span>settings.load(cb)</h4>
     
     
 </dt>
@@ -516,7 +539,7 @@
 
     
     <div class="description">
-        <p>filter:admin.header.build callback</p>
+        <p>Loads settings from database</p>
     </div>
     
 
@@ -539,7 +562,143 @@
         <th>Type</th>
 
         
-        <th>Argument</th>
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="lib_settings.js.html">lib/settings.js</a>,
+				 <a href="lib_settings.js.html#sunlight-1-line-79">line 79</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".settings.persist"><span class="type-signature">&lt;static> </span>settings.persist(cb)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Writes settings to database</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
         
 
         
@@ -553,29 +712,19 @@
 
         <tr>
             
-                <td class="name"><code>err</code></td>
+                <td class="name"><code>cb</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Error</span>
+<span class="param-type">function</span>
 
 
 
             
             </td>
 
-            
-                <td class="attributes">
-                
-
-                
-                    &lt;nullable><br>
-                
-
-                
-                </td>
             
 
             
@@ -584,10 +733,124 @@
         </tr>
 
     
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="lib_settings.js.html">lib/settings.js</a>,
+				 <a href="lib_settings.js.html#sunlight-1-line-57">line 57</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".settings.set"><span class="type-signature">&lt;static> </span>settings.set(data, cb)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Sets and persists local settings object</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
 
         <tr>
             
-                <td class="name"><code>custom_header</code></td>
+                <td class="name"><code>data</code></td>
             
 
             <td class="type">
@@ -601,15 +864,29 @@
             </td>
 
             
-                <td class="attributes">
-                
 
-                
-                    &lt;nullable><br>
-                
+            
 
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
                 
-                </td>
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
             
 
             
@@ -658,8 +935,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="nodebb_events.js.html">nodebb_events.js</a>,
-				 <a href="nodebb_events.js.html#sunlight-1-line-26">line 26</a>
+				<a href="lib_settings.js.html">lib/settings.js</a>,
+				 <a href="lib_settings.js.html#sunlight-1-line-69">line 69</a>
 			</li>
 		</ul>
 	</dd>
@@ -688,11 +965,11 @@
     
 </dd>
 
+        
             
-                
 <hr>
 <dt>
-    <h4 class="name" id="initCB"><span class="type-signature"></span>initCB(err, app)</h4>
+    <h4 class="name" id="~parseBools"><span class="type-signature">&lt;inner> </span>parseBools(obj)</h4>
     
     
 </dt>
@@ -700,7 +977,8 @@
 
     
     <div class="description">
-        <p>static:app.load callback</p>
+        <p>Parses an Object and replaces 'true'/'false' string
+values with their respective boolean</p>
     </div>
     
 
@@ -723,8 +1001,6 @@
         <th>Type</th>
 
         
-        <th>Argument</th>
-        
 
         
 
@@ -737,63 +1013,19 @@
 
         <tr>
             
-                <td class="name"><code>err</code></td>
+                <td class="name"><code>obj</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Error</span>
+<span class="param-type">Object</span>
 
 
 
             
             </td>
 
-            
-                <td class="attributes">
-                
-
-                
-                    &lt;nullable><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>app</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">app</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                    &lt;nullable><br>
-                
-
-                
-                </td>
             
 
             
@@ -842,8 +1074,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="nodebb_events.js.html">nodebb_events.js</a>,
-				 <a href="nodebb_events.js.html#sunlight-1-line-8">line 8</a>
+				<a href="lib_settings.js.html">lib/settings.js</a>,
+				 <a href="lib_settings.js.html#sunlight-1-line-108">line 108</a>
 			</li>
 		</ul>
 	</dd>
@@ -868,11 +1100,33 @@
     
 
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
 
     
 </dd>
 
-            </dl>
+        </dl>
+    
+
     
 
     
@@ -918,7 +1172,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a>
 	
-		on 2016-04-22T05:24:47+02:00
+		on 2016-04-22T10:44:32+02:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

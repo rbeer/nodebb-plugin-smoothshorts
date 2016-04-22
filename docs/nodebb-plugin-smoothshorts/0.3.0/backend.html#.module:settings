@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Namespace: settings</title>
+	<title>Documentation Module: settings</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -33,14 +33,14 @@
 			<li class="dropdown">
 				<a href="namespaces.list.html" class="dropdown-toggle" data-toggle="dropdown">Namespaces<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="acp.html">acp</a></li><li><a href="backend.html">backend</a></li><li><a href="client.html">client</a></li><li><a href="client.controller.html">client.controller</a></li><li><a href="settings.html">settings</a></li><li><a href="sockets.html">sockets</a></li>
+					<li><a href="acp.html">acp</a></li><li><a href="acp.controller.html">acp.controller</a></li><li><a href="backend.html">backend</a></li><li><a href="client.html">client</a></li><li><a href="client.controller.html">client.controller</a></li><li><a href="nodebb-core.html">nodebb-core</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="client.module_contextmenu.html">client.contextmenu</a></li><li><a href="client.module_helper.html">client.helper</a></li>
+					<li><a href="backend.module_hashing.html">backend.hashing</a></li><li><a href="backend.html#.module:settings">backend.settings</a></li><li><a href="backend.module_SmoothShorts.html">backend.SmoothShorts</a></li><li><a href="backend.module_sockets.html">backend.sockets</a></li><li><a href="client.module_contextmenu.html">client.contextmenu</a></li><li><a href="client.module_helper.html">client.helper</a></li><li><a href="client.module_settings.html">client.settings</a></li><li><a href="client.module_sockets.html">client.sockets</a></li>
 				</ul>
 			</li>
 			
@@ -48,6 +48,13 @@
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
 					<li><a href="client.HashedPost.html">client.HashedPost</a></li><li><a href="client.HashedTopic.html">client.HashedTopic</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="backend.module_sockets.html#.event:%2522event:smoothshorts.newhash%2522">backend.sockets.event:"event:smoothshorts.newhash"</a></li><li><a href="nodebb-core.html#.event:%2522action:post.purge%2522">nodebb-core.event:"action:post.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:post.save%2522">nodebb-core.event:"action:post.save"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.purge%2522">nodebb-core.event:"action:topic.purge"</a></li><li><a href="nodebb-core.html#.event:%2522action:topic.save%2522">nodebb-core.event:"action:topic.save"</a></li><li><a href="nodebb-core.html#.event:%2522filter:admin.header.build%2522">nodebb-core.event:"filter:admin.header.build"</a></li><li><a href="nodebb-core.html#.event:%2522static:app.load%2522">nodebb-core.event:"static:app.load"</a></li>
 				</ul>
 			</li>
 			
@@ -77,15 +84,10 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Namespace: settings</h1>
+	<h1 class="page-title">Module: settings</h1>
 <section>
 
 <header>
-    
-        <h2>
-        settings
-        </h2>
-        
     
 </header>
 
@@ -94,7 +96,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Provides plugin's settings</p></div>
+            <div class="description"><p>Settings</p></div>
         
 
         
@@ -132,8 +134,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="public_scripts_settings.js.html">public/scripts/settings.js</a>,
-				 <a href="public_scripts_settings.js.html#sunlight-1-line-6">line 6</a>
+				<a href="lib_settings.js.html">lib/settings.js</a>,
+				 <a href="lib_settings.js.html#sunlight-1-line-7">line 7</a>
 			</li>
 		</ul>
 	</dd>
@@ -234,8 +236,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="public_scripts_settings.js.html">public/scripts/settings.js</a>,
-				 <a href="public_scripts_settings.js.html#sunlight-1-line-34">line 34</a>
+				<a href="lib_settings.js.html">lib/settings.js</a>,
+				 <a href="lib_settings.js.html#sunlight-1-line-48">line 48</a>
 			</li>
 		</ul>
 	</dd>
@@ -263,7 +265,8 @@
 <dd>
     
     <div class="description">
-        <p>Modifier key (ctrl, alt or shift) to enable URL replacement</p>
+        <p>Modifier key (ctrl, alt or shift) to enable URL
+replacement in context menu method</p>
     </div>
     
 
@@ -315,8 +318,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="public_scripts_settings.js.html">public/scripts/settings.js</a>,
-				 <a href="public_scripts_settings.js.html#sunlight-1-line-17">line 17</a>
+				<a href="lib_settings.js.html">lib/settings.js</a>,
+				 <a href="lib_settings.js.html#sunlight-1-line-31">line 31</a>
 			</li>
 		</ul>
 	</dd>
@@ -396,8 +399,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="public_scripts_settings.js.html">public/scripts/settings.js</a>,
-				 <a href="public_scripts_settings.js.html#sunlight-1-line-27">line 27</a>
+				<a href="lib_settings.js.html">lib/settings.js</a>,
+				 <a href="lib_settings.js.html#sunlight-1-line-41">line 41</a>
 			</li>
 		</ul>
 	</dd>
@@ -422,6 +425,102 @@
     
 </dd>
 
+        
+            
+<hr>
+<dt class="name" id=".useModKey">
+    <h4><span class="type-signature">&lt;static> </span>useModKey<span class="type-signature"> :Boolean</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Indicates whether modifier key must be
+pressed to replace URLs in context menu method</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Boolean</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+	<dt class="tag-default method-doc-label method-doc-details-label">Default Value:</dt>
+	<dd class="tag-default">
+		<ul class="dummy">
+			<li>false</li>
+		</ul>
+	</dd>
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="lib_settings.js.html">lib/settings.js</a>,
+				 <a href="lib_settings.js.html#sunlight-1-line-24">line 24</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li><a href="backend.html#.module:settings#.modKey">backend.module:settings.modKey</a></li>
+			</ul>
+	</dd>
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
         </dl>
     
 
@@ -432,7 +531,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".load"><span class="type-signature">&lt;static> </span>load(cb)</h4>
+    <h4 class="name" id=".settings.load"><span class="type-signature">&lt;static> </span>settings.load(cb)</h4>
     
     
 </dt>
@@ -440,7 +539,7 @@
 
     
     <div class="description">
-        <p>Load settings from backend</p>
+        <p>Loads settings from database</p>
     </div>
     
 
@@ -492,7 +591,7 @@
 
             
 
-            <td class="description last"><p>Called when settings have been received</p></td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -536,8 +635,8 @@
 	<dd class="tag-source">
 		<ul class="dummy">
 			<li>
-				<a href="public_scripts_settings.js.html">public/scripts/settings.js</a>,
-				 <a href="public_scripts_settings.js.html#sunlight-1-line-42">line 42</a>
+				<a href="lib_settings.js.html">lib/settings.js</a>,
+				 <a href="lib_settings.js.html#sunlight-1-line-79">line 79</a>
 			</li>
 		</ul>
 	</dd>
@@ -562,6 +661,465 @@
     
 
     
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".settings.persist"><span class="type-signature">&lt;static> </span>settings.persist(cb)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Writes settings to database</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="lib_settings.js.html">lib/settings.js</a>,
+				 <a href="lib_settings.js.html#sunlight-1-line-57">line 57</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id=".settings.set"><span class="type-signature">&lt;static> </span>settings.set(data, cb)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Sets and persists local settings object</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="lib_settings.js.html">lib/settings.js</a>,
+				 <a href="lib_settings.js.html#sunlight-1-line-69">line 69</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="~parseBools"><span class="type-signature">&lt;inner> </span>parseBools(obj)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        <p>Parses an Object and replaces 'true'/'false' string
+values with their respective boolean</p>
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<ul class="dummy">
+			<li>
+				<a href="lib_settings.js.html">lib/settings.js</a>,
+				 <a href="lib_settings.js.html#sunlight-1-line-108">line 108</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
 
     
 </dd>
@@ -614,7 +1172,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a>
 	
-		on 2016-04-22T00:15:09+02:00
+		on 2016-04-22T10:32:34+02:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
