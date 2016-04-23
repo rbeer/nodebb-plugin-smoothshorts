@@ -1,7 +1,9 @@
 module.exports = function(grunt) {
 
+  require('load-grunt-tasks')(grunt);
+  var execFile = require('child_process').execFile;
+
   grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
     babel: {
       options: {
         presets: ['es2015']
@@ -19,14 +21,28 @@ module.exports = function(grunt) {
     },
     eslint: {
       options: {
+        // auto-fix the mess babel produces
+        // (mainly space-before-function-paren :rage:)
         fix: true,
-        cache: true
+        // max-len warnings be cluttering
+        quiet: true
       },
-      target: ['build/**/*.js']
+      build: ['build/**/*.js']
+    },
+    clean: {
+      build: ['build/*']
+    },
+    copy: {
+      build: {
+        src: ['package.json', 'plugin.json', '**/*.{tpl,css}', '!node_modules/**'],
+        dest: 'build/'
+      }
     }
   });
 
-  grunt.loadNpmTasks('grunt-eslint');
-  grunt.loadNpmTasks('grunt-babel');
-  grunt.registerTask('default', ['babel', 'eslint']);
+  grunt.registerTask('restart', 'Restart NodeBB', function() {
+    grunt.log.writeln('Restarting NodeBB...');
+    execFile('pkill', ['-SIGHUP', '-f', 'loader.js']);
+  });
+  grunt.registerTask('default', ['clean', 'babel', 'eslint', 'copy', 'restart']);
 };
