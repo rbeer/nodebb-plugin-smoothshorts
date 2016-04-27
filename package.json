@@ -9,7 +9,6 @@
   "dependencies": {
     "xxhash": "^0.2.2"
   },
-  "main": "smoothshorts.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/rbeer/nodebb-plugin-smoothshorts"
@@ -48,6 +47,7 @@
     "minami": "^1.1.1"
   },
   "scripts": {
-    "build-docs": "jsdoc --configure .jsdoc -t node_modules/ink-docstrap/template/ -R ./README.md --verbose ./"
+    "build-docs": "jsdoc --configure .jsdoc -t node_modules/ink-docstrap/template/ -R ./README.md --verbose ./",
+    "grunt": "grunt"
   }
 }
