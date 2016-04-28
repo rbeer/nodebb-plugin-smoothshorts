@@ -26,6 +26,8 @@
         sockets.getHashes('posts', data[dataKey].filter(helper.teaserFilter).map(mapHelperDelegate('teaser', pageData)), addHashes);
         if (dataKey === 'topics') {
           sockets.getHashes('topics', data[dataKey].map(mapHelperDelegate('topics')), addHashes);
+        } else if(document.querySelector('[component="category/posts"].post-preview')) {
+          sockets.getHashes('topics', data[dataKey].filter(helper.teaserFilter).map(mapHelperDelegate('lavenderTeaser')), addHashes);
         }
       }
     }
@@ -51,7 +53,7 @@
     function mapHelperDelegate(type) {
       return function mapHelper(mapObj) {
         var fn = helper[type + 'Map'];
-        return fn(mapObj, type === 'topics' ? HashedTopic : HashedPost);
+        return fn(mapObj, type === 'topics' || type === 'lavenderTeaser' ? HashedTopic : HashedPost);
       };
     }
 

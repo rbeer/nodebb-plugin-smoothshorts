@@ -53,6 +53,13 @@ define('plugins/smoothshorts/helper', ['plugins/smoothshorts/settings'], functio
     });
   };
 
+  helper.lavenderTeaserMap = function(category, HashedTopic) {
+    var topic = category.posts[0].topic;
+    topic.tid = topic.slug.split('/')[0];
+    topic.postcount = 1;
+    return helper.topicsMap(topic, HashedTopic);
+  };
+
   helper.teaserFilter = function(obj) {
     return !!obj.teaser;
   };
