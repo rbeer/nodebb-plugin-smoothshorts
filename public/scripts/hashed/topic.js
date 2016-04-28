@@ -28,10 +28,8 @@ define('plugins/smoothshorts/hashed/topic', ['plugins/smoothshorts/helper'], fun
   };
 
   function getAnchors(url, postcount, title) {
-    var anchors = document.querySelectorAll('[component="category/topic"] a');
-    var lavenderHomeAnchors = document.querySelectorAll('[component="category/posts"].post-preview a');
-    anchors = helper.ArrayFromNodeList(anchors).concat(helper.ArrayFromNodeList(lavenderHomeAnchors));
-    return anchors.filter(function(element) {
+    var anchors = document.querySelectorAll('a[href*="' + url + '"]');
+    return helper.ArrayFromNodeList(anchors).filter(function(element) {
       return (postcount === '1' && element.getAttribute('href') === url) ||
              (element.textContent.trim() === title);
     });
