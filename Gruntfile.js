@@ -17,6 +17,16 @@ module.exports = function(grunt) {
             dest: 'build/'
           }
         ]
+      },
+      publish: {
+        files: [
+          {
+            expand: true,
+            cwd: './',
+            src: ['**/*.js', '!build/**', '!publish/**', '!node_modules/**', '!Gruntfile.js'],
+            dest: 'publish/'
+          }
+        ]
       }
     },
     eslint: {
@@ -27,15 +37,30 @@ module.exports = function(grunt) {
         // max-len warnings be cluttering
         quiet: true
       },
-      build: ['build/**/*.js']
+      build: ['build/**/*.js'],
+      publish: ['publish/**/*.js']
     },
     clean: {
-      build: ['build/*']
+      build: ['build/*', '!node_modules/**'],
+      publish: ['publish/*', '!node_modules/**']
     },
     copy: {
       build: {
         src: ['package.json', 'plugin.json', '**/*.{tpl,css}', '!node_modules/**'],
         dest: 'build/'
+      },
+      publish: {
+        src: [
+          'package.json',
+          'plugin.json',
+          '**/*.{tpl,css}',
+          'assets/*',
+          'README.md',
+          'CHANGELOG.md',
+          'LICENSE',
+          '!node_modules/**',
+          '!build/*'],
+        dest: 'publish/'
       }
     }
   });
@@ -45,4 +70,5 @@ module.exports = function(grunt) {
     execFile('pkill', ['-SIGHUP', '-f', 'loader.js']);
   });
   grunt.registerTask('default', ['clean', 'babel', 'eslint', 'copy', 'restart']);
+  grunt.registerTask('publish', ['clean:publish', 'babel:publish', 'eslint:publish', 'copy:publish']);
 };
