@@ -17,10 +17,10 @@ module.exports = function(grunt) {
     NodeBB: '../../dev/',
     pkg: grunt.file.readJSON('package.json'),
     buildPath: {
-      _buildsBase: __dirname + '/builds',
-      current: '<%= buildPath._buildsBase %>/current',
-      dev: '<%= buildPath._buildsBase %>/dev',
-      publish: '<%= buildPath._buildsBase %>/publish',
+      _buildsBase: (relative) => relative ? 'builds' : __dirname + '/builds',
+      current: '<%= buildPath._buildsBase() %>/current',
+      dev: '<%= buildPath._buildsBase() %>/dev',
+      publish: '<%= buildPath._buildsBase() %>/publish',
       npm_install: path.resolve(__dirname, '../'),
       npm_module: '<%= buildPath.npm_install %>/node_modules/<%= pkg.name %>'
     },
@@ -33,7 +33,7 @@ module.exports = function(grunt) {
           {
             expand: true,
             cwd: './',
-            src: [ '**/*.js', '!<%= buildPath._buildsBase %>/**', '!node_modules/**' ],
+            src: [ '**/*.js', '!<%= buildPath._buildsBase(true) %>/**/**', '!node_modules/**' ],
             dest: '<%= buildPath.dev %>'
           }
         ]
@@ -43,7 +43,7 @@ module.exports = function(grunt) {
           {
             expand: true,
             cwd: './',
-            src: [ '**/*.js', '!<%= buildPath._buildsBase %>/**', '!node_modules/**' ],
+            src: [ '**/*.js', '!<%= buildPath._buildsBase(true) %>/**/**', '!node_modules/**' ],
             dest: '<%= buildPath.publish %>'
           }
         ]
@@ -77,7 +77,7 @@ module.exports = function(grunt) {
           'plugin.json',
           '**/*.{tpl,css}',
           '!node_modules/**',
-          '!<%= buildPath._buildsBase %>/**'
+          '!<%= buildPath._buildsBase(true) %>/**/**'
         ],
         dest: '<%= buildPath.dev %>/'
       },
@@ -91,7 +91,7 @@ module.exports = function(grunt) {
           'CHANGELOG.md',
           'LICENSE',
           '!node_modules/**',
-          '!<%= buildPath._buildsBase %>/**' ],
+          '!<%= buildPath._buildsBase(true) %>/**/**' ],
         dest: '<%= buildPath.publish %>/'
       }
     },
