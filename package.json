@@ -13,12 +13,7 @@
     "type": "git",
     "url": "https://github.com/rbeer/nodebb-plugin-smoothshorts"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://raw.github.com/rbeer/nodebb-plugin-smoothshorts/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/rbeer/nodebb-plugin-smoothshorts/issues"
   },
@@ -48,6 +43,8 @@
   },
   "scripts": {
     "build-docs": "jsdoc --configure .jsdoc -t node_modules/ink-docstrap/template/ -R ./README.md --verbose ./",
-    "grunt": "grunt"
+    "dev": "grunt dev",
+    "publish": "grunt publish",
+    "npm-install": "grunt npm"
   }
 }

@@ -1,8 +1,6 @@
 node_modules/
 snaps/
-build/
-publish/
-dev
+builds/
 THUMBS.db
 .eslintcache
 *.log

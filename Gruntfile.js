@@ -1,20 +1,40 @@
 module.exports = function(grunt) {
+  'use strict';
+
+  const fs = require('fs');
+  const symlink = fs.symlink;
+  const unlink = fs.unlink;
+
+  const cp = require('child_process');
+  const execSync = cp.execSync;
+  const spawn = cp.spawn;
+
+  const path = require('path');
 
   require('load-grunt-tasks')(grunt);
-  var execFile = require('child_process').execFile;
 
   grunt.initConfig({
+    NodeBB: '../../dev/',
+    pkg: grunt.file.readJSON('package.json'),
+    buildPath: {
+      _buildsBase: __dirname + '/builds',
+      current: '<%= buildPath._buildsBase %>/current',
+      dev: '<%= buildPath._buildsBase %>/dev',
+      publish: '<%= buildPath._buildsBase %>/publish',
+      npm_install: path.resolve(__dirname, '../'),
+      npm_module: '<%= buildPath.npm_install %>/node_modules/<%= pkg.name %>'
+    },
     babel: {
       options: {
-        presets: ['es2015']
+        presets: [ 'es2015' ]
       },
-      build: {
+      dev: {
         files: [
           {
             expand: true,
             cwd: './',
-            src: ['**/*.js', '!build/**', '!node_modules/**', '!Gruntfile.js'],
-            dest: 'build/'
+            src: [ '**/*.js', '!<%= buildPath._buildsBase %>/**', '!node_modules/**' ],
+            dest: '<%= buildPath.dev %>'
           }
         ]
       },
@@ -23,8 +43,8 @@ module.exports = function(grunt) {
           {
             expand: true,
             cwd: './',
-            src: ['**/*.js', '!build/**', '!publish/**', '!node_modules/**', '!Gruntfile.js'],
-            dest: 'publish/'
+            src: [ '**/*.js', '!<%= buildPath._buildsBase %>/**', '!node_modules/**' ],
+            dest: '<%= buildPath.publish %>'
           }
         ]
       }
@@ -37,17 +57,29 @@ module.exports = function(grunt) {
         // max-len warnings be cluttering
         quiet: true
       },
-      build: ['build/**/*.js'],
-      publish: ['publish/**/*.js']
+      dev: [ '<%= buildPath.dev %>/**/*.js' ],
+      publish: [ '<%= buildPath.publish %>/**/*.js' ]
     },
     clean: {
-      build: ['build/*', '!node_modules/**'],
-      publish: ['publish/*', '!node_modules/**']
+      dev: [ '<%= buildPath.dev %>/*', '!node_modules/**' ],
+      publish: [ '<%= buildPath.publish %>/*', '!node_modules/**' ],
+      npm: {
+        options: {
+          force: true
+        },
+        src: [ '<%= buildPath.npm_module %>/*' ]
+      }
     },
     copy: {
-      build: {
-        src: ['package.json', 'plugin.json', '**/*.{tpl,css}', '!node_modules/**'],
-        dest: 'build/'
+      dev: {
+        src: [
+          'package.json',
+          'plugin.json',
+          '**/*.{tpl,css}',
+          '!node_modules/**',
+          '!<%= buildPath._buildsBase %>/**'
+        ],
+        dest: '<%= buildPath.dev %>/'
       },
       publish: {
         src: [
@@ -59,16 +91,158 @@ module.exports = function(grunt) {
           'CHANGELOG.md',
           'LICENSE',
           '!node_modules/**',
-          '!build/*'],
-        dest: 'publish/'
+          '!<%= buildPath._buildsBase %>/**' ],
+        dest: '<%= buildPath.publish %>/'
+      }
+    },
+    symlink: {
+      dev: {
+        link: '<%= buildPath.current %>',
+        target: '<%= buildPath.dev %>',
+        linkNodeBB: true
+      },
+      publish: {
+        link: '<%= buildPath.current %>',
+        target: '<%= buildPath.publish %>'
+      },
+      npm: {
+        link: '<%= buildPath.current %>',
+        target: '<%= buildPath.npm_module %>'
+      },
+      NodeBB: {
+        link: '<%= NodeBB %>/node_modules/<%= pkg.name %>',
+        target: '<%= buildPath.current %>'
+      }
+    },
+    npm_install: {
+      default: {
+        cwd: '<%= buildPath.npm_install %>',
+        packageDir: '<%= buildPath.publish %>'
       }
     }
   });
 
-  grunt.registerTask('restart', 'Restart NodeBB', function() {
-    grunt.log.writeln('Restarting NodeBB...');
-    execFile('pkill', ['-SIGHUP', '-f', 'loader.js']);
+  grunt.registerMultiTask('symlink', 'Link last build to NodeBB', () => {
+    var done = grunt.task.current.async();
+
+    var data = grunt.task.current.data;
+    console.log(data.target);
+    var sym = {
+      link: path.normalize(grunt.template.process(data.link)),
+      target: path.normalize(grunt.template.process(data.target + '/'))
+    };
+    var isNodeBB = grunt.task.current.target === 'NodeBB';
+
+    var chktarget = (cb) => {
+      grunt.log.write('Checking target...');
+      fs.lstat(sym.target, (err, stats) => {
+        if (err) {
+          if (err.code === 'ENOENT') {
+            grunt.log.verbose.error(`Can\'t access '${sym.target}' !`);
+          }
+          return done(err);
+        }
+        if (!stats.isDirectory() && !stats.isSymbolicLink()) {
+          grunt.log.error();
+          grunt.log.verbose.error('Target must be a symlink or directory!');
+          return done(err);
+        }
+        grunt.log.ok();
+        cb();
+      });
+    };
+
+    var _unlink = (cb) => {
+      unlink(sym.link, (err) => {
+        if (err) {
+          grunt.log.verbose.warn(err);
+        }
+        cb();
+      });
+    };
+
+    var _symlink = () => {
+      symlink(sym.target, sym.link, (err) => {
+        if (err) {
+          grunt.log.error();
+          return done(err);
+        }
+        let linkpath = path.relative(__dirname, sym.link);
+        grunt.log.write(isNodeBB ? 'Linking into NodeBB...' :
+                                   'Writing link \'' + linkpath + '\'...');
+        grunt.log.ok();
+        done();
+      });
+    };
+
+    if (!isNodeBB && data.linkNodeBB) {
+      grunt.task.run('symlink:NodeBB');
+    }
+
+    chktarget(() => _unlink(() => _symlink()));
   });
-  grunt.registerTask('default', ['clean', 'babel', 'eslint', 'copy', 'restart']);
-  grunt.registerTask('publish', ['clean:publish', 'babel:publish', 'eslint:publish', 'copy:publish']);
+
+  grunt.registerMultiTask('npm_install', 'Test NPM installation', () => {
+    var done = grunt.task.current.async();
+    var verbose = grunt.verbose;
+
+    var packageDir = grunt.task.current.data.packageDir;
+    var cwd = grunt.task.current.data.cwd;
+
+    var installProc = spawn('npm', [ 'i', packageDir ], { cwd: cwd });
+
+    installProc.stdout.on('data', grunt.log.writeln);
+
+    installProc.stderr.on('data', verbose.error);
+
+    installProc.on('close', (code) => {
+      if (code !== 0) {
+        return done(new Error('NPM install failed!'));
+      }
+      grunt.log.ok('NPM install good.');
+      done();
+    });
+  });
+
+  grunt.registerTask('restart', 'Restart NodeBB dev instance', () => {
+    grunt.log.write('Restarting NodeBB...');
+    var pkillOut = execSync('pkill -fe -SIGHUP "loader.js --no-daemon --no-silent"')
+                   .toString().split('\n');
+
+    pkillOut.filter(line => {
+      if (line.startsWith('nodejs')) {
+        grunt.log.ok(`@ ${line.match(/\(pid (\d*)\)/)[1]}`);
+        return false;
+      }
+      return true;
+    });
+    if (pkillOut.length < 3) {
+      grunt.log.write('No NodeBB instance is running in dev mode!'['yellow']);
+    }
+  });
+
+  grunt.registerTask('dev', [
+    'clean:dev',
+    'babel:dev',
+    'eslint:dev',
+    'copy:dev',
+    'symlink:dev',
+    'restart'
+  ]);
+
+  grunt.registerTask('publish', [
+    'clean:publish',
+    'babel:publish',
+    'eslint:publish',
+    'copy:publish',
+    'symlink:publish'
+  ]);
+
+  grunt.registerTask('npm', [
+    'clean:npm',
+    'npm_install',
+    'symlink:npm'
+  ]);
+
+  grunt.registerTask('deploy', ['publish', 'npm']);
 };
