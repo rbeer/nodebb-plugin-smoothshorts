@@ -1,4 +1,15 @@
-﻿### 0.3.0
+﻿### 0.3.2 [2016-05-02]
+  - **FIX**: Recognize sub-categories (#11 / 3702b2c).
+  - **META**: Added grunt tasks
+  - **FIX**: Hashes can be 8 OR 7 digits long (b1ee0a6)
+  - **CHANGE**: Use [attribute*=value] to find topic links (3d11ea7)
+  - **FIX**: Wrongfully given error message on hash creation. (#14 / 5b31753)
+  - **FIX**: Topic links in lavender home-teaser (#11 / 6ee88c2)
+
+### 0.3.1 [2016-04-21]
+  - **FIX**: Overlooked module rename
+
+### 0.3.0
   - **BREAKING CHANGE**: Former setting *Forced Domain* is now *URL Format*.
     - Allows admins to set the short urls' format to whatever they want. Including domain, path and hash insertion point, using keyword `:hash`.
     - settings:smoothshorts.useDomain/forcedDomain replaced by settings:smoothshorts.shortFormat
@@ -10,7 +21,7 @@
     - Split ACP template into index and settings, stat(u)s partials
 
 ### 0.2.1
-  - **ADD**: Fallback for missing teaser post ids in NodeBB versions <1.0.3 .
+  - **ADD**: Fallback for missing teaser post ids in NodeBB versions < 1.0.3 .
 
 ### 0.2.0
   - **REWORK**: Front-end scripts:
