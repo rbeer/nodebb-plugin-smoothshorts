@@ -18,18 +18,30 @@
       var data = ajaxify.data;
       var dataKey = data.topics ? 'topics' : data.categories ? 'categories' : null;
       var pageData = dataKey ? data[dataKey] : void 0;
+      var hashedObjects = {
+        posts: [],
+        topics: []
+      };
 
+      if (data.children && data.children.length > 0) {
+        data.children.forEach(function(child) {
+          hashedObjects.posts = hashedObjects.posts.concat(child.posts.map(mapHelperDelegate('posts')));
+        });
+        hashedObjects.topics = hashedObjects.topics.concat(data.children.map(mapHelperDelegate('lavenderTeaser')));
+      }
       if (data.posts) {
-        sockets.getHashes('posts', data.posts.map(mapHelperDelegate('posts')), addHashes);
+        hashedObjects.posts = hashedObjects.posts.concat(data.posts.map(mapHelperDelegate('posts')));
       } else if (pageData) {
         ensureTeaserPids(pageData);
-        sockets.getHashes('posts', data[dataKey].filter(helper.teaserFilter).map(mapHelperDelegate('teaser', pageData)), addHashes);
+        hashedObjects.posts = hashedObjects.posts.concat(data[dataKey].filter(helper.teaserFilter).map(mapHelperDelegate('teaser', pageData)));
         if (dataKey === 'topics') {
-          sockets.getHashes('topics', data[dataKey].map(mapHelperDelegate('topics')), addHashes);
+          hashedObjects.topics = hashedObjects.topics.concat(data[dataKey].map(mapHelperDelegate('topics')));
         } else if(document.querySelector('[component="category/posts"].post-preview')) {
-          sockets.getHashes('topics', data[dataKey].filter(helper.teaserFilter).map(mapHelperDelegate('lavenderTeaser')), addHashes);
+          hashedObjects.topics = hashedObjects.topics.concat(data[dataKey].filter(helper.teaserFilter).map(mapHelperDelegate('lavenderTeaser')));
         }
       }
+      sockets.getHashes('topics', hashedObjects.topics, addHashes);
+      sockets.getHashes('posts', hashedObjects.posts, addHashes);
     }
 
     function ensureTeaserPids(pageData) {
