@@ -126,7 +126,6 @@ module.exports = function(grunt) {
     var done = grunt.task.current.async();
 
     var data = grunt.task.current.data;
-    console.log(data.target);
     var sym = {
       link: path.normalize(grunt.template.process(data.link)),
       target: path.normalize(grunt.template.process(data.target + '/'))
@@ -153,23 +152,32 @@ module.exports = function(grunt) {
     };
 
     var _unlink = (cb) => {
+      grunt.log.write('Removing link...');
       unlink(sym.link, (err) => {
+        let okmsg = 'deleted';
         if (err) {
-          grunt.log.verbose.warn(err);
+          if (err.code === 'EISDIR') {
+            grunt.log.writeln('Link is a directory!'['yellow']);
+            grunt.log.warn(err);
+            return done(err);
+          } else if (err.code === 'ENOENT') {
+            okmsg = 'No link to delete';
+          }
         }
+        grunt.log.ok(okmsg);
         cb();
       });
     };
 
     var _symlink = () => {
+      let linkpath = path.relative(__dirname, sym.link);
+      grunt.log.write(isNodeBB ? 'Linking into NodeBB...' :
+                                 'Writing link \'' + linkpath + '\'...');
       symlink(sym.target, sym.link, (err) => {
         if (err) {
           grunt.log.error();
           return done(err);
         }
-        let linkpath = path.relative(__dirname, sym.link);
-        grunt.log.write(isNodeBB ? 'Linking into NodeBB...' :
-                                   'Writing link \'' + linkpath + '\'...');
         grunt.log.ok();
         done();
       });

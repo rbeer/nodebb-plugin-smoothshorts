@@ -44,7 +44,7 @@
   "scripts": {
     "build-docs": "jsdoc --configure .jsdoc -t node_modules/ink-docstrap/template/ -R ./README.md --verbose ./",
     "dev": "grunt dev",
-    "publish": "grunt publish",
+    "grunt-publish": "grunt publish",
     "npm-install": "grunt npm"
   }
 }
