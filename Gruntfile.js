@@ -75,6 +75,7 @@ module.exports = function(grunt) {
         src: [
           'package.json',
           'plugin.json',
+          'public/locales/**/*.json',
           '**/*.{tpl,css}',
           '!node_modules/**',
           '!<%= buildPath._buildsBase(true) %>/**/**'
@@ -85,6 +86,7 @@ module.exports = function(grunt) {
         src: [
           'package.json',
           'plugin.json',
+          'public/locales/**/*.json',
           '**/*.{tpl,css}',
           'assets/*',
           'README.md',
