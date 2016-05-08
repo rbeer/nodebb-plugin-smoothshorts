@@ -1,15 +1,15 @@
 module.exports = function(grunt) {
   'use strict';
 
-  const fs = require('fs');
-  const symlink = fs.symlink;
-  const unlink = fs.unlink;
+  var fs = require('fs');
+  var symlink = fs.symlink;
+  var unlink = fs.unlink;
 
-  const cp = require('child_process');
-  const execSync = cp.execSync;
-  const spawn = cp.spawn;
+  var cp = require('child_process');
+  var execSync = cp.execSync;
+  var spawn = cp.spawn;
 
-  const path = require('path');
+  var path = require('path');
 
   require('load-grunt-tasks')(grunt);
 
@@ -17,7 +17,9 @@ module.exports = function(grunt) {
     NodeBB: '../../dev/',
     pkg: grunt.file.readJSON('package.json'),
     buildPath: {
-      _buildsBase: (relative) => relative ? 'builds' : __dirname + '/builds',
+      _buildsBase: function(relative) {
+        return relative ? 'builds' : __dirname + '/builds';
+      },
       current: '<%= buildPath._buildsBase() %>/current',
       dev: '<%= buildPath._buildsBase() %>/dev',
       publish: '<%= buildPath._buildsBase() %>/publish',
@@ -124,7 +126,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerMultiTask('symlink', 'Link last build to NodeBB', () => {
+  grunt.registerMultiTask('symlink', 'Link last build to NodeBB', function() {
     var done = grunt.task.current.async();
 
     var data = grunt.task.current.data;
@@ -134,9 +136,9 @@ module.exports = function(grunt) {
     };
     var isNodeBB = grunt.task.current.target === 'NodeBB';
 
-    var chktarget = (cb) => {
+    var chktarget = function(cb) {
       grunt.log.write('Checking target...');
-      fs.lstat(sym.target, (err, stats) => {
+      fs.lstat(sym.target, function(err, stats) {
         if (err) {
           if (err.code === 'ENOENT') {
             grunt.log.verbose.error(`Can\'t access '${sym.target}' !`);
@@ -153,10 +155,10 @@ module.exports = function(grunt) {
       });
     };
 
-    var _unlink = (cb) => {
+    var _unlink = function(cb) {
       grunt.log.write('Removing link...');
-      unlink(sym.link, (err) => {
-        let okmsg = 'deleted';
+      unlink(sym.link, function (err) {
+        var okmsg = 'deleted';
         if (err) {
           if (err.code === 'EISDIR') {
             grunt.log.writeln('Link is a directory!'['yellow']);
@@ -171,11 +173,11 @@ module.exports = function(grunt) {
       });
     };
 
-    var _symlink = () => {
-      let linkpath = path.relative(__dirname, sym.link);
+    var _symlink = function() {
+      var linkpath = path.relative(__dirname, sym.link);
       grunt.log.write(isNodeBB ? 'Linking into NodeBB...' :
                                  'Writing link \'' + linkpath + '\'...');
-      symlink(sym.target, sym.link, (err) => {
+      symlink(sym.target, sym.link, function(err) {
         if (err) {
           grunt.log.error();
           return done(err);
@@ -189,10 +191,14 @@ module.exports = function(grunt) {
       grunt.task.run('symlink:NodeBB');
     }
 
-    chktarget(() => _unlink(() => _symlink()));
+    chktarget(function() {
+      _unlink(function() {
+        _symlink();
+      });
+    });
   });
 
-  grunt.registerMultiTask('npm_install', 'Test NPM installation', () => {
+  grunt.registerMultiTask('npm_install', 'Test NPM installation', function() {
     var done = grunt.task.current.async();
     var verbose = grunt.verbose;
 
@@ -205,7 +211,7 @@ module.exports = function(grunt) {
 
     installProc.stderr.on('data', verbose.error);
 
-    installProc.on('close', (code) => {
+    installProc.on('close', function(code) {
       if (code !== 0) {
         return done(new Error('NPM install failed!'));
       }
@@ -214,12 +220,12 @@ module.exports = function(grunt) {
     });
   });
 
-  grunt.registerTask('restart', 'Restart NodeBB dev instance', () => {
+  grunt.registerTask('restart', 'Restart NodeBB dev instance', function() {
     grunt.log.write('Restarting NodeBB...');
     var pkillOut = execSync('pkill -fe -SIGHUP "loader.js --no-daemon --no-silent"')
                    .toString().split('\n');
 
-    pkillOut.filter(line => {
+    pkillOut.filter(function(line) {
       if (line.startsWith('nodejs')) {
         grunt.log.ok(`@ ${line.match(/\(pid (\d*)\)/)[1]}`);
         return false;
@@ -236,15 +242,22 @@ module.exports = function(grunt) {
     'babel:dev',
     'eslint:dev',
     'copy:dev',
-    'symlink:dev',
     'restart'
+  ]);
+  grunt.registerTask('dev:symlinks', [
+    'dev',
+    'symlink:dev'
   ]);
 
   grunt.registerTask('publish', [
     'clean:publish',
     'babel:publish',
     'eslint:publish',
-    'copy:publish',
+    'copy:publish'
+  ]);
+
+  grunt.registerTask('publish:symlinks', [
+    'publish',
     'symlink:publish'
   ]);
 
