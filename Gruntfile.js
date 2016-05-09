@@ -141,7 +141,7 @@ module.exports = function(grunt) {
       fs.lstat(sym.target, function(err, stats) {
         if (err) {
           if (err.code === 'ENOENT') {
-            grunt.log.verbose.error(`Can\'t access '${sym.target}' !`);
+            grunt.log.verbose.error('Can\'t access \'' + sym.target + '\' !');
           }
           return done(err);
         }
@@ -157,7 +157,7 @@ module.exports = function(grunt) {
 
     var _unlink = function(cb) {
       grunt.log.write('Removing link...');
-      unlink(sym.link, function (err) {
+      unlink(sym.link, function(err) {
         var okmsg = 'deleted';
         if (err) {
           if (err.code === 'EISDIR') {
@@ -227,7 +227,7 @@ module.exports = function(grunt) {
 
     pkillOut.filter(function(line) {
       if (line.startsWith('nodejs')) {
-        grunt.log.ok(`@ ${line.match(/\(pid (\d*)\)/)[1]}`);
+        grunt.log.ok('@ ' + line.match(/\(pid (\d*)\)/)[1]);
         return false;
       }
       return true;
