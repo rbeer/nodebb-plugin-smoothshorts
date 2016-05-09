@@ -43,8 +43,8 @@
   },
   "scripts": {
     "build-docs": "jsdoc --configure .jsdoc -t node_modules/ink-docstrap/template/ -R ./README.md --verbose ./",
-    "dev": "grunt dev",
-    "grunt-publish": "grunt publish",
+    "dev": "grunt dev:symlinks",
+    "grunt-publish": "grunt publish:symlinks",
     "npm-install": "grunt npm"
   }
 }

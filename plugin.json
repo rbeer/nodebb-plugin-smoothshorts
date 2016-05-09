@@ -16,6 +16,7 @@
     { "hook": "action:post.save", "method": "shortenPost" },
     { "hook": "action:post.purge", "method": "purgePost" },
     { "hook": "filter:admin.header.build", "method": "admin.addMenuItem" },
+    { "hook": "filter:hotswap.prepare", "method": "prepareHotSwap" },
     { "hook": "static:app.load", "method": "init" }
   ]
 }
