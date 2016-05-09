@@ -34,21 +34,12 @@ $(document).ready(function() {
       modKey: ddModKey.selectedOptions.item(0).value.toLowerCase(),
       shortFormat: shortFormat.value,
       copyButtonClass: copyButtonIcon.firstElementChild.value
-    }, function(err) {
+    }, function(err, hotswapped) {
       if (err) {
         app.alertError('Couldn\'t save settings.');
         return console.error(err);
       }
-      var alertOptions = {
-        title: 'Settings saved',
-        message: 'Please restart your NodeBB to apply the new settings!',
-        clickfn: function() {
-          require(['admin/modules/instance'], function(instance) {
-            instance.reload();
-          });
-        }
-      };
-      app.alert(alertOptions);
+      app.alertSuccess('Settings Saved.' + (hotswapped ? ' New URL Format activated!' : ''));
     });
   });
 
