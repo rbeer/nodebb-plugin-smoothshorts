@@ -27,7 +27,7 @@
         data.children.forEach(function(child) {
           hashedObjects.posts = hashedObjects.posts.concat(child.posts.map(mapHelperDelegate('posts')));
         });
-        hashedObjects.topics = hashedObjects.topics.concat(data.children.map(mapHelperDelegate('lavenderTeaser')));
+        hashedObjects.topics = hashedObjects.topics.concat(data.children.filter(helper.teaserFilter).map(mapHelperDelegate('lavenderTeaser')));
       }
       if (data.posts) {
         hashedObjects.posts = hashedObjects.posts.concat(data.posts.map(mapHelperDelegate('posts')));

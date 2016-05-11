@@ -61,7 +61,7 @@ define('plugins/smoothshorts/helper', ['plugins/smoothshorts/settings'], functio
   };
 
   helper.teaserFilter = function(obj) {
-    return !!obj.teaser;
+    return !!obj.teaser || (!!Array.isArray(obj.posts) && obj.posts.length > 0);
   };
 
   helper.buildShortURL = function(hash) {
